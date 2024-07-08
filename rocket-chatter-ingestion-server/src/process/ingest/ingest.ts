@@ -56,7 +56,8 @@ namespace Algorithms {
 		const query = `MATCH (n) DETACH DELETE n`
 		try {
 			await db.run(query)
-		} catch {
+		} catch (e) {
+			console.log(e)
 			console.error("Failed to empty DB")
 		}
 

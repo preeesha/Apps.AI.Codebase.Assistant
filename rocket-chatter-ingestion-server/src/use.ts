@@ -1,3 +1,4 @@
+import { closeDBConnection } from "./core/neo4j"
 import { insertDataIntoDB } from "./process/ingest/ingest"
 import { Codebase } from "./process/prepare/codebase"
 import { FileProcessor } from "./process/prepare/processor/file"
@@ -7,7 +8,9 @@ async function main() {
 	await codebase.process()
 	await codebase.embed()
 
-	// insertDataIntoDB(codebase.embeddingsDirPath, 1)
+	await insertDataIntoDB(codebase.embeddingsDirPath, 1)
+
+	closeDBConnection()
 }
 
 main()

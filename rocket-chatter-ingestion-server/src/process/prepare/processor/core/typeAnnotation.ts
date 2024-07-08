@@ -22,6 +22,7 @@ export namespace TypeAnnotation {
 		) {
 			for (const t of type.types) {
 				flatten(t).forEach((x) => typeArguments.add(x))
+				flatten((t as any).typeParameters).forEach((x) => typeArguments.add(x))
 			}
 		}
 		// Handle function types
@@ -65,6 +66,14 @@ export namespace TypeAnnotation {
 				)
 			if (type.typeParameter.default)
 				flatten(type.typeParameter.default).forEach((x) => typeArguments.add(x))
+		}
+
+		// Handle type parameters
+		const typeParameters = (type as any).typeParameters
+		if (typeParameters) {
+			for (const p of typeParameters.params) {
+				flatten(p).forEach((x) => typeArguments.add(x))
+			}
 		}
 
 		return [...typeArguments]
