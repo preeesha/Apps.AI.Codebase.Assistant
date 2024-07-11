@@ -25,9 +25,17 @@ export class FileProcessor implements IFileProcessor {
 
 		let treeNodes: TreeNode[] = []
 		for (let node of ast.program.body) {
+			if (namedTypes.ExportDefaultDeclaration.check(node))
+				node = (node as any).declaration
 			if (namedTypes.ExportNamedDeclaration.check(node))
 				node = (node as any).declaration
+			// if (namedTypes.ExpressionStatement.check(node))
+			// 	node = (node as any).expression
 
+			// if (namedTypes.CallExpression.check(node)) {
+			// 	console.log(Functions.flattenCallExpression(node as any))
+			// 	console.log(node)
+			// }
 			if (namedTypes.FunctionDeclaration.check(node))
 				/* Functions */
 				treeNodes.push(Functions.Handle(node))
@@ -58,6 +66,7 @@ export class FileProcessor implements IFileProcessor {
 				.filter((node: any) => namedTypes.ImportDeclaration.check(node)) // Filter out all non-import nodes
 				.filter((node: any) => node.source.value.startsWith(".")) // Filter out all library/non-relative imports
 			for (const i of imports) {
+				if (!(i as any).specifiers[0]) continue
 				const importName = (i as any).specifiers[0].local.name
 				const relativePath = (i as any).source.value
 
@@ -68,14 +77,9 @@ export class FileProcessor implements IFileProcessor {
 				let finalPath = ""
 				const backSteps = relativePath.match(/\.\.\//g)
 				if (backSteps) {
-					const backStepsCount = backSteps.length
 					const currentFileDirectoryParts = currentFileDirectory.split("/")
-					const finalPathParts = currentFileDirectoryParts.slice(
-						0,
-						currentFileDirectoryParts.length - backStepsCount
-					)
 					finalPath = path
-						.join(...finalPathParts, relativePath)
+						.join(...currentFileDirectoryParts, relativePath)
 						.replaceAll("\\", "/")
 				} else {
 					finalPath = path
@@ -95,12 +99,13 @@ export class FileProcessor implements IFileProcessor {
 		}
 
 		for (const treeNode of treeNodes) {
+			treeNode.name ||= "Anonymous"
 			treeNode.sourceFileRelativePath = sourceFile.getFullPath()
 			treeNode.uses = treeNode.uses
 				.filter((x) => x.name)
 				.map((x) => {
 					if (parsedImports.has(x.name))
-						x.name = `${parsedImports.get(x.name)!}.ts:${x.name}`
+						x.name = `${parsedImports.get(x.name)!}:${x.name}`
 					if (nodesInFile[x.name]) {
 						x.name = nodesInFile[x.name]
 					}
@@ -134,12 +139,10 @@ export class FileProcessor implements IFileProcessor {
 			code: fileContent,
 
 			filePath: sourceFile.getFullPath(),
-			relations:
-				[] ??
-				treeNodes.map((x) => ({
-					target: x.getID(),
-					relation: "CONTAINS",
-				})),
+			relations: treeNodes.map((x) => ({
+				target: x.getID(),
+				relation: "CONTAINS",
+			})),
 
 			nameEmbeddings: [],
 			codeEmbeddings: [],
