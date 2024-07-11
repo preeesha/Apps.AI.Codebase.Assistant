@@ -117,7 +117,8 @@ export class Codebase {
 				const files = this._files.slice(start, end)
 				const jobs = files.map((x) => this._fileProcessor.process(x, nodes))
 				await Promise.all(jobs)
-			} catch {
+			} catch (e) {
+				console.log(e);
 				console.error(`Error in processing ${start}-${end} files`)
 			}
 
@@ -201,7 +202,7 @@ export class Codebase {
 
 			if (i + nFilesPerBatch < files.length) {
 				console.log(`🕒 Waiting for 60 seconds`)
-				await new Promise((resolve) => setTimeout(resolve, 60 * 1000))
+				// await new Promise((resolve) => setTimeout(resolve, 60 * 1000))
 			}
 		}
 
