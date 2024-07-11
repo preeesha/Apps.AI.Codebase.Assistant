@@ -53,14 +53,19 @@ export namespace Functions {
 		// Handle the body of the function
 		for (const c of n.body.body) {
 			if (namedTypes.ExpressionStatement.check(c)) {
+				let expression = c.expression
+				if (namedTypes.AwaitExpression.check(expression)) {
+					expression = expression.argument as any
+				}
+
 				// For direct calls
-				if (namedTypes.CallExpression.check(c.expression)) {
+				if (namedTypes.CallExpression.check(expression)) {
 					node.pushUse(
 						{
-							name: (c.expression.callee as any).name,
+							name: (expression.callee as any).name,
 							type: "function",
 						},
-						...flattenCallExpression(c.expression)
+						...flattenCallExpression(expression)
 					)
 				}
 			}
@@ -118,6 +123,17 @@ export namespace Functions {
 				name: node.callee.name,
 				type: "function",
 			})
+		} else if (namedTypes.MemberExpression.check(node.callee)) {
+			if (namedTypes.Identifier.check(node.callee.object)) {
+				uses.push({
+					name: node.callee.object.name,
+					type: "variable",
+				})
+				uses.push({
+					name: (node.callee.property as any).name,
+					type: "function",
+				})
+			}
 		}
 
 		if (node.arguments) {
