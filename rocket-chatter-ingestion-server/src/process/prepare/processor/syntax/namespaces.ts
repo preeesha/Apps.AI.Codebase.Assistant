@@ -9,7 +9,7 @@ import { TypeAlias } from "./typeAlias"
 export namespace Namespaces {
 	export function Handle(n: namedTypes.TSModuleDeclaration) {
 		const node = new TreeNode(
-			(n.id as any)?.name.toString() ?? "",
+			(n.id as any)?.name?.toString() ?? "",
 			"Namespace",
 			"",
 			"",
