@@ -3,7 +3,9 @@ import { namedTypes } from "ast-types"
 export namespace TypeAnnotation {
 	export function flatten(
 		type: namedTypes.TSTypeAliasDeclaration["typeAnnotation"]
-	) {
+	): string[] {
+		if (!type) return []
+
 		const typeArguments = new Set<string>()
 
 		// Handle type annotations
