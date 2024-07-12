@@ -43,6 +43,8 @@ namespace Helpers {
 			`MATCH (m { id: $targetID })`,
 			`CREATE (n)-[:${relation}]->(m)\n`,
 		].join("\n")
+		console.clear()
+		console.log(query)
 		try {
 			await tx.run(query, { sourceID, targetID })
 		} catch (e) {
