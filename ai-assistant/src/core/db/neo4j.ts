@@ -28,7 +28,7 @@ export class Neo4j implements IDB {
         throw new Error("Not implemented");
     }
 
-    async run(query: string, params?: any) {
+    async run(query: string, params?: any): Promise<any> {
         throw new Error("Not implemented");
     }
 }
