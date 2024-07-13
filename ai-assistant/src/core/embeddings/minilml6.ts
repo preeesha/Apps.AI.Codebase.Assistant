@@ -3,7 +3,8 @@ import { IEmbeddingModel } from "./embeddings.types";
 
 export class MiniLML6 implements IEmbeddingModel {
     private http: IHttp;
-    readonly baseURL: string = "http://text-embedding-api:8020/embed_multiple";
+    private readonly baseURL: string =
+        "http://text-embedding-api:8020/embed_multiple";
 
     constructor(http: IHttp) {
         this.http = http;
