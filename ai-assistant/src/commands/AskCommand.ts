@@ -84,8 +84,11 @@ export class AskCommand implements ISlashCommand {
             this.command
         );
 
-        let res = await this.process(http, query);
-        if (!res) res = "❌ Unable to process your query";
-        await sendEditedMessage(res);
+        const res = await this.process(http, query);
+        if (res) {
+            await sendEditedMessage(res);
+        } else {
+            await sendEditedMessage("❌ Unable to process your query");
+        }
     }
 }
