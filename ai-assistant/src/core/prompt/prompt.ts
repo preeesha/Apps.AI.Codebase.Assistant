@@ -1,52 +1,23 @@
-export class Prompt {
-    private systemPrompt: string;
-    private assistantPrompt: string;
+export type PromptRole = "user" | "assistant" | "system";
+export type PromptMessage = { role: PromptRole; content: string };
+export type PromptMessages = PromptMessage[];
 
-    constructor(systemPrompt: string, assistantPrompt: string) {
-        this.systemPrompt = systemPrompt;
-        this.assistantPrompt = assistantPrompt;
+export class Prompt {
+    private _messages: PromptMessages = [];
+    get messages() {
+        return this._messages;
     }
 
-    /* TODO: Add format checking or use langchain */
-    /**
-     * Example:
-     * <s>
-     *     [INST]
-     *         You are a human.
-     *     [/INST]
-     *     I am a machine but I can help you.
-     *
-     *     [INST]
-     *         Yeah but you need to act like a human.
-     *     [/INST]
-     *     Ok, I will try my best.
-     * </s>
-     * Assistant:
-     */
-    make(
-        messages: { role: "system" | "assistant" | "user"; content: string }[],
-        delimiter: string = ""
-    ): string {
-        let prompt = "<s>\n";
-        prompt += `\t[INST]\n\t\t${this.systemPrompt}\n\t[/INST]\n\t`;
-        prompt += this.assistantPrompt;
-        prompt += "\n</s>\n";
+    pushSystem(content: string) {
+        this._messages.push({ role: "system", content });
+    }
 
-        for (let i = 0; i < messages.length; i++) {
-            const message = messages[i];
-            prompt += `\t[INST]\n\t\t${message.content}\n\t[/INST]`;
+    pushAssistant(content: string) {
+        this._messages.push({ role: "assistant", content });
+    }
 
-            const nextMessage = messages[++i];
-            if (!nextMessage) {
-                break;
-            }
-
-            prompt += `\n\t${nextMessage.content}`;
-            prompt += "\n</s>\n";
-        }
-        prompt += " Assistant:\n" + delimiter;
-
-        return prompt;
+    pushUser(content: string) {
+        this._messages.push({ role: "user", content });
     }
 
     static processOutput(output: string): string {

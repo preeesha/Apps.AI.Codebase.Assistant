@@ -12,7 +12,7 @@ import { Neo4j } from "../core/db/neo4j";
 import { renderDiagramToBase64URI } from "../core/diagram";
 import { MiniLML6 } from "../core/embeddings/minilml6";
 import { Llama3_70B } from "../core/llm/llama3_70B";
-import { Prompts } from "../core/prompt/prompts";
+import { PromptFactory } from "../core/prompt/prompt.factory";
 import { Query } from "../core/query";
 import { handleCommandResponse } from "../utils/handleCommandResponse";
 
@@ -58,7 +58,7 @@ export class DiagramCommand implements ISlashCommand {
          * ---------------------------------------------------------------------------------------------
          */
         const diagram = await llm.ask(
-            Prompts.makeDiagramPrompt(JSON.stringify(results), query)
+            PromptFactory.makeDiagramPrompt(JSON.stringify(results), query)
         );
         console.log(diagram);
         if (!diagram) return null;

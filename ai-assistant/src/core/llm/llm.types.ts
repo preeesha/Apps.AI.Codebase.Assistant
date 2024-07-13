@@ -1,3 +1,5 @@
+import { Prompt } from "../prompt/prompt";
+
 export interface ILLMModel {
-    ask(prompt: string): Promise<string | null>;
+    ask(prompt: Prompt): Promise<string | null>;
 }

@@ -12,7 +12,7 @@ import {
 import { IUser } from "@rocket.chat/apps-engine/definition/users";
 import { Neo4j } from "../core/db/neo4j";
 import { Llama3_70B } from "../core/llm/llama3_70B";
-import { Prompts } from "../core/prompt/prompts";
+import { PromptFactory } from "../core/prompt/prompt.factory";
 import { getButton, getInputBox } from "../utils/blockBuilders";
 import { handleCommandResponse } from "../utils/handleCommandResponse";
 
@@ -66,7 +66,7 @@ async function process(http: IHttp, query: string): Promise<string | null> {
      * ---------------------------------------------------------------------------------------------
      */
     const result = await llm.ask(
-        Prompts.makeStyleguidePrompt(query, JSON.stringify(styleGuides))
+        PromptFactory.makeStyleguidePrompt(query, JSON.stringify(styleGuides))
     );
     if (!result) return null;
 

@@ -2,7 +2,7 @@ import { DBNode } from "./db/db";
 import { IDB } from "./db/db.types";
 import { IEmbeddingModel } from "./embeddings/embeddings.types";
 import { ILLMModel } from "./llm/llm.types";
-import { Prompts } from "./prompt/prompts";
+import { PromptFactory } from "./prompt/prompt.factory";
 
 export namespace Query {
     export async function getDBNodesFromVectorQuery(
@@ -61,7 +61,9 @@ export namespace Query {
         llm: ILLMModel,
         query: string
     ): Promise<string[]> {
-        const content = await llm.ask(Prompts.makeDBKeywordQueryPrompt(query));
+        const content = await llm.ask(
+            PromptFactory.makeDBKeywordQueryPrompt(query)
+        );
         if (!content) return [];
 
         console.log(content);
