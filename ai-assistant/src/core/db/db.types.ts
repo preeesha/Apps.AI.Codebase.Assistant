@@ -9,5 +9,5 @@ export interface IDB {
 
     rollbackTransaction(): Promise<void>;
 
-    run(query: string, params: any): Promise<any>;
+    run(query: string, params?: any): Promise<any>;
 }
