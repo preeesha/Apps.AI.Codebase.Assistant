@@ -2,10 +2,15 @@ import { IHttp } from "@rocket.chat/apps-engine/definition/accessors";
 import { IEmbeddingModel } from "./embeddings.types";
 
 export class MiniLML6 implements IEmbeddingModel {
+    private http: IHttp;
     readonly baseURL: string = "http://text-embedding-api:8020/embed_multiple";
 
-    async generate(http: IHttp, text: string): Promise<number[] | null> {
-        const res = await http.post(this.baseURL, {
+    constructor(http: IHttp) {
+        this.http = http;
+    }
+
+    async generate(text: string): Promise<number[] | null> {
+        const res = await this.http.post(this.baseURL, {
             headers: {
                 accept: "application/json",
                 "Content-Type": "application/json",

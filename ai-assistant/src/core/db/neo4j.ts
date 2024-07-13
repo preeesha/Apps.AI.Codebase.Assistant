@@ -1,6 +1,13 @@
+import { IHttp } from "@rocket.chat/apps-engine/definition/accessors";
 import { IDB } from "./db.types";
 
 export class Neo4j implements IDB {
+    private http: IHttp;
+
+    constructor(http: IHttp) {
+        this.http = http;
+    }
+
     async verifyConnectivity() {
         throw new Error("Not implemented");
     }
