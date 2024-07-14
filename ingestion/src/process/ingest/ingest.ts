@@ -7,9 +7,9 @@ import { RC_APP_URI } from "../../constants"
 import { DBNode } from "../../core/dbNode"
 
 namespace Algorithms {
-	export async function emptyDB(): Promise<boolean> {
+	export async function purgeDB(): Promise<boolean> {
 		try {
-			const res = await fetch(`${RC_APP_URI}/empty`, {
+			const res = await fetch(`${RC_APP_URI}/purgeDB`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -50,7 +50,7 @@ export async function insertDataIntoDB(batchesDirPath: string) {
 
 	/* Step 1: Empty DB */
 	{
-		const success = await Algorithms.emptyDB()
+		const success = await Algorithms.purgeDB()
 		if (!success) {
 			console.log("❌ Error emptying db")
 			return
