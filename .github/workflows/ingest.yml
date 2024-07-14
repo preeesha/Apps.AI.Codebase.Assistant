@@ -3,6 +3,7 @@ name: Ingest Workflow
 on:
   repository_dispatch:
     types: [trigger-workflow]
+  workflow_dispatch:
 
 jobs:
   trigger-ingest:
@@ -11,7 +12,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-        ref: ${{ github.event.client_payload.sha }}
+          ref: ${{ github.event.client_payload.sha }}
       - name: Run Ingestion
         run: |
           cd rocket-chat-ingestion-server
