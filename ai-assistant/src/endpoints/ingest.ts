@@ -126,7 +126,6 @@ export class IngestEndpoint extends ApiEndpoint {
         await db.beginTransaction();
         // -----------------------------------------------------------------------------------
         await Helpers.insertNodes(db, nodes);
-        await Helpers.establishRelations(db, nodes);
         // -----------------------------------------------------------------------------------
         responseBody.status = await this.commitProgress(db);
         // -----------------------------------------------------------------------------------

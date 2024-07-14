@@ -1,6 +1,7 @@
 import { IEmbeddingModel } from "../embeddings/embeddings.types";
 
-export type DBNodeRelation = "CONTAINS" | "USES";
+export type DBNodeRelationType = "CONTAINS" | "USES"
+export type DBNodeRelation = { target: string; relation: DBNodeRelationType }
 
 export class DBNode {
     id: string;
@@ -10,7 +11,7 @@ export class DBNode {
     code: string;
 
     filePath: string;
-    relations: { target: string; relation: DBNodeRelation }[];
+    relations: DBNodeRelation[];
 
     nameEmbeddings: number[];
     codeEmbeddings: number[];
@@ -24,7 +25,7 @@ export class DBNode {
         type: string;
         code: string;
         filePath: string;
-        relations: { target: string; relation: DBNodeRelation }[];
+        relations: DBNodeRelation[];
         nameEmbeddings: number[];
         codeEmbeddings: number[];
         descriptor: "Node" | string;

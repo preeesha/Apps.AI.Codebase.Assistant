@@ -4,7 +4,7 @@ import path from "path"
 
 import { v4 as uuid } from "uuid"
 import { RC_APP_URI } from "../../constants"
-import { DBNode } from "../../core/dbNode"
+import { DBNode, DBNodeRelation } from "../../core/dbNode"
 
 namespace Algorithms {
 	export async function purgeDB(): Promise<boolean> {
@@ -39,6 +39,23 @@ namespace Algorithms {
 			return false
 		}
 	}
+
+	export async function establishRelations(relations: DBNodeRelation[]): Promise<boolean> {
+		try {
+			const res = await fetch(`${RC_APP_URI}/establishRelations`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ relations }),
+			})
+
+			return res.status === 200
+		} catch (e) {
+			console.log(e);
+			return false
+		}
+	}
 }
 
 export async function insertDataIntoDB(batchesDirPath: string) {
@@ -61,11 +78,20 @@ export async function insertDataIntoDB(batchesDirPath: string) {
 	{
 		const errorBatches: Set<string> = new Set()
 
+		const relations: DBNodeRelation[] = []
+
 		// Insert each batch
 		for (const file of files) {
 			const batchID = uuid()
 			const data = await readFile(file, "utf-8")
 			const nodes = Object.values(JSON.parse(data)) as DBNode[]
+
+			for (const node of nodes)
+				relations.push(...node.relations.map((relation) => ({
+					source: node.id,
+					target: relation.target,
+					relation: relation.relation,
+				})))
 
 			const success = await Algorithms.insertBatch(batchID, nodes)
 			if (success) {
@@ -76,6 +102,14 @@ export async function insertDataIntoDB(batchesDirPath: string) {
 		}
 		if (errorBatches.size > 0)
 			console.log("❌ Error batches", errorBatches)
+
+		// Establish relations
+		const success = await Algorithms.establishRelations(relations)
+		if (success) {
+			console.log("🔗 Relations established")
+		} else {
+			console.log("❌ Error establishing relations")
+		}
 	}
 
 	console.log("✅ Inserted")
