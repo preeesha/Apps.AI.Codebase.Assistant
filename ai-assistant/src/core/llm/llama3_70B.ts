@@ -1,4 +1,5 @@
 import { IHttp } from "@rocket.chat/apps-engine/definition/accessors";
+
 import { Prompt } from "../prompt/prompt";
 import { ILLMModel } from "./llm.types";
 
@@ -12,16 +13,20 @@ export class Llama3_70B implements ILLMModel {
     }
 
     async ask(prompt: Prompt): Promise<string | null> {
-        this.http.post(this.baseURL, {
+        const url = `${this.baseURL}/chat/completions`;
+        const res = await this.http.post(url, {
             headers: {
                 "Content-Type": "application/json",
             },
             data: {
                 model: this.model,
+                temprature: 0,
                 messages: prompt.messages,
             },
         });
+        if (!res.content) return null;
 
-        return null;
+        const message = JSON.parse(res.content).choices[0].message.content;
+        return message;
     }
 }
