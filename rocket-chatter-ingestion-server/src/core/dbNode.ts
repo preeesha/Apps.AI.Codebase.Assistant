@@ -1,5 +1,4 @@
 import { TreeNode } from "../process/prepare/processor/core/treeNode"
-import { LLM } from "./llm"
 
 export type DBNodeRelation = "CONTAINS" | "USES"
 
@@ -68,13 +67,6 @@ export class DBNode {
 			isFile: false,
 			descriptor: "Node",
 		})
-	}
-
-	static async fillEmbeddings(node: DBNode): Promise<DBNode> {
-		node.nameEmbeddings = await LLM.generateEmbeddings(node.name)
-		node.codeEmbeddings = await LLM.generateEmbeddings(node.code)
-
-		return node
 	}
 
 	getNodeName(): string {
