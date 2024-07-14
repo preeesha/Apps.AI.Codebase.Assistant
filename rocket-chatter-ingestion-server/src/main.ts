@@ -1,17 +1,16 @@
-import cors from "cors"
-import express from "express"
-import { PORT } from "./constants"
-import { healthRoute } from "./routes/health"
-import { ingestRoute } from "./routes/ingest"
+import { closeDBConnection } from "./core/neo4j"
+import { insertDataIntoDB } from "./process/ingest/ingest"
+import { Codebase } from "./process/prepare/codebase"
+import { FileProcessor } from "./process/prepare/processor/file"
 
-const app = express()
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use(cors({ origin: "*" }))
+async function main() {
+	const codebase = new Codebase("./project", new FileProcessor(), 1)
+	await codebase.process()
+	await codebase.embed()
 
-app.get("/health", healthRoute)
-app.post("/ingest", ingestRoute)
+	await insertDataIntoDB(codebase.embeddingsDirPath, 1)
 
-app.listen(PORT, () =>
-	console.log(`🚀 Server running on port http://localhost:${PORT}`)
-)
+	closeDBConnection()
+}
+
+main()
