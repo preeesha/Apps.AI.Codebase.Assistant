@@ -15,5 +15,5 @@ jobs:
           ref: ${{ github.event.client_payload.sha }}
       - name: Run Ingestion
         run: |
-          cd rocket-chat-ingestion-server
+          cd ingestion
           npm run start
