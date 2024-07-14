@@ -10,6 +10,10 @@ import {
 import { App } from "@rocket.chat/apps-engine/definition/App";
 import { IAppInfo } from "@rocket.chat/apps-engine/definition/metadata";
 
+import {
+    ApiSecurity,
+    ApiVisibility,
+} from "@rocket.chat/apps-engine/definition/api";
 import { UIKitViewSubmitInteractionContext } from "@rocket.chat/apps-engine/definition/uikit";
 import { AskCommand } from "./commands/AskCommand";
 import { DiagramCommand } from "./commands/DiagramCommand";
@@ -21,6 +25,7 @@ import { StyleguideCommand } from "./commands/Styleguide";
 import { SuggestCommand } from "./commands/SuggestCommand";
 import { TranslateCommand } from "./commands/TranslateCommand";
 import { WhyUsedCommand } from "./commands/WhyUsedCommand";
+import { IngestEndpoint } from "./endpoints/ingest";
 import { handleModalViewSubmit } from "./utils/handleModalViewSubmit";
 
 export class RocketChatterApp extends App {
@@ -56,5 +61,11 @@ export class RocketChatterApp extends App {
         configuration.slashCommands.provideSlashCommand(new SuggestCommand());
         configuration.slashCommands.provideSlashCommand(new TranslateCommand());
         configuration.slashCommands.provideSlashCommand(new WhyUsedCommand());
+
+        await configuration.api.provideApi({
+            visibility: ApiVisibility.PUBLIC,
+            security: ApiSecurity.UNSECURE,
+            endpoints: [new IngestEndpoint(this)],
+        });
     }
 }

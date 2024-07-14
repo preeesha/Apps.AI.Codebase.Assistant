@@ -12,15 +12,15 @@ export class Neo4j implements IDB {
     private transactionUrl?: string;
 
     constructor(
-        http: IHttp,
-        baseUrl: string,
-        username: string,
-        password: string
+        http: IHttp
+        // baseUrl: string,
+        // username: string,
+        // password: string
     ) {
         this.http = http;
-        this.baseUrl = baseUrl;
-        this.username = username;
-        this.password = password;
+        // this.baseUrl = baseUrl;
+        // this.username = username;
+        // this.password = password;
     }
 
     private async sendRequest(
