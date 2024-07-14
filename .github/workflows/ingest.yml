@@ -16,4 +16,5 @@ jobs:
       - name: Run Ingestion
         run: |
           cd ingestion
+          npm install
           npm run start
