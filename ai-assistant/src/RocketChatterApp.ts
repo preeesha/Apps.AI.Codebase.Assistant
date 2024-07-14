@@ -26,6 +26,7 @@ import { SuggestCommand } from "./commands/SuggestCommand";
 import { TranslateCommand } from "./commands/TranslateCommand";
 import { WhyUsedCommand } from "./commands/WhyUsedCommand";
 import { IngestEndpoint } from "./endpoints/ingest";
+import { PurgeDBEndpoint } from "./endpoints/purgeDB";
 import { handleModalViewSubmit } from "./utils/handleModalViewSubmit";
 
 export class RocketChatterApp extends App {
@@ -65,7 +66,11 @@ export class RocketChatterApp extends App {
         await configuration.api.provideApi({
             visibility: ApiVisibility.PUBLIC,
             security: ApiSecurity.UNSECURE,
-            endpoints: [new IngestEndpoint(this)],
+            endpoints: [
+                new IngestEndpoint(this),
+                new PurgeDBEndpoint(this),
+            ],
         });
+
     }
 }
