@@ -188,11 +188,6 @@ export class Codebase {
 				Object.assign(nodes, data)
 			}
 
-			const jobs = Object.values(nodes).map(async (x) => {
-				nodes[x.id] = await DBNode.fillEmbeddings(new DBNode(x))
-			})
-			await Promise.all(jobs)
-
 			writeFileSync(
 				`${this._embeddingsDirPath}/batch-${batch++}.json`,
 				JSON.stringify(nodes, null, 2)
