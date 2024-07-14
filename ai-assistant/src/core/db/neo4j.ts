@@ -73,10 +73,6 @@ export class Neo4j implements IDB {
         if (!this.transactionUrl) {
             throw new Error("No transaction to commit");
         }
-
-        if (!this.transactionUrl) {
-            throw new Error("No transaction to commit");
-        }
         const response = await this.sendRequest(
             `${this.transactionUrl}/commit`,
             "POST"
@@ -90,10 +86,6 @@ export class Neo4j implements IDB {
     }
 
     async rollbackTransaction(): Promise<void> {
-        if (!this.transactionUrl) {
-            throw new Error("No transaction to rollback");
-        }
-
         if (!this.transactionUrl) {
             throw new Error("No transaction to rollback");
         }
