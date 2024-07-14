@@ -41,11 +41,11 @@ namespace Algorithms {
 	}
 }
 
-export async function insertDataIntoDB(embeddingsPath: string) {
+export async function insertDataIntoDB(batchesDirPath: string) {
 	console.log("🕒 Inserting")
 
-	const files = readdirSync(embeddingsPath).map((file) =>
-		path.resolve(embeddingsPath, file)
+	const files = readdirSync(batchesDirPath).map((file) =>
+		path.resolve(batchesDirPath, file)
 	)
 
 	/* Step 1: Empty DB */

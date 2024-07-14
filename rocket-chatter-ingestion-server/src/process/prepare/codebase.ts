@@ -1,13 +1,12 @@
 import {
 	existsSync,
 	mkdirSync,
-	readFileSync,
-	readdirSync,
 	rmSync,
-	writeFileSync,
+	writeFileSync
 } from "fs"
 import { glob } from "glob"
 import path from "path"
+import { v4 as uuid } from "uuid"
 
 import { DBNode } from "../../core/dbNode"
 import { IFileProcessor } from "./processor/file.types"
@@ -18,8 +17,6 @@ export class Codebase {
 	private _path: string
 	private _dataDirPath: string
 	private _dataDirName: string
-	private _embeddingsDirPath: string
-	private _embeddingsDirName: string
 
 	private _batchSize: number
 	private _fileProcessor: IFileProcessor
@@ -34,8 +31,6 @@ export class Codebase {
 		this._path = path
 		this._dataDirName = ""
 		this._dataDirPath = ""
-		this._embeddingsDirName = ""
-		this._embeddingsDirPath = ""
 
 		this._batchSize = batchSize
 		this._fileProcessor = fileProcessor
@@ -45,24 +40,18 @@ export class Codebase {
 		this.makeFilesBatches()
 	}
 
-	get embeddingsDirPath(): string {
-		return this._embeddingsDirPath
+	get dataDirPath(): string {
+		return this._dataDirPath
 	}
 
 	private initializeDataDirectory(removeExisting = true): void {
-		this._dataDirName = `data`
+		this._dataDirName = uuid()
 		this._dataDirPath = path.resolve(this._path, this._dataDirName)
-
-		this._embeddingsDirName = `${this._dataDirName}/embeddings`
-		this._embeddingsDirPath = path.resolve(this._path, this._embeddingsDirName)
 
 		/* Handle data directory */
 		if (removeExisting && existsSync(this._dataDirPath))
 			rmSync(this._dataDirPath, { recursive: true })
 		mkdirSync(this._dataDirPath)
-
-		/* Handle embeddings directory */
-		mkdirSync(this._embeddingsDirPath)
 	}
 
 	private prepareFilesMetadata() {
@@ -155,52 +144,5 @@ export class Codebase {
 		}
 
 		console.log(`✅ Prepared ${nodesProcessed} nodes`)
-	}
-
-	async embed(): Promise<void> {
-		console.log("🕒 Preparing Embeddings")
-
-		if (existsSync(this._embeddingsDirPath))
-			rmSync(this._embeddingsDirPath, { recursive: true })
-		mkdirSync(this._embeddingsDirPath)
-
-		const files = readdirSync(this._dataDirPath)
-			.filter((x) => x.endsWith(".json"))
-			.map((x) => path.resolve(this._dataDirPath, x)) // convert path like "batch-1.json" to "./data/batch-1.json"
-
-		const embeddingsPerNode = 2
-		const maxAllowedEmbeddingsPerMinute = 2800 // openai limitation for embeddings
-		const nFilesPerBatch = Math.floor(
-			maxAllowedEmbeddingsPerMinute / this._batchSize / embeddingsPerNode
-		)
-
-		let batch = 0
-		for (let i = 0; i < files.length; i += nFilesPerBatch) {
-			const start = i
-			const end = Math.min(i + nFilesPerBatch, files.length)
-
-			console.log(`\n🕒 Embedding ${start}-${end} files`)
-
-			let nodes: Record<string, DBNode> = {}
-			for (const file of files.slice(start, end)) {
-				// to convert file content from a plain string to js object
-				const data = JSON.parse(readFileSync(file, "utf-8"))
-				Object.assign(nodes, data)
-			}
-
-			writeFileSync(
-				`${this._embeddingsDirPath}/batch-${batch++}.json`,
-				JSON.stringify(nodes, null, 2)
-			)
-
-			console.log(`✅ Embedded ${start}-${end} files\n`)
-
-			if (i + nFilesPerBatch < files.length) {
-				console.log(`🕒 Waiting for 60 seconds`)
-				// await new Promise((resolve) => setTimeout(resolve, 60 * 1000))
-			}
-		}
-
-		console.log(`✅ Prepared embeddings for nodes`)
 	}
 }
