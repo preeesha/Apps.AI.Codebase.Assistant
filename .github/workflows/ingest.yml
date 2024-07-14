@@ -1,0 +1,18 @@
+name: Ingest Workflow
+
+on:
+  repository_dispatch:
+    types: [trigger-workflow]
+
+jobs:
+  trigger-ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+        ref: ${{ github.event.client_payload.sha }}
+      - name: Run Ingestion
+        run: |
+          cd rocket-chat-ingestion-server
+          npm run start
