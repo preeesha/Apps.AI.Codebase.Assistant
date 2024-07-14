@@ -15,7 +15,7 @@ import { AskCommand } from "./commands/AskCommand";
 import { DiagramCommand } from "./commands/DiagramCommand";
 import { DocumentCommand } from "./commands/DocumentCommand";
 import { FindSimilarCommand } from "./commands/FindSimilar";
-import { HealthCommand } from "./commands/HealthCommand";
+import { HelpCommand } from "./commands/HelpCommand";
 import { ImportanceCommand } from "./commands/ImportanceCommand";
 import { StyleguideCommand } from "./commands/Styleguide";
 import { SuggestCommand } from "./commands/SuggestCommand";
@@ -39,7 +39,7 @@ export class RocketChatterApp extends App {
     }
 
     public async extendConfiguration(configuration: IConfigurationExtend) {
-        configuration.slashCommands.provideSlashCommand(new HealthCommand());
+        configuration.slashCommands.provideSlashCommand(new HelpCommand());
 
         configuration.slashCommands.provideSlashCommand(new AskCommand());
         configuration.slashCommands.provideSlashCommand(new DiagramCommand());
