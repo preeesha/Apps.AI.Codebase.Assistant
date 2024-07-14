@@ -45,16 +45,16 @@ Rocket Chatter is a Slack bot that provides code-related information and assista
 \`\`\`
 (A modal will open to input the code snippet you want to suggest improvements for)
 
-\`/rcc-importance\`: Determines and explains the importance of a specific code entity within the larger context of the Rocket Chat codebase.
-\`\`\`
-/rcc-importance [entity]
-\`\`\`
-
 \`/rcc-styleguide\`: Formats the codebase according to the styleguide used throughout the codebase.
 \`\`\`
 /rcc-styleguide
 \`\`\`
 (A modal will open to input the code snippet you want to format)
+
+\`/rcc-importance\`: Determines and explains the importance of a specific code entity within the larger context of the Rocket Chat codebase.
+\`\`\`
+/rcc-importance [entity]
+\`\`\`
 
 \`/rcc-translate\`: Translates the target entity from one programming language to another for a better understanding of the codebase.
 \`\`\`
