@@ -1,4 +1,3 @@
-// endpoint.ts
 import {
     IHttp,
     IModify,
@@ -72,16 +71,6 @@ namespace Helpers {
 
 export class IngestEndpoint extends ApiEndpoint {
     public path = "ingest";
-
-    async emptyDB(db: IDB) {
-        const query = `MATCH (n) DETACH DELETE n`;
-        try {
-            await db.run(query);
-        } catch (e) {
-            console.log(e);
-            console.error("Failed to empty DB");
-        }
-    }
 
     makeBodies(
         content: any
