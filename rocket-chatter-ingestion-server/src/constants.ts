@@ -1,4 +1,4 @@
 import { configDotenv } from "dotenv"
 configDotenv()
 
-export const NEO4J_URI = process.env["NEO4J_URI"] ?? ""
+export const RC_APP_URI = process.env["RC_APP_URI"] ?? ""

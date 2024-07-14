@@ -47,14 +47,9 @@ export class DBNode {
         this.descriptor = node.descriptor;
     }
 
-    static async fillEmbeddings(
-        embeddingModel: IEmbeddingModel,
-        node: DBNode
-    ): Promise<DBNode> {
-        node.nameEmbeddings = (await embeddingModel.generate(node.name)) ?? [];
-        node.codeEmbeddings = (await embeddingModel.generate(node.code)) ?? [];
-
-        return node;
+    async fillEmbeddings(embeddingModel: IEmbeddingModel): Promise<void> {
+        this.nameEmbeddings = (await embeddingModel.generate(this.name)) ?? [];
+        this.codeEmbeddings = (await embeddingModel.generate(this.code)) ?? [];
     }
 
     getDBInsertQuery(): string {

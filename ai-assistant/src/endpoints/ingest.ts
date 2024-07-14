@@ -14,6 +14,7 @@ import {
 import { DBNode } from "../core/db/db";
 import { IDB } from "../core/db/db.types";
 import { Neo4j } from "../core/db/neo4j";
+import { MiniLML6 } from "../core/embeddings/minilml6";
 import {
     IngestEndpointRequestBody,
     IngestEndpointResponseBody,
@@ -122,11 +123,16 @@ export class IngestEndpoint extends ApiEndpoint {
         http: IHttp,
         persis: IPersistence
     ): Promise<IApiResponse> {
-        const [{ nodes }, responseBody] = this.makeBodies(request.content);
+        let [{ nodes }, responseBody] = this.makeBodies(request.content);
+
+        // -----------------------------------------------------------------------------------
+        const embeddingModel = new MiniLML6(http);
+        nodes = nodes.map((node) => new DBNode(node));
+        await Promise.all(nodes.map((x) => x.fillEmbeddings(embeddingModel)));
+        // -----------------------------------------------------------------------------------
 
         const db = new Neo4j(http);
         await db.verifyConnectivity();
-
         // -----------------------------------------------------------------------------------
         await db.beginTransaction();
         // -----------------------------------------------------------------------------------
