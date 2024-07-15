@@ -30,7 +30,7 @@ async function main() {
 
 	await Algorithms.execCommand(`git clone ${REPO_URI} ${sessionID}`)
 	{
-		const codebase = new Codebase("./project", new FileProcessor(), 1)
+		const codebase = new Codebase(sessionID, new FileProcessor(), 1)
 		await codebase.process()
 		await insertDataIntoDB(codebase.dataDirPath)
 	}
