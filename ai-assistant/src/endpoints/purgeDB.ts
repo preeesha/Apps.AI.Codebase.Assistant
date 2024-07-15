@@ -18,8 +18,10 @@ export class PurgeDBEndpoint extends ApiEndpoint {
 
     async emptyDB(db: IDB) {
         const query = `MATCH (n) DETACH DELETE n`;
-        await db.run(query);
-        console.error("Failed to empty DB");
+        const res = await db.run(query);
+        if (!res) {
+            throw new Error(JSON.stringify(res));
+        }
     }
 
     async setupIndices(db: IDB) {
@@ -32,7 +34,7 @@ export class PurgeDBEndpoint extends ApiEndpoint {
             "CREATE VECTOR INDEX `nameEmbeddings`",
             "FOR (n: Node) ON (n.nameEmbeddings)",
             "OPTIONS {indexConfig: {",
-            "   `vector.dimensions`: 768,",
+            "   `vector.dimensions`: 384,",
             "   `vector.similarity_function`: 'COSINE'",
             "}};",
 
@@ -40,10 +42,9 @@ export class PurgeDBEndpoint extends ApiEndpoint {
             "CREATE VECTOR INDEX `codeEmbeddings`",
             "FOR (n: Node) ON (n.codeEmbeddings)",
             "OPTIONS {indexConfig: {",
-            "   `vector.dimensions`: 768,",
+            "   `vector.dimensions`: 384,",
             "   `vector.similarity_function`: 'COSINE'",
             "}};",
-
         ].join("\n");
         await db.run(query);
     }
@@ -58,8 +59,8 @@ export class PurgeDBEndpoint extends ApiEndpoint {
     ): Promise<IApiResponse> {
         const db = new Neo4j(http);
 
-        await this.emptyDB(db)
-        await this.setupIndices(db)
+        await this.emptyDB(db);
+        await this.setupIndices(db);
 
         return this.success();
     }
