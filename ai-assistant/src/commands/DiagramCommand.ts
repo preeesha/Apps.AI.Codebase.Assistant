@@ -9,7 +9,7 @@ import {
 } from "@rocket.chat/apps-engine/definition/slashcommands";
 
 import { Neo4j } from "../core/db/neo4j";
-import { renderDiagramToBase64URI } from "../core/diagram";
+// import { renderDiagramToBase64URI } from "../core/diagram";
 import { MiniLML6 } from "../core/embeddings/minilml6";
 import { Llama3_70B } from "../core/llm/llama3_70B";
 import { PromptFactory } from "../core/prompt/prompt.factory";
@@ -71,8 +71,8 @@ export class DiagramCommand implements ISlashCommand {
             .trim();
         console.log("DIAGRAM:\n", diagramContent);
 
-        const base64Diagram = await renderDiagramToBase64URI(diagramContent);
-        return base64Diagram;
+        // const base64Diagram = await renderDiagramToBase64URI(diagramContent);
+        return "";
     }
 
     public async executor(

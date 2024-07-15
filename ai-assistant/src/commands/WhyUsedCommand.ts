@@ -9,7 +9,7 @@ import {
 } from "@rocket.chat/apps-engine/definition/slashcommands";
 import { writeFileSync } from "fs";
 import { Neo4j } from "../core/db/neo4j";
-import { renderDiagramToBase64URI } from "../core/diagram";
+// import { renderDiagramToBase64URI } from "../core/diagram";
 import { MiniLML6 } from "../core/embeddings/minilml6";
 import { Llama3_70B } from "../core/llm/llama3_70B";
 import { PromptFactory } from "../core/prompt/prompt.factory";
@@ -93,7 +93,7 @@ export class WhyUsedCommand implements ISlashCommand {
                 .trim();
             writeFileSync("output.txt", parsedDiagram);
             try {
-                data.diagram = await renderDiagramToBase64URI(parsedDiagram);
+                // data.diagram = await renderDiagramToBase64URI(parsedDiagram);
             } catch {}
         }
 

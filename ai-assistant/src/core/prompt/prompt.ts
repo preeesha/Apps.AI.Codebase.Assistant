@@ -21,6 +21,9 @@ export class Prompt {
     }
 
     static processOutput(output: string): string {
-        return (output.split("[/INST] Assistant:\n").at(-1) ?? "").trim();
+        const segments = output.split("[/INST] Assistant:\n")
+        if (!segments.length) return "";
+
+        return segments[segments.length - 1].trim();
     }
 }
