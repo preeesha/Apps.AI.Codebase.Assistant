@@ -1,7 +1,7 @@
 import {
     IHttp,
     IModify,
-    IRead,
+    IRead
 } from "@rocket.chat/apps-engine/definition/accessors";
 import {
     ISlashCommand,

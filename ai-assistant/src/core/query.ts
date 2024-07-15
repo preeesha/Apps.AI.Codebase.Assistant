@@ -23,17 +23,14 @@ export namespace Query {
 			`,
             { vector }
         );
+        if (!result) return [];
 
-        const data = result.records.map((record) => record.toObject());
-        const results: any[] = [];
-        for (const record of data) {
-            const n = record.node.properties;
-            delete n["nameEmbeddings"];
-            delete n["codeEmbeddings"];
-            results.push(n);
+        const nodes: DBNode[] = [];
+        for (const record of result) {
+            nodes.push(record as DBNode);
         }
 
-        return results;
+        return nodes;
     }
 
     export async function getCodeNodesFromKeywords(
