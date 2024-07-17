@@ -27,27 +27,31 @@ export class PurgeDBEndpoint extends ApiEndpoint {
     async setupIndices(db: IDB) {
         const query = [
             // Drop existing indices
-            "DROP INDEX `nameEmbeddings`;",
-            "DROP INDEX `codeEmbeddings`;",
+            ["DROP INDEX `nameEmbeddings`;"],
+            ["DROP INDEX `codeEmbeddings`;"],
 
             // Create indices for name embeddings
-            "CREATE VECTOR INDEX `nameEmbeddings`",
-            "FOR (n: Node) ON (n.nameEmbeddings)",
-            "OPTIONS {indexConfig: {",
-            "   `vector.dimensions`: 384,",
-            "   `vector.similarity_function`: 'COSINE'",
-            "}};",
+            [
+                "CREATE VECTOR INDEX `nameEmbeddings`",
+                "FOR (n: Node) ON (n.nameEmbeddings)",
+                "OPTIONS {indexConfig: {",
+                "   `vector.dimensions`: 384,",
+                "   `vector.similarity_function`: 'COSINE'",
+                "}};",
+            ],
 
             // Create indices for code embeddings
-            "CREATE VECTOR INDEX `codeEmbeddings`",
-            "FOR (n: Node) ON (n.codeEmbeddings)",
-            "OPTIONS {indexConfig: {",
-            "   `vector.dimensions`: 384,",
-            "   `vector.similarity_function`: 'COSINE'",
-            "}};",
-        ].join("\n");
+            [
+                "CREATE VECTOR INDEX `codeEmbeddings`",
+                "FOR (n: Node) ON (n.codeEmbeddings)",
+                "OPTIONS {indexConfig: {",
+                "   `vector.dimensions`: 384,",
+                "   `vector.similarity_function`: 'COSINE'",
+                "}};",
+            ],
+        ].map((q) => q.join("\n"));
 
-        await db.run(query);
+        for (const q of query) await db.run(q);
     }
 
     public async post(
