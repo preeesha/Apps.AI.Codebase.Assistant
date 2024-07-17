@@ -1,7 +1,7 @@
 import { IEmbeddingModel } from "../embeddings/embeddings.types";
 
-export type DBNodeRelationType = "CONTAINS" | "USES"
-export type DBNodeRelation = { target: string; relation: DBNodeRelationType }
+export type DBNodeRelationType = "CONTAINS" | "USES";
+export type DBNodeRelation = { target: string; relation: DBNodeRelationType };
 
 export class DBNode {
     id: string;
