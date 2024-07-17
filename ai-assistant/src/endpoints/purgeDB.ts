@@ -46,6 +46,7 @@ export class PurgeDBEndpoint extends ApiEndpoint {
             "   `vector.similarity_function`: 'COSINE'",
             "}};",
         ].join("\n");
+
         await db.run(query);
     }
 
