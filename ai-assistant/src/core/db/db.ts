@@ -56,18 +56,18 @@ export class DBNode {
     getDBInsertQuery(): string {
         let query = "";
         query += `
-         CREATE (n:${this.descriptor} {
-            id: $id,
-            name: $name,
-            type: $type,
+            CREATE (n:${this.descriptor} {
+                id: $id,
+                name: $name,
+                type: $type,
 
-            code: $code,
-            filePath: $filePath,
+                code: $code,
+                filePath: $filePath,
 
-            nameEmbeddings: $nameEmbeddings,
-            codeEmbeddings: $codeEmbeddings
-         })
-      `;
+                nameEmbeddings: $nameEmbeddings,
+                codeEmbeddings: $codeEmbeddings
+            })
+        `;
 
         return query;
     }
