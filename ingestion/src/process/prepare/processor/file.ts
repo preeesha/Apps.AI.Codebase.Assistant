@@ -82,9 +82,10 @@ export class FileProcessor implements IFileProcessor {
 						.join(...currentFileDirectoryParts, relativePath)
 						.replaceAll("\\", "/")
 				} else {
-					finalPath = path
-						.join(currentFileDirectory, relativePath)
-						.replaceAll("\\", "/")
+					finalPath =
+						path
+							.join(currentFileDirectory, relativePath)
+							.replaceAll("\\", "/") + ".ts"
 				}
 
 				parsedImports.set(importName, finalPath)
