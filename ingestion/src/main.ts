@@ -1,28 +1,26 @@
-import { exec } from "child_process";
-import { v4 as uuid } from "uuid";
+import { exec } from "child_process"
+import { v4 as uuid } from "uuid"
 
-import { REPO_URI } from "./constants";
-import { insertDataIntoDB } from "./process/ingest/ingest";
-import { Codebase } from "./process/prepare/codebase";
-import { FileProcessor } from "./process/prepare/processor/file";
+import { insertDataIntoDB } from "./process/ingest/ingest"
+import { Codebase } from "./process/prepare/codebase"
+import { FileProcessor } from "./process/prepare/processor/file"
 
 namespace Algorithms {
 	export async function execCommand(command: string) {
 		await new Promise((resolve, reject) => {
 			exec(command, (error, stdout, stderr) => {
 				if (error) {
-					reject(`Error: ${error.message}`);
-					return;
+					reject(`Error: ${error.message}`)
+					return
 				}
 				if (stderr) {
-					reject(`Stderr: ${stderr}`);
-					return;
+					reject(`Stderr: ${stderr}`)
+					return
 				}
-				resolve(stdout);
-			});
-		});
+				resolve(stdout)
+			})
+		})
 	}
-
 }
 
 async function main() {
