@@ -22,12 +22,7 @@ import {
 namespace Helpers {
     async function insertNode(db: IDB, node: DBNode) {
         const query = new DBNode(node).getDBInsertQuery();
-        try {
-            await db.run(query);
-        } catch (e) {
-            console.log(e);
-            console.error("Failed to insert node");
-        }
+        await db.run(query, node);
     }
 
     export async function insertNodes(db: IDB, nodes: DBNode[]) {
@@ -41,33 +36,13 @@ export class IngestEndpoint extends ApiEndpoint {
     makeBodies(
         content: any
     ): [IngestEndpointRequestBody, IngestEndpointResponseBody] {
-        const requestBody = JSON.parse(content) as IngestEndpointRequestBody;
+        const requestBody = content as IngestEndpointRequestBody;
         const responseBody: IngestEndpointResponseBody = {
-            batchID: requestBody.batchID,
+            batchID: "hey",
             status: 200,
         };
 
         return [requestBody, responseBody];
-    }
-
-    async commitProgress(
-        db: IDB
-    ): Promise<IngestEndpointResponseBody["status"]> {
-        try {
-            try {
-                await db.commitTransaction();
-            } catch (e) {
-                console.error(e);
-                await db.rollbackTransaction();
-
-                return 500;
-            }
-        } catch (e) {
-            console.error(e);
-            return 500;
-        }
-
-        return 200;
     }
 
     public async post(
@@ -85,15 +60,13 @@ export class IngestEndpoint extends ApiEndpoint {
         nodes = nodes.map((node) => new DBNode(node));
         await Promise.all(nodes.map((x) => x.fillEmbeddings(embeddingModel)));
         // -----------------------------------------------------------------------------------
-
         const db = new Neo4j(http);
         await db.verifyConnectivity();
         // -----------------------------------------------------------------------------------
-        await db.beginTransaction();
-        // -----------------------------------------------------------------------------------
-        await Helpers.insertNodes(db, nodes);
-        // -----------------------------------------------------------------------------------
-        responseBody.status = await this.commitProgress(db);
+        const jobs = nodes.map((node) =>
+            db.run(new DBNode(node).getDBInsertQuery(), node)
+        );
+        await Promise.all(jobs);
         // -----------------------------------------------------------------------------------
 
         return this.success(JSON.stringify(responseBody));

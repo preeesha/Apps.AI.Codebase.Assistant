@@ -119,10 +119,7 @@ export class Neo4j implements IDB {
         this.transactionUrl = undefined;
     }
 
-    async run(
-        query: string,
-        params?: any
-    ): Promise<Record<string, any>[] | null> {
+    async run(query: string, params?: any): Promise<Record<string, any>[]> {
         const data = {
             statements: [
                 {
@@ -152,7 +149,9 @@ export class Neo4j implements IDB {
         }
 
         if (response.errors.length) {
-            return null;
+            throw new Error(
+                response.errors.map((x) => JSON.stringify(x)).join("\n\n")
+            );
         }
 
         const nodes: Record<string, any>[] = [];
