@@ -33,40 +33,6 @@ namespace Helpers {
     export async function insertNodes(db: IDB, nodes: DBNode[]) {
         await Promise.all(nodes.map((node) => insertNode(db, node)));
     }
-
-    async function establishRelation(
-        db: IDB,
-        sourceID: string,
-        targetID: string,
-        relation: string
-    ) {
-        const query = [
-            `MATCH (n { id: $sourceID })`,
-            `MATCH (m { id: $targetID })`,
-            `CREATE (n)-[:${relation}]->(m)\n`,
-        ].join("\n");
-        try {
-            await db.run(query, { sourceID, targetID });
-        } catch (e) {
-            console.error(e);
-        }
-    }
-
-    export async function establishRelations(db: IDB, nodes: DBNode[]) {
-        const jobs: Promise<any>[] = [];
-        for (const node of nodes) {
-            for (const relation of node.relations) {
-                const job = establishRelation(
-                    db,
-                    node.id,
-                    relation.target,
-                    relation.relation
-                );
-                jobs.push(job);
-            }
-        }
-        await Promise.all(jobs);
-    }
 }
 
 export class IngestEndpoint extends ApiEndpoint {
