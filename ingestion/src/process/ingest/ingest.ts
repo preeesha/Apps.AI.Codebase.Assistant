@@ -12,22 +12,27 @@ namespace Algorithms {
 			const res = await fetch(`${RC_APP_URI}/purgeDB`, {
 				method: "POST",
 				headers: {
+					accept: "application/json",
 					"Content-Type": "application/json",
 				},
 			})
 
 			return res.status === 200
 		} catch (e) {
-			console.log(e);
+			console.log(e)
 			return false
 		}
 	}
 
-	export async function insertBatch(batchID: string, nodes: DBNode[]): Promise<boolean> {
+	export async function insertBatch(
+		batchID: string,
+		nodes: DBNode[]
+	): Promise<boolean> {
 		try {
 			const res = await fetch(`${RC_APP_URI}/ingest`, {
 				method: "POST",
 				headers: {
+					accept: "application/json",
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({ nodes, batchID }),
@@ -35,12 +40,14 @@ namespace Algorithms {
 
 			return res.status === 200
 		} catch (e) {
-			console.log(e);
+			console.log(e)
 			return false
 		}
 	}
 
-	export async function establishRelations(relations: DBNodeRelation[]): Promise<boolean> {
+	export async function establishRelations(
+		relations: DBNodeRelation[]
+	): Promise<boolean> {
 		try {
 			const res = await fetch(`${RC_APP_URI}/establishRelations`, {
 				method: "POST",
@@ -52,7 +59,7 @@ namespace Algorithms {
 
 			return res.status === 200
 		} catch (e) {
-			console.log(e);
+			console.log(e)
 			return false
 		}
 	}
@@ -87,11 +94,13 @@ export async function insertDataIntoDB(batchesDirPath: string) {
 			const nodes = Object.values(JSON.parse(data)) as DBNode[]
 
 			for (const node of nodes)
-				relations.push(...node.relations.map((relation) => ({
-					source: node.id,
-					target: relation.target,
-					relation: relation.relation,
-				})))
+				relations.push(
+					...node.relations.map((relation) => ({
+						source: node.id,
+						target: relation.target,
+						relation: relation.relation,
+					}))
+				)
 
 			const success = await Algorithms.insertBatch(batchID, nodes)
 			if (success) {
@@ -100,8 +109,7 @@ export async function insertDataIntoDB(batchesDirPath: string) {
 				errorBatches.add(batchID)
 			}
 		}
-		if (errorBatches.size > 0)
-			console.log("❌ Error batches", errorBatches)
+		if (errorBatches.size > 0) console.log("❌ Error batches", errorBatches)
 
 		// Establish relations
 		const success = await Algorithms.establishRelations(relations)

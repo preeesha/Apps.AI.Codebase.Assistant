@@ -1,9 +1,4 @@
-import {
-	existsSync,
-	mkdirSync,
-	rmSync,
-	writeFileSync
-} from "fs"
+import { existsSync, mkdirSync, rmSync, writeFileSync } from "fs"
 import { glob } from "glob"
 import path from "path"
 import { v4 as uuid } from "uuid"
@@ -55,7 +50,7 @@ export class Codebase {
 	}
 
 	private prepareFilesMetadata() {
-		const extensions = ["ts", "tsx", "js", "jsx"]
+		const extensions = ["ts", "js"]
 
 		console.log(`🕒 Preparing metadata for files: *.${extensions.join(", *.")}`)
 		{
@@ -107,7 +102,7 @@ export class Codebase {
 				const jobs = files.map((x) => this._fileProcessor.process(x, nodes))
 				await Promise.all(jobs)
 			} catch (e) {
-				console.log(e);
+				console.log(e)
 				console.error(`Error in processing ${start}-${end} files`)
 			}
 

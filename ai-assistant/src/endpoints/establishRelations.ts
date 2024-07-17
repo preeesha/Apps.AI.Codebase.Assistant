@@ -54,7 +54,7 @@ export class EstablishRelationsEndpoint extends ApiEndpoint {
     makeBodies(
         content: any
     ): [EstablishRelationsEndpointRequestBody, EstablishRelationsEndpointResponseBody] {
-        const requestBody = JSON.parse(content) as EstablishRelationsEndpointRequestBody;
+        const requestBody = content as EstablishRelationsEndpointRequestBody;
         const responseBody: EstablishRelationsEndpointResponseBody = {
             status: 200,
         };
