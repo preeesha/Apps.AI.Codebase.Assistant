@@ -31,7 +31,7 @@ export class ImportanceCommand implements ISlashCommand {
 				LIMIT 1
 			`
         );
-        if (!maxOutDegreeQuery) return 0;
+        if (!maxOutDegreeQuery.length) return 0;
         const maxOutDegree = maxOutDegreeQuery[0].get("outDegree").toNumber();
 
         const outDegree = await db.run(
@@ -41,7 +41,7 @@ export class ImportanceCommand implements ISlashCommand {
 			`,
             { id: node.id }
         );
-        if (!outDegree) return 0;
+        if (!outDegree.length) return 0;
         const centrality = outDegree[0].get("outDegree").toNumber();
 
         const relativeCentrality = centrality / maxOutDegree;
@@ -58,7 +58,7 @@ export class ImportanceCommand implements ISlashCommand {
 				LIMIT 1
 			`
         );
-        if (!maxInDegreeQuery) return 0;
+        if (!maxInDegreeQuery.length) return 0;
         const maxInDegree = maxInDegreeQuery[0].get("inDegree").toNumber();
 
         const inDegree = await db.run(
@@ -68,7 +68,7 @@ export class ImportanceCommand implements ISlashCommand {
 			`,
             { id: node.id }
         );
-        if (!inDegree) return 0;
+        if (!inDegree.length) return 0;
         const criticality = inDegree[0].get("inDegree").toNumber();
 
         const relativeCriticality = criticality / maxInDegree;

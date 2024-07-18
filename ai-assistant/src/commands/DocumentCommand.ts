@@ -62,8 +62,6 @@ export class DocumentCommand implements ISlashCommand {
         );
         if (!result) return null;
 
-        console.log(result);
-
         const answer = result
             .split("<ANSWER_START>")[1]
             .split("<ANSWER_END>")[0]

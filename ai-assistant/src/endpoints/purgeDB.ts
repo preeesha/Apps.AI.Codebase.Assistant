@@ -18,10 +18,7 @@ export class PurgeDBEndpoint extends ApiEndpoint {
 
     async emptyDB(db: IDB) {
         const query = `MATCH (n) DETACH DELETE n`;
-        const res = await db.run(query);
-        if (!res) {
-            throw new Error(JSON.stringify(res));
-        }
+        await db.run(query);
     }
 
     async setupIndices(db: IDB) {

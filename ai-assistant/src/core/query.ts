@@ -15,15 +15,15 @@ export namespace Query {
             `
 				CALL db.index.vector.queryNodes("${indexName}", 2, $vector)
 				YIELD node, score 
-				WHERE score >= ${threshold}
-				WITH node, score
-				MATCH (node)-[r]->(relatedNode)
-				RETURN node, COLLECT(relatedNode) AS relatedNodes, score
-				ORDER BY score DESC
+                WHERE score >= ${threshold}
+                WITH node, score
+                OPTIONAL MATCH (node)-[r]->(relatedNode)
+                RETURN node, COLLECT(relatedNode) AS relatedNodes, score
+                ORDER BY score DESC
 			`,
             { vector }
         );
-        if (!result) return [];
+        if (!result.length) return [];
 
         const nodes: DBNode[] = [];
         for (const record of result) {
@@ -42,11 +42,12 @@ export namespace Query {
         for (const keyword of keywords) {
             const queryVector = await embeddingModel.generate(keyword);
             if (!queryVector) continue;
+
             const result = await getDBNodesFromVectorQuery(
                 db,
                 "nameEmbeddings",
                 queryVector,
-                0.7
+                0.85
             );
             results.push(...result);
         }

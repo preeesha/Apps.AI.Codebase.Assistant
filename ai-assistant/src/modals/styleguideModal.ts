@@ -54,7 +54,7 @@ async function process(http: IHttp, query: string): Promise<string | null> {
      * ---------------------------------------------------------------------------------------------
      */
     const dbResults = await db.run(`MATCH (n:Styleguide) RETURN n`);
-    if (!dbResults) return null;
+    if (!dbResults.length) return null;
 
     const styleGuides = dbResults.map((record) => record.get("n").properties);
     if (!styleGuides.length) return null;
