@@ -1,7 +1,7 @@
 import {
     IHttp,
     IModify,
-    IRead
+    IRead,
 } from "@rocket.chat/apps-engine/definition/accessors";
 import {
     ISlashCommand,
@@ -57,7 +57,10 @@ export class AskCommand implements ISlashCommand {
          * ---------------------------------------------------------------------------------------------
          */
         const answer = await llm.ask(
-            PromptFactory.makeAskPrompt(JSON.stringify(results), query)
+            PromptFactory.makeAskPrompt(
+                results.map((x) => x.code).join("\n\n"),
+                query
+            )
         );
         console.log("ANSWER", answer);
         if (!answer) return null;

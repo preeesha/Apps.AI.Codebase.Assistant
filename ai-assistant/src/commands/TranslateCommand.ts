@@ -50,7 +50,7 @@ export class TranslateCommand implements ISlashCommand {
          */
         const res = await llm.ask(
             PromptFactory.makeTranslatePrompt(
-                JSON.stringify(codeNodes),
+                codeNodes.map((x) => x.code).join("\n\n"),
                 targetEntity,
                 targetLanguage
             )

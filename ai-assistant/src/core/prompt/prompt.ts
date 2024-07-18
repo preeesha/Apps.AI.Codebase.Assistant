@@ -7,6 +7,9 @@ export class Prompt {
     get messages() {
         return this._messages;
     }
+    set messages(messages: PromptMessages) {
+        this._messages = messages;
+    }
 
     pushSystem(content: string) {
         this._messages.push({ role: "system", content });

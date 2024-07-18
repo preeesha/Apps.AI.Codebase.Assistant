@@ -79,7 +79,10 @@ async function process(http: IHttp, query: string): Promise<string | null> {
      * ---------------------------------------------------------------------------------------------
      */
     const answer = await llm.ask(
-        PromptFactory.makeSuggestPrompt(JSON.stringify(codeNodes), query)
+        PromptFactory.makeSuggestPrompt(
+            codeNodes.map((x) => x.code).join("\n\n"),
+            query
+        )
     );
     if (!answer) return null;
 

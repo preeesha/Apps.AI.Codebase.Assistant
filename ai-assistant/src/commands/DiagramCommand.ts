@@ -58,7 +58,10 @@ export class DiagramCommand implements ISlashCommand {
          * ---------------------------------------------------------------------------------------------
          */
         const diagram = await llm.ask(
-            PromptFactory.makeDiagramPrompt(JSON.stringify(results), query)
+            PromptFactory.makeDiagramPrompt(
+                results.map((x) => x.code).join("\n\n"),
+                query
+            )
         );
         console.log(diagram);
         if (!diagram) return null;

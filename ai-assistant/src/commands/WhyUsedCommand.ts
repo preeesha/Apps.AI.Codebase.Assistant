@@ -63,7 +63,10 @@ export class WhyUsedCommand implements ISlashCommand {
          * ---------------------------------------------------------------------------------------------
          */
         const result = await llm.ask(
-            PromptFactory.makeWhyUsedPrompt(JSON.stringify(codeNodes), query)
+            PromptFactory.makeWhyUsedPrompt(
+                codeNodes.map((x) => x.code).join("\n\n"),
+                query
+            )
         );
         if (!result) return null;
 

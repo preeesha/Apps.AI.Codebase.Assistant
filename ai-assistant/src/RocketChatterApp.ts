@@ -28,6 +28,7 @@ import { TranslateCommand } from "./commands/TranslateCommand";
 import { WhyUsedCommand } from "./commands/WhyUsedCommand";
 import { EstablishRelationsEndpoint } from "./endpoints/establishRelations";
 import { IngestEndpoint } from "./endpoints/ingest";
+import { LLMEndpoint } from "./endpoints/llm";
 import { PurgeDBEndpoint } from "./endpoints/purgeDB";
 import { handleModalViewSubmit } from "./utils/handleModalViewSubmit";
 
@@ -73,8 +74,8 @@ export class RocketChatterApp extends App {
                 new IngestEndpoint(this),
                 new PurgeDBEndpoint(this),
                 new EstablishRelationsEndpoint(this),
+                new LLMEndpoint(this),
             ],
         });
-
     }
 }
