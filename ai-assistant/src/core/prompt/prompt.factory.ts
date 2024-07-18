@@ -1,6 +1,7 @@
 import { PROMPT_ASK_COMMAND } from "./contents/ask";
 import { PROMPT_DIAGRAM_COMMAND } from "./contents/diagram";
 import { PROMPT_DOCUMENT_COMMAND } from "./contents/document";
+import { PROMPT_EXTRACT_DB_KEYWORDS } from "./contents/extractDBKeywords";
 import { PROMPT_STYLEGUIDE_COMMAND } from "./contents/styleguide";
 import { PROMPT_SUGGEST_COMMAND } from "./contents/suggest";
 import { PROMPT_TRANSLATE_COMMAND } from "./contents/translate";
@@ -10,6 +11,7 @@ import { Prompt } from "./prompt";
 export namespace PromptFactory {
     export function makeDBKeywordQueryPrompt(query: string): Prompt {
         const prompt = new Prompt();
+        prompt.pushSystem(PROMPT_EXTRACT_DB_KEYWORDS);
         prompt.pushAssistant(
             "Sure, I will strictly follow my instructions. I will provide the answer the above specified format only."
         );
@@ -90,7 +92,6 @@ export namespace PromptFactory {
             "Yeah sure. I understand this codebase very well and I am able to generate JSDoc & documentation for the target entity."
         );
         prompt.pushUser(query);
-        prompt.pushSystem("<ANSWER_START>\n<JSDOC>");
 
         return prompt;
     }

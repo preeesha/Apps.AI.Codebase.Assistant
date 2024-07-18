@@ -64,11 +64,10 @@ export namespace Query {
         );
         if (!content) return [];
 
-        console.log(content);
-
+        // @ts-ignore
         const keywords = content
-            .split("<ANSWER>")[1]
-            .split("</ANSWER>")[0]
+            .split("<ANSWER_START>")[1]
+            .split("<ANSWER_END>")[0]
             .split(",")
             .map((x) => x.trim())
             .map((x) => {

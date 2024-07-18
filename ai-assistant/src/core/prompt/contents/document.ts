@@ -5,15 +5,15 @@ INPUT: Inter-related entities from a huge codebase in JSON format, target entity
 
 EXPECTED OUTPUT:
 <ANSWER_START>
-   <JSDOC>
-      - Generate a short JSDoc documentation for the target entity explaining its purpose and usage.
-      - Generate a comprehensive JSDoc documentation for the target entity explaining its purpose, usage, and parameters in @description, @param, @returns, @throws sections respectively.
-      - (IF EXISTS) Explain the edge cases and exceptions the target entity might throw or face in the @throws section.
-      - (ONLY IF POSSIBLE & RELEVANT) Provide different example usages of the target entity in the codebase.
-   </JSDOC>
-   <EXPLANATION>
-      - Provide an additional comprehensive explanation of the target entity with proper reasoning.
-   </EXPLANATION>
+    <JSDOC_START>
+        - Generate a short JSDoc documentation for the target entity explaining its purpose and usage.
+        - Generate a comprehensive JSDoc documentation for the target entity explaining its purpose, usage, and parameters in @description, @param, @returns, @throws sections respectively.
+        - (IF EXISTS) Explain the edge cases and exceptions the target entity might throw or face in the @throws section.
+        - (ONLY IF POSSIBLE & RELEVANT) Provide different example usages of the target entity in the codebase.
+    <JSDOC_END>
+    <EXPLANATION_START>
+        - Provide an additional comprehensive explanation of the target entity with proper reasoning.
+    <EXPLANATION_END>
 <ANSWER_END>
 
 RULES:

@@ -22,13 +22,13 @@ export class LLMEndpoint extends ApiEndpoint {
         http: IHttp,
         persis: IPersistence
     ): Promise<IApiResponse> {
-        const url = `http://mistral-7b/v1/chat/completions`;
+        const url = `http://llama3-70b/v1/chat/completions`;
         const res = await http.post(url, {
             headers: {
                 "Content-Type": "application/json",
             },
             data: {
-                model: "mistral",
+                model: "llama3",
                 temprature: 0,
                 messages: request.content.messages,
             },

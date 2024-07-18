@@ -62,15 +62,15 @@ export class DocumentCommand implements ISlashCommand {
         );
         if (!result) return null;
 
-        const answer = result
-            .split("<ANSWER_START>")[1]
-            .split("<ANSWER_END>")[0]
+        //@ts-ignore
+        const jsDoc = result
+            .split("<JSDOC_START>")[1]
+            .split("<JSDOC_END>")[0]
             .trim();
-
-        const jsDoc = answer.split("<JSDOC>")[1].split("</JSDOC>")[0].trim();
-        const explanation = answer
-            .split("<EXPLANATION>")[1]
-            .split("</EXPLANATION>")[0]
+        //@ts-ignore
+        const explanation = result
+            .split("<EXPLANATION_START>")[1]
+            .split("<EXPLANATION_END>")[0]
             .trim();
 
         console.log(jsDoc);
