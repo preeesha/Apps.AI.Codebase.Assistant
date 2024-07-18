@@ -19,11 +19,4 @@ export class Prompt {
     pushUser(content: string) {
         this._messages.push({ role: "user", content });
     }
-
-    static processOutput(output: string): string {
-        const segments = output.split("[/INST] Assistant:\n")
-        if (!segments.length) return "";
-
-        return segments[segments.length - 1].trim();
-    }
 }
