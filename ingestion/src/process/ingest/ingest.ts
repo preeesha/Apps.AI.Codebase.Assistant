@@ -1,8 +1,8 @@
 import { readdirSync } from "fs"
 import { readFile } from "fs/promises"
 import path from "path"
-
 import { v4 as uuid } from "uuid"
+
 import { RC_APP_URI } from "../../constants"
 import { DBNode, DBNodeRelation } from "../../core/dbNode"
 
@@ -112,12 +112,21 @@ export async function insertDataIntoDB(batchesDirPath: string) {
 		if (errorBatches.size > 0) console.log("❌ Error batches", errorBatches)
 
 		// Establish relations
-		const success = await Algorithms.establishRelations(relations)
-		if (success) {
-			console.log("🔗 Relations established")
-		} else {
-			console.log("❌ Error establishing relations")
+		const batchSize = 1000
+		for (let i = 0; i < relations.length; i += batchSize) {
+			const success = await Algorithms.establishRelations(
+				relations.slice(i, i + batchSize)
+			)
+			if (success) {
+				console.log(`🔗 Relations established ${i + 1000}/${relations.length}`)
+			} else {
+				console.log(
+					`❌ Error establishing relations ${i + 1000}/${relations.length}`
+				)
+			}
 		}
+
+		console.log("🔗 All Relations established")
 	}
 
 	console.log("✅ Inserted")
