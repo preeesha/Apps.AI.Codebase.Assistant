@@ -10,16 +10,13 @@ EXPECTED OUTPUT:
       - NEVER NEVER NEVER explain the entity itself or it's working.
       - ALWAYS explain where and why it's used in the codebase with due reasoning and mention of the file and line number.
    </EXPLANATION>
-   <IMPACT>
-      - Provide the impact score of the target entity based on the number of usages and the importance of the file.
-   </IMPACT>
    <DIAGRAM>
       - You only provide flowchart or sequence diagram in the mermaid 8.9.0 format.
       - The diagram must be clear and understandable for the user. The aim is to make it easy for the user to understand the flow & overall working.
       - The output must not have any kind of errors and must render properly.
    </DIAGRAM>
 </ANSWER>
-      
+
 RULES:
 - NEVER NEVER NEVER explain the entity itself or it's working.
 - Don't tell me how to use that entity in the codebase.

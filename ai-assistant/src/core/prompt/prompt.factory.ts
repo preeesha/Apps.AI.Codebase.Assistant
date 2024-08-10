@@ -77,22 +77,10 @@ export namespace PromptFactory {
 
     export function makeWhyUsedPrompt(codebase: string, query: string): Prompt {
         const prompt = new Prompt();
-
         prompt.pushSystem(PROMPT_WHY_USED_COMMAND);
-        prompt.pushAssistant(
-            "Sure, I will strictly follow my instructions. I will only provide the answer in the above specified format only."
+        prompt.pushUser(
+            `Hey can you explain why this \`${query}\` entity is used in the following codebase? Here's the codebase:\n\n<CODEBASE_START>\n${codebase}\n<CODEBASE_END>`
         );
-        prompt.pushSystem(`
-            HERE'RE THE NODES OF THE CODEBASE TO USE AS CONTEXT:
-            <CODEBASE_START>
-                ${codebase}
-            </CODEBASE_END>
-        `);
-        prompt.pushAssistant(
-            "Yeah sure. If I don't know the answer, I'll tell it to you."
-        );
-        prompt.pushUser(query);
-        prompt.pushSystem("<ANSWER>");
 
         return prompt;
     }
