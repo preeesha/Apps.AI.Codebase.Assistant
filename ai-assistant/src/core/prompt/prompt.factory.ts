@@ -135,24 +135,9 @@ export namespace PromptFactory {
         const prompt = new Prompt();
 
         prompt.pushSystem(PROMPT_SUGGEST_COMMAND);
-        prompt.pushAssistant(
-            "Sure, I will strictly follow my instructions. I will only provide the answer in text format."
-        );
-        prompt.pushSystem(`
-            <CODEBASE_START>
-                ${codebase}
-            <CODEBASE_END>
-            <TARGET_ENTITY_START>
-                ${targetEntity}
-            <TARGET_ENTITY_END>
-        `);
-        prompt.pushAssistant(
-            "Yeah sure. I understand this codebase very well and I am able to suggest multiple fixes for the target entity. If I don't know the answer, I'll tell it to you."
-        );
         prompt.pushUser(
-            "Suggest multiple (only if possible) fixes for the target entity."
+            `Hey, can you suggest multiple fixes for the target entity? To help you with the context I have provided the codebase of the entities it uses and the target entity. You don't need to worry about the codebase, just focus on the target entity.\n\n<CODEBASE_START>\n${codebase}\n<CODEBASE_END>\n<TARGET_ENTITY_START>${targetEntity}\n<TARGET_ENTITY_END>.`
         );
-        prompt.pushSystem("<ANSWER>");
 
         return prompt;
     }
