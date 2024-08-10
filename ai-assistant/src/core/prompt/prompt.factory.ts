@@ -56,21 +56,10 @@ export namespace PromptFactory {
         query: string
     ): Prompt {
         const prompt = new Prompt();
-
         prompt.pushSystem(PROMPT_DOCUMENT_COMMAND);
-        prompt.pushAssistant(
-            "Sure, I will strictly follow my instructions. The output will be in the above format only."
+        prompt.pushUser(
+            `<CODEBASE_START>\n${codebase}\n<CODEBASE_END>\n\nTarget Entity: ${query}`
         );
-        prompt.pushSystem(`
-            HERE'RE THE NODES OF THE CODEBASE TO USE AS CONTEXT:
-            <CODEBASE_START>
-                ${codebase}
-            </CODEBASE_END>
-        `);
-        prompt.pushAssistant(
-            "Yeah sure. I understand this codebase very well and I am able to generate JSDoc & documentation for the target entity."
-        );
-        prompt.pushUser(query);
 
         return prompt;
     }
