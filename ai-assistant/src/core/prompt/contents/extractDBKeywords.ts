@@ -12,7 +12,7 @@ TASKS:
 
 EXAMPLE:
 - INPUT:
-    "Find the codebase for the user query CRC_TABLE in the main.ts'
+    "Find the codebase for the user query CRC_TABLE in the main.ts"
 - OUTPUT:
     <ANSWER_START>CRC_TABLE, main.ts<ANSWER_END>
 

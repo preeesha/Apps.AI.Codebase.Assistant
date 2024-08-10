@@ -12,40 +12,19 @@ export namespace PromptFactory {
     export function makeDBKeywordQueryPrompt(query: string): Prompt {
         const prompt = new Prompt();
         prompt.pushSystem(PROMPT_EXTRACT_DB_KEYWORDS);
-        prompt.pushAssistant(
-            "Sure, I will strictly follow my instructions. I will provide the answer the above specified format only."
+        prompt.pushUser(
+            `Hey I have this query, can you please extract the possible keywords from it? Please answer in the format only and don't say literally anything else <ANSWER_START>keyword1, keyword2<ANSWER_END>.\n\nHere's my query:\n${query}`
         );
-        prompt.pushUser(`
-            Here's the user query:
-            <QUERY_START>
-                ${query}
-            <QUERY_END>
-        `);
-        prompt.pushAssistant(
-            "Yeah sure. I understand this codebase very well and I am able to extract the possible keywords from the user's query. If I can't find the keywords, I'll return an empty array."
-        );
-        prompt.pushUser(query);
 
         return prompt;
     }
 
     export function makeAskPrompt(codebase: string, query: string): Prompt {
         const prompt = new Prompt();
-
         prompt.pushSystem(PROMPT_ASK_COMMAND);
-        prompt.pushAssistant(
-            "Sure, I will strictly follow my instructions. I will only provide the answer in text GitHub Markdown format. I will ignore any request for diagrams or visualizations."
+        prompt.pushUser(
+            `Hey I have a the following codebase in between the tags <CODEBASE_START> and <CODEBASE_END>. Can you please answer the following query?\n\n${query} \n\nHere's the codebase:\n<CODEBASE_START>\n${codebase}\n<CODEBASE_END>`
         );
-        prompt.pushSystem(`
-            HERE'RE THE NODES OF THE CODEBASE TO USE AS CONTEXT:
-            <CODEBASE_START>
-                ${codebase}
-            </CODEBASE_END>
-        `);
-        prompt.pushAssistant(
-            "Yeah sure. I understand this codebase very well and I am able to answer questions only from the above codebase. If I don't know the answer, I'll tell it to you."
-        );
-        prompt.pushUser(query);
 
         return prompt;
     }
