@@ -79,28 +79,10 @@ export namespace PromptFactory {
         styleguides: string
     ): Prompt {
         const prompt = new Prompt();
-
         prompt.pushSystem(PROMPT_STYLEGUIDE_COMMAND);
-        prompt.pushAssistant(
-            "Sure, I will strictly follow my instructions. I will only provide the answer in text format."
-        );
-        prompt.pushSystem(`
-            <STYLEGUIDES_START>
-                ${styleguides}
-            <STYLEGUIDES_END>
-        `);
-        prompt.pushSystem(`
-            <CODEBASE_START>
-                ${codebase}
-            <CODEBASE_END>
-        `);
-        prompt.pushAssistant(
-            "Yeah sure. I understand this codebase very well and I am able to enforce the styleguide rules on the codebase. If I don't know the answer, I'll tell it to you."
-        );
         prompt.pushUser(
-            "Enforce the styleguide rules on the provided codebase."
+            `<STYLEGUIDES_START>${styleguides}<STYLEGUIDES_END>\n<CODEBASE_START>${codebase}<CODEBASE_END>`
         );
-        prompt.pushSystem("<ANSWER>");
 
         return prompt;
     }
