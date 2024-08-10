@@ -165,22 +165,9 @@ export namespace PromptFactory {
         const prompt = new Prompt();
 
         prompt.pushSystem(PROMPT_TRANSLATE_COMMAND);
-        prompt.pushAssistant(
-            "Sure, I will strictly follow my instructions. I will only provide the answer in text format."
+        prompt.pushUser(
+            `Hey, can you translate the following codebase in TypeScript to the ${targetLanguage}? I have provided you with other entities as well on which my target entity depends. Here you go:\n\n<CODEBASE_START>\n${codebase}\n<CODEBASE_END>\n<TARGET_ENTITY_START>${targetEntity}\n<TARGET_ENTITY_END>`
         );
-        prompt.pushSystem(`
-            <CODEBASE_START>
-                ${codebase}
-            <CODEBASE_END>
-            <TARGET_ENTITY_START>
-                ${targetEntity}
-            <TARGET_ENTITY_END>
-        `);
-        prompt.pushAssistant(
-            "Yeah sure. I understand this codebase very well and I am able to translate the target entity to the target language. If I don't know the answer, I'll tell it to you."
-        );
-        prompt.pushUser(`Translate the target entity to ${targetLanguage}`);
-        prompt.pushSystem("<ANSWER>");
 
         return prompt;
     }
