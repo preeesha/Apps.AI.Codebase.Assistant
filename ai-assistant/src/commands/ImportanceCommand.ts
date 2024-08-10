@@ -11,7 +11,6 @@ import { DBNode } from "../core/db/db";
 import { IDB } from "../core/db/db.types";
 import { Neo4j } from "../core/db/neo4j";
 import { MiniLML6 } from "../core/embeddings/minilml6";
-import { Llama3_70B } from "../core/llm/llama3_70B";
 import { Query } from "../core/query";
 import { handleCommandResponse } from "../utils/handleCommandResponse";
 
@@ -85,7 +84,6 @@ export class ImportanceCommand implements ISlashCommand {
         query: string
     ): Promise<Record<string, number> | null> {
         const db = new Neo4j(http);
-        const llm = new Llama3_70B(http);
         const embeddingModel = new MiniLML6(http);
 
         /**
