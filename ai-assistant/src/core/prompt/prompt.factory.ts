@@ -13,7 +13,7 @@ export namespace PromptFactory {
         const prompt = new Prompt();
         prompt.pushSystem(PROMPT_EXTRACT_DB_KEYWORDS);
         prompt.pushUser(
-            `Hey I have this query, can you please extract the possible keywords from it? Please answer in the format only and don't say literally anything else <ANSWER_START>keyword1, keyword2<ANSWER_END>.\n\nHere's my query:\n${query}`
+            `Hey I have this query, can you please extract the possible keywords from it? Please answer in <ANSWER_START>keyword1, keyword2<ANSWER_END> format only and don't say literally anything else.\n\nHere's my query:\n${query}`
         );
 
         return prompt;

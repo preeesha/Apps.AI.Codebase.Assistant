@@ -66,8 +66,8 @@ export namespace Query {
 
         // @ts-ignore
         const keywords = content
-            .split("<ANSWER_START>")[1]
-            .split("<ANSWER_END>")[0]
+            .split("<ANSWER>")[1]
+            .split("</ANSWER>")[0]
             .split(",")
             .map((x) => x.trim())
             .map((x) => {
@@ -76,7 +76,6 @@ export namespace Query {
                 }
                 return x;
             });
-        console.log(keywords);
 
         return keywords;
     }

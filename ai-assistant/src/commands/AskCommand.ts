@@ -10,7 +10,7 @@ import {
 
 import { Neo4j } from "../core/db/neo4j";
 import { MiniLML6 } from "../core/embeddings/minilml6";
-import { Mistral_7B } from "../core/llm/mistral_7b";
+import { Llama3_70B } from "../core/llm/llama3_70B";
 import { PromptFactory } from "../core/prompt/prompt.factory";
 import { Query } from "../core/query";
 import { handleCommandResponse } from "../utils/handleCommandResponse";
@@ -23,7 +23,7 @@ export class AskCommand implements ISlashCommand {
 
     private async process(http: IHttp, query: string): Promise<string | null> {
         const db = new Neo4j(http);
-        const llm = new Mistral_7B(http);
+        const llm = new Llama3_70B(http);
         const embeddingModel = new MiniLML6(http);
 
         /**
