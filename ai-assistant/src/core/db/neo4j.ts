@@ -36,9 +36,9 @@ export class Neo4j implements IDB {
         // this.baseUrl = "http://neo4j:7474";
         // this.username = "neo4j";
         // this.password = "strongpasswordsafe123";
-        this.baseUrl = "http://3.89.86.217:7474";
+        this.baseUrl = "http://34.230.47.155:7474";
         this.username = "neo4j";
-        this.password = "errors-fourths-seeds";
+        this.password = "talk-runway-pad";
     }
 
     private async sendRequest(
@@ -58,12 +58,14 @@ export class Neo4j implements IDB {
             headers,
             data: data,
         });
+
         if (!res || ![200, 201].includes(res.statusCode) || !res.content) {
-            console.log(res);
             return null;
         }
+        const parsedContent = JSON.parse(res.content);
+        if (parsedContent.errors.length) return null;
 
-        return JSON.parse(res.content);
+        return parsedContent;
     }
 
     async verifyConnectivity(): Promise<void> {
