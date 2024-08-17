@@ -11,17 +11,17 @@ import {
     findSimilarModalSubmitHandler,
 } from "../modals/findSimilarModal";
 import {
+    IMPROVE_COMMAND_MODAL,
+    improveModalSubmitHandler,
+} from "../modals/improveModal";
+import {
     STYLEGUIDE_COMMAND_MODAL,
     styleguideModalSubmitHandler,
 } from "../modals/styleguideModal";
-import {
-    SUGGEST_COMMAND_MODAL,
-    suggestModalSubmitHandler,
-} from "../modals/suggestModal";
 import { getUIData } from "./persistenceHandlers";
 
 const MODALS: Record<string, any> = {
-    [SUGGEST_COMMAND_MODAL]: suggestModalSubmitHandler,
+    [IMPROVE_COMMAND_MODAL]: improveModalSubmitHandler,
     [FIND_SIMILAR_COMMAND_MODAL]: findSimilarModalSubmitHandler,
     [STYLEGUIDE_COMMAND_MODAL]: styleguideModalSubmitHandler,
 };
