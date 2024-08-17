@@ -16,7 +16,7 @@ import {
 } from "@rocket.chat/apps-engine/definition/api";
 import { UIKitViewSubmitInteractionContext } from "@rocket.chat/apps-engine/definition/uikit";
 import { AskCodeCommand } from "./commands/AskCodeCommand";
-import { DevDocsCommand } from "./commands/DevDocsCommand";
+import { AskDocsCommand } from "./commands/AskDocsCommand";
 import { DiagramCommand } from "./commands/DiagramCommand";
 import { DocumentCommand } from "./commands/DocumentCommand";
 import { FindSimilarCommand } from "./commands/FindSimilar";
@@ -51,7 +51,7 @@ export class RocketChatterApp extends App {
         configuration.slashCommands.provideSlashCommand(new HelpCommand());
 
         configuration.slashCommands.provideSlashCommand(new AskCodeCommand());
-        configuration.slashCommands.provideSlashCommand(new DevDocsCommand());
+        configuration.slashCommands.provideSlashCommand(new AskDocsCommand());
         configuration.slashCommands.provideSlashCommand(new DiagramCommand());
         configuration.slashCommands.provideSlashCommand(new DocumentCommand());
         configuration.slashCommands.provideSlashCommand(

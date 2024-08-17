@@ -13,8 +13,8 @@ import { MiniLML6 } from "../core/embeddings/minilml6";
 import { Llama3_70B } from "../core/llm/llama3_70B";
 import { handleCommandResponse } from "../utils/handleCommandResponse";
 
-export class DevDocsCommand implements ISlashCommand {
-    public command = "rcc-devdocs";
+export class AskDocsCommand implements ISlashCommand {
+    public command = "rcc-askdocs";
     public i18nParamsExample = "";
     public i18nDescription = "";
     public providesPreview = false;
