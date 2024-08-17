@@ -15,8 +15,8 @@ import { PromptFactory } from "../core/prompt/prompt.factory";
 import { Query } from "../core/query";
 import { handleCommandResponse } from "../utils/handleCommandResponse";
 
-export class AskCommand implements ISlashCommand {
-    public command = "rcc-ask";
+export class AskCodeCommand implements ISlashCommand {
+    public command = "rcc-askcode";
     public i18nParamsExample = "";
     public i18nDescription = "";
     public providesPreview = false;
@@ -55,7 +55,7 @@ export class AskCommand implements ISlashCommand {
          * ---------------------------------------------------------------------------------------------
          */
         const answer = await llm.ask(
-            PromptFactory.makeAskPrompt(
+            PromptFactory.makeAskCodePrompt(
                 results.map((x) => x.code).join("\n\n"),
                 query
             )

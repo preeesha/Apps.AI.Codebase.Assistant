@@ -15,7 +15,7 @@ import {
     ApiVisibility,
 } from "@rocket.chat/apps-engine/definition/api";
 import { UIKitViewSubmitInteractionContext } from "@rocket.chat/apps-engine/definition/uikit";
-import { AskCommand } from "./commands/AskCommand";
+import { AskCodeCommand } from "./commands/AskCodeCommand";
 import { DevDocsCommand } from "./commands/DevDocsCommand";
 import { DiagramCommand } from "./commands/DiagramCommand";
 import { DocumentCommand } from "./commands/DocumentCommand";
@@ -50,7 +50,7 @@ export class RocketChatterApp extends App {
     public async extendConfiguration(configuration: IConfigurationExtend) {
         configuration.slashCommands.provideSlashCommand(new HelpCommand());
 
-        configuration.slashCommands.provideSlashCommand(new AskCommand());
+        configuration.slashCommands.provideSlashCommand(new AskCodeCommand());
         configuration.slashCommands.provideSlashCommand(new DevDocsCommand());
         configuration.slashCommands.provideSlashCommand(new DiagramCommand());
         configuration.slashCommands.provideSlashCommand(new DocumentCommand());
