@@ -14,16 +14,11 @@ import {
     IMPROVE_COMMAND_MODAL,
     improveModalSubmitHandler,
 } from "../modals/improveModal";
-import {
-    STYLEGUIDE_COMMAND_MODAL,
-    styleguideModalSubmitHandler,
-} from "../modals/styleguideModal";
 import { getUIData } from "./persistenceHandlers";
 
 const MODALS: Record<string, any> = {
     [IMPROVE_COMMAND_MODAL]: improveModalSubmitHandler,
     [FIND_SIMILAR_COMMAND_MODAL]: findSimilarModalSubmitHandler,
-    [STYLEGUIDE_COMMAND_MODAL]: styleguideModalSubmitHandler,
 };
 
 export async function handleModalViewSubmit(
