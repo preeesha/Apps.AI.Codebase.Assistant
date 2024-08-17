@@ -23,7 +23,6 @@ import { FindSimilarCommand } from "./commands/FindSimilar";
 import { HelpCommand } from "./commands/HelpCommand";
 import { ImportanceCommand } from "./commands/ImportanceCommand";
 import { ImproveCommand } from "./commands/ImproveCommand";
-import { StyleguideCommand } from "./commands/Styleguide";
 import { TranslateCommand } from "./commands/TranslateCommand";
 import { WhyUsedCommand } from "./commands/WhyUsedCommand";
 import { EstablishRelationsEndpoint } from "./endpoints/establishRelations";
@@ -59,9 +58,6 @@ export class RocketChatterApp extends App {
         );
         configuration.slashCommands.provideSlashCommand(
             new ImportanceCommand()
-        );
-        configuration.slashCommands.provideSlashCommand(
-            new StyleguideCommand()
         );
         configuration.slashCommands.provideSlashCommand(new ImproveCommand());
         configuration.slashCommands.provideSlashCommand(new TranslateCommand());
