@@ -85,9 +85,7 @@ export class DiagramCommand implements ISlashCommand {
         http: IHttp
     ): Promise<void> {
         const query = context.getArguments().join(" ");
-        if (!query) {
-            throw new Error("Error!");
-        }
+        if (!query) return;
 
         const sendEditedMessage = await handleCommandResponse(
             query,
