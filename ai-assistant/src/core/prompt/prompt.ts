@@ -11,15 +11,31 @@ export class Prompt {
         this._messages = messages;
     }
 
+    private parsePromptContent(content: string): string {
+        return content
+            .split("\n")
+            .map((x) => x.trim())
+            .join("\n");
+    }
+
     pushSystem(content: string) {
-        this._messages.push({ role: "system", content });
+        this._messages.push({
+            role: "system",
+            content: this.parsePromptContent(content),
+        });
     }
 
     pushAssistant(content: string) {
-        this._messages.push({ role: "assistant", content });
+        this._messages.push({
+            role: "assistant",
+            content: this.parsePromptContent(content),
+        });
     }
 
     pushUser(content: string) {
-        this._messages.push({ role: "user", content });
+        this._messages.push({
+            role: "user",
+            content: this.parsePromptContent(content),
+        });
     }
 }
