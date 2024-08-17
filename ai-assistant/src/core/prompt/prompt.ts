@@ -15,7 +15,8 @@ export class Prompt {
         return content
             .split("\n")
             .map((x) => x.trim())
-            .join("\n");
+            .join("\n")
+            .trim();
     }
 
     pushSystem(content: string) {
