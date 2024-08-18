@@ -21,9 +21,11 @@ export class Llama3_70B implements ILLMModel {
                 authorization: "Bearer " + HF_TOKEN,
             },
             data: {
+                temprature: 0,
                 messages: prompt.messages,
                 model: "mistralai/Mistral-7B-Instruct-v0.1",
                 stream: false,
+                max_tokens: 10000,
             },
         });
         if (!res.content) return null;
