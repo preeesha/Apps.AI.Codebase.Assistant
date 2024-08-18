@@ -8,8 +8,8 @@ import {
     ISlashCommand,
     SlashCommandContext,
 } from "@rocket.chat/apps-engine/definition/slashcommands";
-import { improveModal } from "../modals/improveModal";
 import { persistUIData } from "../utils/persistenceHandlers";
+import { improveModal } from "./ImproveCommand.modal";
 
 export class ImproveCommand implements ISlashCommand {
     public command = "rcc-improve";

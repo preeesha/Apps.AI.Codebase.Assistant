@@ -9,11 +9,11 @@ import { UIKitViewSubmitInteractionContext } from "@rocket.chat/apps-engine/defi
 import {
     FIND_SIMILAR_COMMAND_MODAL,
     findSimilarModalSubmitHandler,
-} from "../modals/findSimilarModal";
+} from "../commands/FindSimilar.modal";
 import {
     IMPROVE_COMMAND_MODAL,
     improveModalSubmitHandler,
-} from "../modals/improveModal";
+} from "../commands/ImproveCommand.modal";
 import { getUIData } from "./persistenceHandlers";
 
 const MODALS: Record<string, any> = {
