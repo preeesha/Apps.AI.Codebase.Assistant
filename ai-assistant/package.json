@@ -1,4 +1,7 @@
 {
+    "scripts": {
+        "dev": "clear && tsx src/test.ts"
+    },
     "devDependencies": {
         "@rocket.chat/apps-cli": "^1.11.1",
         "@rocket.chat/apps-engine": "^1.19.0",
