@@ -7,11 +7,11 @@ import {
     ISlashCommand,
     SlashCommandContext,
 } from "@rocket.chat/apps-engine/definition/slashcommands";
-import { DBNode } from "../core/db/db";
-import { IDB } from "../core/db/db.types";
-import { Neo4j } from "../core/db/neo4j";
-import { MiniLML6 } from "../core/embeddings/minilml6";
 import { Query } from "../core/query";
+import { DBNode } from "../core/services/db/db";
+import { IDB } from "../core/services/db/db.types";
+import { Neo4j } from "../core/services/db/neo4j";
+import { MiniLML6 } from "../core/services/embeddings/minilml6";
 import { handleCommandResponse } from "../utils/handleCommandResponse";
 
 export class ImportanceCommand implements ISlashCommand {

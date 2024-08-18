@@ -1,5 +1,5 @@
 import { IHttp } from "@rocket.chat/apps-engine/definition/accessors";
-import { HF_TOKEN } from "../../credentials";
+import { HF_TOKEN } from "../../../credentials";
 import { IEmbeddingModel } from "./embeddings.types";
 
 export class MiniLML6 implements IEmbeddingModel {

@@ -1,8 +1,8 @@
-import { DBNode } from "./db/db";
-import { IDB } from "./db/db.types";
-import { IEmbeddingModel } from "./embeddings/embeddings.types";
-import { ILLMModel } from "./llm/llm.types";
 import { PromptFactory } from "./prompt.factory";
+import { DBNode } from "./services/db/db";
+import { IDB } from "./services/db/db.types";
+import { IEmbeddingModel } from "./services/embeddings/embeddings.types";
+import { ILLMModel } from "./services/llm/llm.types";
 
 export namespace Query {
     export async function getDBNodesFromVectorQuery(

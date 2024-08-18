@@ -8,11 +8,11 @@ import {
     SlashCommandContext,
 } from "@rocket.chat/apps-engine/definition/slashcommands";
 
-import { Neo4j } from "../core/db/neo4j";
-import { MiniLML6 } from "../core/embeddings/minilml6";
-import { Llama3_70B } from "../core/llm/llama3_70B";
 import { PromptFactory } from "../core/prompt.factory";
 import { Query } from "../core/query";
+import { Neo4j } from "../core/services/db/neo4j";
+import { MiniLML6 } from "../core/services/embeddings/minilml6";
+import { Llama3_70B } from "../core/services/llm/llama3_70B";
 import { handleCommandResponse } from "../utils/handleCommandResponse";
 
 export class AskCodeCommand implements ISlashCommand {

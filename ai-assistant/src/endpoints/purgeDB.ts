@@ -10,8 +10,8 @@ import {
     IApiRequest,
     IApiResponse,
 } from "@rocket.chat/apps-engine/definition/api";
-import { IDB } from "../core/db/db.types";
-import { Neo4j } from "../core/db/neo4j";
+import { IDB } from "../core/services/db/db.types";
+import { Neo4j } from "../core/services/db/neo4j";
 
 export class PurgeDBEndpoint extends ApiEndpoint {
     public path = "purgeDB";

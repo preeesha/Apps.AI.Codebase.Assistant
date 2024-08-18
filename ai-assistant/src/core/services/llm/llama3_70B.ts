@@ -1,7 +1,7 @@
 import { IHttp } from "@rocket.chat/apps-engine/definition/accessors";
 
-import { HF_TOKEN } from "../../credentials";
-import { Prompt } from "../prompt";
+import { HF_TOKEN } from "../../../credentials";
+import { Prompt } from "../../prompt";
 import { ILLMModel } from "./llm.types";
 
 export class Llama3_70B implements ILLMModel {

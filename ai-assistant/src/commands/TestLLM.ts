@@ -8,8 +8,8 @@ import {
     SlashCommandContext,
 } from "@rocket.chat/apps-engine/definition/slashcommands";
 
-import { Llama3_70B } from "../core/llm/llama3_70B";
 import { Prompt } from "../core/prompt";
+import { Llama3_70B } from "../core/services/llm/llama3_70B";
 import { handleCommandResponse } from "../utils/handleCommandResponse";
 
 export class TestCommand implements ISlashCommand {
