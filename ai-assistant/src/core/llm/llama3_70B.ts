@@ -29,6 +29,8 @@ export class Llama3_70B implements ILLMModel {
         if (!res.content) return null;
 
         const message = JSON.parse(res.content).choices[0].message.content;
+        console.log(message);
+
         return message;
     }
 

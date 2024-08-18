@@ -36,9 +36,9 @@ export class Neo4j implements IDB {
         // this.baseUrl = "http://neo4j:7474";
         // this.username = "neo4j";
         // this.password = "strongpasswordsafe123";
-        this.baseUrl = "http://34.230.47.155:7474";
+        this.baseUrl = "http://44.202.213.161:7474";
         this.username = "neo4j";
-        this.password = "talk-runway-pad";
+        this.password = "advance-polarity-flake";
     }
 
     private async sendRequest(

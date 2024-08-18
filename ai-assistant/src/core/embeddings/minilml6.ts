@@ -31,6 +31,8 @@ export class MiniLML6 implements IEmbeddingModel {
         if (!res || res.statusCode !== 200) return null;
 
         const data = res.data[0] as number[];
+        console.log(data);
+
         return data;
     }
 
