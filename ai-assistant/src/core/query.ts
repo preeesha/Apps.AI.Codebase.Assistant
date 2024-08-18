@@ -2,7 +2,7 @@ import { DBNode } from "./db/db";
 import { IDB } from "./db/db.types";
 import { IEmbeddingModel } from "./embeddings/embeddings.types";
 import { ILLMModel } from "./llm/llm.types";
-import { PromptFactory } from "./prompt/prompt.factory";
+import { PromptFactory } from "./prompt.factory";
 
 export namespace Query {
     export async function getDBNodesFromVectorQuery(

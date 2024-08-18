@@ -11,7 +11,7 @@ import {
 import { Neo4j } from "../core/db/neo4j";
 import { MiniLML6 } from "../core/embeddings/minilml6";
 import { Llama3_70B } from "../core/llm/llama3_70B";
-import { PromptFactory } from "../core/prompt/prompt.factory";
+import { PromptFactory } from "../core/prompt.factory";
 import { Query } from "../core/query";
 import { handleCommandResponse } from "../utils/handleCommandResponse";
 

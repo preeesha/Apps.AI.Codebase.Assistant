@@ -1,6 +1,6 @@
 import { IHttp } from "@rocket.chat/apps-engine/definition/accessors";
 
-import { Prompt } from "../prompt/prompt";
+import { Prompt } from "../prompt";
 import { ILLMModel } from "./llm.types";
 
 export class Mistral_7B implements ILLMModel {
