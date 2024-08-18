@@ -25,11 +25,11 @@ export namespace PromptFactory {
             4. INPUT: "Can you please tell me more about the file tests/commands.spec.ts?"
             OUTPUT: <ANSWER>tests/commands.spec.ts</ANSWER>
 
-            OUTPUT FORMAT: <ANSWER>keyword1,keyword2,full/path/1,full/path/2</ANSWER>
+            OUTPUT STRICT FORMAT: <ANSWER>keyword1,keyword2,full/path/1,full/path/2</ANSWER>
         `);
         prompt.pushUser(`
-            Hey I have this query, can you please extract the possible keywords from it? Please answer in <ANSWER_START>keyword1, keyword2<ANSWER_END> format only and don't say literally anything else.
-            
+            Hey I have this query, can you please extract the possible keywords from it? Please answer in <ANSWER>keyword1, keyword2<ANSWER> format only and don't say literally anything else.
+
             Here's my query:
             ${query}
         `);
