@@ -23,13 +23,9 @@ export class PurgeDBEndpoint extends ApiEndpoint {
 
     async setupIndices(db: IDB) {
         const query = [
-            // Drop existing indices
-            ["DROP INDEX `nameEmbeddings`;"],
-            ["DROP INDEX `codeEmbeddings`;"],
-
             // Create indices for name embeddings
             [
-                "CREATE VECTOR INDEX `nameEmbeddings`",
+                "CREATE VECTOR INDEX `nameEmbeddings` IF NOT EXISTS",
                 "FOR (n: Node) ON (n.nameEmbeddings)",
                 "OPTIONS {indexConfig: {",
                 "   `vector.dimensions`: 384,",
@@ -39,7 +35,7 @@ export class PurgeDBEndpoint extends ApiEndpoint {
 
             // Create indices for code embeddings
             [
-                "CREATE VECTOR INDEX `codeEmbeddings`",
+                "CREATE VECTOR INDEX `codeEmbeddings` IF NOT EXISTS",
                 "FOR (n: Node) ON (n.codeEmbeddings)",
                 "OPTIONS {indexConfig: {",
                 "   `vector.dimensions`: 384,",
@@ -61,8 +57,8 @@ export class PurgeDBEndpoint extends ApiEndpoint {
     ): Promise<IApiResponse> {
         const db = new Neo4j(http);
 
-        await this.emptyDB(db);
         await this.setupIndices(db);
+        await this.emptyDB(db);
 
         return this.success();
     }
