@@ -179,6 +179,47 @@ export namespace PromptFactory {
         return prompt;
     }
 
+    export function makeTestcasesPrompt(
+        targetEntity: string,
+        codebase: string,
+        testingFramework: string
+    ): Prompt {
+        const prompt = new Prompt();
+
+        prompt.pushSystem(`
+            You are an expert in understanding typescript and javascript.
+
+            INPUT: target entity, other code entities the target entity uses, testing framework.
+
+            TASK: Based on the context (other code entities) provided, write various test cases for the target entity in the specified testing framwork.
+
+            EXPECTED OUTPUT: 100% code coverage testcases in markdown format.
+
+            RULES:
+            - STRICTLY, do not make anything other than the answer to the user's query.
+            - DO NOT REPEAT THE TRANSLATION MULTIPLE TIMES.
+            - Do not provide any kind of diagram or visualization in the output.
+            - The output MUST BE IN ONLY AND ONLY STRING.
+        `);
+        prompt.pushUser(`
+            Hey, can you write testcases for the following entity. I have provided you with other entities as well on which my target entity depends. Here you go:
+
+            <TESTING_FRAMEWORK_START>
+            ${testingFramework}
+            <TESTING_FRAMEWORK_END>
+            
+            <TARGET_ENTITY_START>
+            ${targetEntity}
+            <TARGET_ENTITY_END>
+
+            <OTHER_ENTITIES_START>
+            ${codebase}
+            <OTHER_ENTITIES_END>
+        `);
+
+        return prompt;
+    }
+
     export function makeTranslatePrompt(
         codebase: string,
         targetEntity: string,
@@ -208,7 +249,8 @@ export namespace PromptFactory {
             ${codebase}
             <CODEBASE_END>
 
-            <TARGET_ENTITY_START>${targetEntity}
+            <TARGET_ENTITY_START>
+            ${targetEntity}
             <TARGET_ENTITY_END>
         `);
 
