@@ -21,6 +21,11 @@ import { handleCommandResponse } from "../utils/handleCommandResponse";
 export const COMMAND = "rcc-testcases";
 export const TESTCASES_COMMAND_MODAL = "testcases-command";
 
+/**
+ * Helps to build the modal for `/rcc-testcases` command.
+ *
+ * @returns A promise that resolves to an object of type IUIKitSurfaceViewParam used to open RC's modal.
+ */
 export async function testcasesModal(): Promise<IUIKitSurfaceViewParam> {
     return {
         id: TESTCASES_COMMAND_MODAL,
@@ -45,6 +50,13 @@ export async function testcasesModal(): Promise<IUIKitSurfaceViewParam> {
     };
 }
 
+/**
+ * Processes the given query by extracting keywords, querying the database, and generating test cases.
+ *
+ * @param http - The HTTP client used for making requests.
+ * @param query - The user's query.
+ * @returns A promise that resolves to a string representing the generated test cases, or null if no test cases were generated.
+ */
 async function process(http: IHttp, query: string): Promise<string | null> {
     const db = new Neo4j(http);
     const llm = new Llama3_70B(http);
@@ -90,6 +102,17 @@ async function process(http: IHttp, query: string): Promise<string | null> {
     return answer;
 }
 
+/**
+ * Handles the submission of the testcases modal.
+ *
+ * @param {IUIKitSurface} view - The UI Kit surface.
+ * @param {IUser} sender - The user who triggered the event.
+ * @param {IRoom} room - The room where the event occurred.
+ * @param {IRead} read - The read utility.
+ * @param {IModify} modify - The modify utility.
+ * @param {IHttp} http - The HTTP utility.
+ * @returns {Promise<void>} - A promise that resolves when the function is complete.
+ */
 export async function testcasesModalSubmitHandler(
     view: IUIKitSurface,
     sender: IUser,
