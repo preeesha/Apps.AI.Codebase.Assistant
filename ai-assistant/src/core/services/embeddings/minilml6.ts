@@ -11,6 +11,11 @@ export class MiniLML6 implements IEmbeddingModel {
         this.http = http;
     }
 
+    /**
+     * Extracts embeddings from Hugging Face API using the MiniLM-L6 model.
+     * @param text - The input text to extract embeddings from.
+     * @returns A promise that resolves to an array of numbers representing the embeddings, or null if the request fails.
+     */
     async fromHuggingFace(text: string): Promise<number[] | null> {
         const res = await this.http.post(
             `https://api-inference.huggingface.co/pipeline/feature-extraction/sentence-transformers/all-MiniLM-L6-v2`,
@@ -34,6 +39,11 @@ export class MiniLML6 implements IEmbeddingModel {
         return data;
     }
 
+    /**
+     * Generates embeddings for the given text.
+     * @param text - The input text for which embeddings need to be generated.
+     * @returns A promise that resolves to an array of numbers representing the embeddings for the text, or null if the generation fails.
+     */
     async generate(text: string): Promise<number[] | null> {
         // return await this.fromHuggingFace(text);
 
