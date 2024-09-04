@@ -56,6 +56,12 @@ Rocket Chatter is a Slack bot that provides code-related information and assista
 /rcc-importance [entity]
 \`\`\`
 
+\`/rcc-testcases\`: Generates test cases for the provided code which uses Rocket Chat codebase to ensure proper functionality and test coverage.
+\`\`\`
+/rcc-testcases
+\`\`\`
+(A modal will open to input the code snippet you want to generate testcases for)
+
 \`/rcc-translate\`: Translates the target entity from one programming language to another for a better understanding of the codebase.
 \`\`\`
 /rcc-translate [entity] [target language]
