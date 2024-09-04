@@ -20,7 +20,7 @@ export class Mistral_7B implements ILLMModel {
             },
             data: {
                 model: this.model,
-                temprature: 0,
+                temperature: 0,
                 messages: prompt.messages,
             },
         });

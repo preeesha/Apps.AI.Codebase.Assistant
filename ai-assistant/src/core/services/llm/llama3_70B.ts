@@ -21,7 +21,7 @@ export class Llama3_70B implements ILLMModel {
                 authorization: "Bearer " + HF_TOKEN,
             },
             data: {
-                temprature: 0,
+                temperature: 0,
                 messages: prompt.messages,
                 model: "mistralai/Mistral-7B-Instruct-v0.1",
                 stream: false,
@@ -37,7 +37,7 @@ export class Llama3_70B implements ILLMModel {
     }
 
     async ask(prompt: Prompt): Promise<string | null> {
-        return await this.fromHuggingFace(prompt);
+        // return await this.fromHuggingFace(prompt);
 
         const url = `${this.baseURL}/chat/completions`;
         const res = await this.http.post(url, {
@@ -45,6 +45,7 @@ export class Llama3_70B implements ILLMModel {
                 "Content-Type": "application/json",
             },
             data: {
+                temperature: 0,
                 messages: prompt.messages,
             },
         });
@@ -52,6 +53,8 @@ export class Llama3_70B implements ILLMModel {
 
         // @ts-ignore
         const message = JSON.parse(res.content).choices[0].message.content;
+        console.log(message);
+
         return message;
     }
 }
