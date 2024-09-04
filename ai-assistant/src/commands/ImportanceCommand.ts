@@ -31,17 +31,17 @@ export class ImportanceCommand implements ISlashCommand {
 			`
         );
         if (!maxOutDegreeQuery.length) return 0;
-        const maxOutDegree = maxOutDegreeQuery[0].get("outDegree").toNumber();
+        const maxOutDegree = maxOutDegreeQuery[0] as unknown as number;
 
         const outDegree = await db.run(
             `
 				MATCH (n:Node { id: $id })<-[]-(x) 
 				RETURN count(x) AS outDegree
-			`,
+                `,
             { id: node.id }
         );
         if (!outDegree.length) return 0;
-        const centrality = outDegree[0].get("outDegree").toNumber();
+        const centrality = outDegree[0] as unknown as number;
 
         const relativeCentrality = centrality / maxOutDegree;
         return relativeCentrality;
@@ -58,7 +58,7 @@ export class ImportanceCommand implements ISlashCommand {
 			`
         );
         if (!maxInDegreeQuery.length) return 0;
-        const maxInDegree = maxInDegreeQuery[0].get("inDegree").toNumber();
+        const maxInDegree = maxInDegreeQuery[0] as unknown as number;
 
         const inDegree = await db.run(
             `
@@ -68,7 +68,7 @@ export class ImportanceCommand implements ISlashCommand {
             { id: node.id }
         );
         if (!inDegree.length) return 0;
-        const criticality = inDegree[0].get("inDegree").toNumber();
+        const criticality = inDegree[0] as unknown as number;
 
         const relativeCriticality = criticality / maxInDegree;
         return relativeCriticality;
