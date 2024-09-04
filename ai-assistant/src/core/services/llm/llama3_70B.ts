@@ -36,6 +36,12 @@ export class Llama3_70B implements ILLMModel {
         return message;
     }
 
+    /**
+     * Asynchronously asks a prompt and returns the response.
+     *
+     * @param {Prompt} prompt - The prompt to ask.
+     * @returns {Promise<string | null>} A promise that resolves with the response string or null if no response is available.
+     */
     async ask(prompt: Prompt): Promise<string | null> {
         // return await this.fromHuggingFace(prompt);
 
