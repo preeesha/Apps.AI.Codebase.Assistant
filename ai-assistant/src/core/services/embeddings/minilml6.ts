@@ -31,13 +31,11 @@ export class MiniLML6 implements IEmbeddingModel {
         if (!res || res.statusCode !== 200) return null;
 
         const data = res.data[0] as number[];
-        console.log(data);
-
         return data;
     }
 
     async generate(text: string): Promise<number[] | null> {
-        return await this.fromHuggingFace(text);
+        // return await this.fromHuggingFace(text);
 
         const res = await this.http.post(this.baseURL, {
             headers: {
