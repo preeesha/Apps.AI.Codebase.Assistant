@@ -21,6 +21,13 @@ export class AskCodeCommand implements ISlashCommand {
     public i18nDescription = "";
     public providesPreview = false;
 
+    /**
+     * Processes the user's query and returns the answer.
+     *
+     * @param {IHttp} http - The HTTP object used for making requests.
+     * @param {string} query - The user's query.
+     * @returns {Promise<string | null>} A promise that resolves to the response to be given to the user or `null` if no answer or no reference is found.
+     */
     private async process(http: IHttp, query: string): Promise<string | null> {
         const db = new Neo4j(http);
         const llm = new Llama3_70B(http);
@@ -65,6 +72,15 @@ export class AskCodeCommand implements ISlashCommand {
         return answer;
     }
 
+    /**
+     * Executes the AskCodeCommand.
+     *
+     * @param context - The SlashCommandContext object.
+     * @param read - The IRead object.
+     * @param modify - The IModify object.
+     * @param http - The IHttp object.
+     * @returns A Promise that resolves to void.
+     */
     public async executor(
         context: SlashCommandContext,
         read: IRead,
