@@ -20,11 +20,25 @@ import {
 } from "./ingest.types";
 
 namespace Helpers {
+    /**
+     * Inserts a node into the database.
+     * 
+     * @param {IDB} db - The database instance.
+     * @param {DBNode} node - The node to be inserted.
+     * @returns {Promise<void>} - A promise that resolves when the node is successfully inserted.
+     */
     async function insertNode(db: IDB, node: DBNode) {
         const query = new DBNode(node).getDBInsertQuery();
         await db.run(query, node);
     }
 
+    /**
+     * Inserts an array of nodes into the database.
+     * 
+     * @param {IDB} db - The database object.
+     * @param {DBNode[]} nodes - The array of nodes to be inserted.
+     * @returns {Promise<void>} - A promise that resolves when all nodes have been inserted.
+     */
     export async function insertNodes(db: IDB, nodes: DBNode[]) {
         await Promise.all(nodes.map((node) => insertNode(db, node)));
     }
@@ -33,6 +47,12 @@ namespace Helpers {
 export class IngestEndpoint extends ApiEndpoint {
     public path = "ingest";
 
+    /**
+     * Generates the request and response bodies for the IngestEndpoint.
+     * 
+     * @param content - The content to be used for generating the request body.
+     * @returns An array containing the generated request body and response body.
+     */
     makeBodies(
         content: any
     ): [IngestEndpointRequestBody, IngestEndpointResponseBody] {
