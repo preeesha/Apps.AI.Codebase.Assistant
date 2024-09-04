@@ -20,6 +20,14 @@ export class TranslateCommand implements ISlashCommand {
     public i18nDescription = "";
     public providesPreview = false;
 
+    /**
+     * Processes the translation command.
+     *
+     * @param {IHttp} http - The HTTP client.
+     * @param {string} targetLanguage - The target language for translation.
+     * @param {string} targetEntity - The target entity for translation.
+     * @returns {Promise<string | null>} A promise that resolves to the translated result or null if no translation is found.
+     */
     private async process(
         http: IHttp,
         targetLanguage: string,
@@ -60,6 +68,15 @@ export class TranslateCommand implements ISlashCommand {
         return res;
     }
 
+    /**
+     * Executes the TranslateCommand.
+     *
+     * @param {SlashCommandContext} context - The context of the slash command.
+     * @param {IRead} read - The read utility.
+     * @param {IModify} modify - The modify utility.
+     * @param {IHttp} http - The HTTP utility.
+     * @returns {Promise<void>} - A promise that resolves when the execution is complete.
+     */
     public async executor(
         context: SlashCommandContext,
         read: IRead,
