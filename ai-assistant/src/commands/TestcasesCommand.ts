@@ -9,7 +9,7 @@ import {
     SlashCommandContext,
 } from "@rocket.chat/apps-engine/definition/slashcommands";
 import { persistUIData } from "../utils/persistenceHandlers";
-import { improveModal } from "./ImproveCommand.modal";
+import { testcasesModal } from "./TestcasesCommand.modal";
 
 export class TestcasesCommand implements ISlashCommand {
     public command = "rcc-testcases";
@@ -35,7 +35,7 @@ export class TestcasesCommand implements ISlashCommand {
         await modify
             .getUiController()
             .openSurfaceView(
-                await improveModal(),
+                await testcasesModal(),
                 { triggerId },
                 context.getSender()
             );
