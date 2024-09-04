@@ -48,11 +48,22 @@ export class DBNode {
         this.descriptor = node.descriptor;
     }
 
+    /**
+     * Fills the embeddings for the given embedding model.
+     *
+     * @param {IEmbeddingModel} embeddingModel - The embedding model used to generate embeddings.
+     * @returns {Promise<void>} - A promise that resolves when the embeddings are filled.
+     */
     async fillEmbeddings(embeddingModel: IEmbeddingModel): Promise<void> {
         this.nameEmbeddings = (await embeddingModel.generate(this.name)) ?? [];
         this.codeEmbeddings = (await embeddingModel.generate(this.code)) ?? [];
     }
 
+    /**
+     * Generates a database insert query for creating a new node with the specified properties.
+     *
+     * @returns The database insert query as a string.
+     */
     getDBInsertQuery(): string {
         let query = "";
         query += `
