@@ -34,7 +34,6 @@ export class DiagramCommand implements ISlashCommand {
          * ---------------------------------------------------------------------------------------------
          */
         const keywords = await Query.getDBKeywordsFromQuery(llm, query);
-        console.log("KEYWORDS", keywords);
         if (!keywords.length) return null;
 
         /**
@@ -48,7 +47,6 @@ export class DiagramCommand implements ISlashCommand {
             embeddingModel,
             keywords
         );
-        console.log("RESULTS", results);
         if (!results.length) return null;
 
         /**
