@@ -26,9 +26,16 @@ export namespace Query {
         if (!result.length) return [];
 
         const nodes: DBNode[] = [];
-        for (const record of result) {
-            nodes.push(record as DBNode);
-        }
+        const processRecord = (record: any) => {
+            const data = record as DBNode;
+            data.nameEmbeddings = [];
+            data.codeEmbeddings = [];
+            nodes.push(data);
+        };
+        // node
+        processRecord(result[0]);
+        // relatedNodes
+        for (const record of (result as any)[1]) processRecord(record);
 
         return nodes;
     }
