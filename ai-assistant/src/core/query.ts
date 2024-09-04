@@ -4,7 +4,19 @@ import { IDB } from "./services/db/db.types";
 import { IEmbeddingModel } from "./services/embeddings/embeddings.types";
 import { ILLMModel } from "./services/llm/llm.types";
 
+/**
+ * The Query namespace provides functions for querying a database and retrieving nodes based on various criteria.
+ */
 export namespace Query {
+    /**
+     * Retrieves database nodes based on a vector query.
+     * 
+     * @param {IDB} db - The database instance.
+     * @param {string} indexName - The name of the index to query.
+     * @param {number[]} vector - The vector to query with.
+     * @param {number} threshold - The minimum score threshold for the query results.
+     * @returns {Promise<DBNode[]>} - A promise that resolves to an array of DBNode objects.
+     */
     export async function getDBNodesFromVectorQuery(
         db: IDB,
         indexName: string,
@@ -40,6 +52,14 @@ export namespace Query {
         return nodes;
     }
 
+    /**
+     * Retrieves code nodes from the database based on a list of keywords.
+     * 
+     * @param {IDB} db - The database object.
+     * @param {IEmbeddingModel} embeddingModel - The embedding model used for generating query vectors.
+     * @param {string[]} keywords - The list of keywords to search for.
+     * @returns {Promise<DBNode[]>} - A promise that resolves to an array of DBNode objects matching the keywords.
+     */
     export async function getCodeNodesFromKeywords(
         db: IDB,
         embeddingModel: IEmbeddingModel,
@@ -62,6 +82,13 @@ export namespace Query {
         return results;
     }
 
+    /**
+     * Retrieves database keywords from a given query using a language model.
+     * 
+     * @param llm - The language model used to generate the keywords.
+     * @param query - The query string to extract keywords from.
+     * @returns A promise that resolves to an array of database keywords extracted from the query.
+     */
     export async function getDBKeywordsFromQuery(
         llm: ILLMModel,
         query: string
