@@ -33,12 +33,12 @@ export class Neo4j implements IDB {
         // password: string
     ) {
         this.http = http;
-        // this.baseUrl = "http://neo4j:7474";
-        // this.username = "neo4j";
-        // this.password = "strongpasswordsafe123";
-        this.baseUrl = "http://44.192.104.170:7474";
+        this.baseUrl = "http://neo4j:7474";
         this.username = "neo4j";
-        this.password = "individuals-societies-wools";
+        this.password = "strongpasswordsafe123";
+        // this.baseUrl = "http://44.192.104.170:7474";
+        // this.username = "neo4j";
+        // this.password = "individuals-societies-wools";
     }
 
     private async sendRequest(
@@ -58,8 +58,6 @@ export class Neo4j implements IDB {
             headers,
             data: data,
         });
-
-        console.log(res);
 
         if (!res || ![200, 201].includes(res.statusCode) || !res.content) {
             return null;
