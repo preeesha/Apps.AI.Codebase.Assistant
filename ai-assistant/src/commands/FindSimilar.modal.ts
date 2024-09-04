@@ -20,6 +20,12 @@ import { handleCommandResponse } from "../utils/handleCommandResponse";
 export const COMMAND = "rcc-findsimilar";
 export const FIND_SIMILAR_COMMAND_MODAL = "findsimilar-command";
 
+/**
+ * Helps to build the modal for `/rcc-findsimilar` command.
+ * Returns the configuration object for the findSimilarModal function.
+ *
+ * @returns A promise that resolves to an object of type IUIKitSurfaceViewParam used to open RC's modal.
+ */
 export async function findSimilarModal(): Promise<IUIKitSurfaceViewParam> {
     return {
         id: FIND_SIMILAR_COMMAND_MODAL,
@@ -44,6 +50,13 @@ export async function findSimilarModal(): Promise<IUIKitSurfaceViewParam> {
     };
 }
 
+/**
+ * Processes the given query to find similar nodes in the database.
+ *
+ * @param http - The IHttp instance used for making HTTP requests.
+ * @param query - The user's query string to process.
+ * @returns Related code chunks from the database.
+ */
 async function process(http: IHttp, query: string): Promise<DBNode[] | null> {
     const db = new Neo4j(http);
     const embeddingModel = new MiniLML6(http);
@@ -61,6 +74,16 @@ async function process(http: IHttp, query: string): Promise<DBNode[] | null> {
     return similarNodes;
 }
 
+/**
+ * Handles the submit event of the findSimilarModal.
+ *
+ * @param view - The UI kit surface view.
+ * @param sender - The user who triggered the event.
+ * @param room - The room where the event occurred.
+ * @param read - The read utility.
+ * @param modify - The modify utility.
+ * @param http - The HTTP utility.
+ */
 export async function findSimilarModalSubmitHandler(
     view: IUIKitSurface,
     sender: IUser,

@@ -17,6 +17,17 @@ export class FindSimilarCommand implements ISlashCommand {
     public i18nDescription = "";
     public providesPreview = false;
 
+    /**
+     * Executes the FindSimilar command.
+     * 
+     * @param context - The SlashCommandContext object.
+     * @param read - The IRead object.
+     * @param modify - The IModify object.
+     * @param http - The IHttp object.
+     * @param persistence - The IPersistence object.
+     * @returns A Promise that resolves to void.
+     * @throws Error if no trigger ID is provided.
+     */
     public async executor(
         context: SlashCommandContext,
         read: IRead,
