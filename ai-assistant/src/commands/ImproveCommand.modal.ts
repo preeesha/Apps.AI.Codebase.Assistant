@@ -21,6 +21,11 @@ import { handleCommandResponse } from "../utils/handleCommandResponse";
 export const COMMAND = "rcc-improve";
 export const IMPROVE_COMMAND_MODAL = "improve-command";
 
+/**
+ * Helps to build the modal for `/rcc-improve` command.
+ *
+ * @returns A promise that resolves to an object of type IUIKitSurfaceViewParam used to open RC's modal.
+ */
 export async function improveModal(): Promise<IUIKitSurfaceViewParam> {
     return {
         id: IMPROVE_COMMAND_MODAL,
@@ -45,6 +50,14 @@ export async function improveModal(): Promise<IUIKitSurfaceViewParam> {
     };
 }
 
+
+/**
+ * Processes the user's query to generate an answer based on the data in the database.
+ * 
+ * @param {IHttp} http - The HTTP client used for making requests.
+ * @param {string} query - The user's query.
+ * @returns {Promise<string | null>} A promise that resolves to the generated answer or null if no answer is found.
+ */
 async function process(http: IHttp, query: string): Promise<string | null> {
     const db = new Neo4j(http);
     const llm = new Llama3_70B(http);
@@ -89,6 +102,17 @@ async function process(http: IHttp, query: string): Promise<string | null> {
     return answer;
 }
 
+/**
+ * Handles the submission of the improve modal form.
+ * 
+ * @param {IUIKitSurface} view - The UI Kit surface where the modal is being displayed.
+ * @param {IUser} sender - The user who submitted the form.
+ * @param {IRoom} room - The room where the form was submitted.
+ * @param {IRead} read - The read utility object.
+ * @param {IModify} modify - The modify utility object.
+ * @param {IHttp} http - The HTTP utility object.
+ * @returns {Promise<void>} - A promise that resolves when the submission is handled.
+ */
 export async function improveModalSubmitHandler(
     view: IUIKitSurface,
     sender: IUser,

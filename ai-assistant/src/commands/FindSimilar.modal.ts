@@ -22,7 +22,6 @@ export const FIND_SIMILAR_COMMAND_MODAL = "findsimilar-command";
 
 /**
  * Helps to build the modal for `/rcc-findsimilar` command.
- * Returns the configuration object for the findSimilarModal function.
  *
  * @returns A promise that resolves to an object of type IUIKitSurfaceViewParam used to open RC's modal.
  */
