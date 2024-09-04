@@ -171,7 +171,8 @@ export namespace PromptFactory {
             <CODEBASE_START>
             ${codebase}
             <CODEBASE_END>
-            <TARGET_ENTITY_START>${targetEntity}
+            <TARGET_ENTITY_START>
+            ${targetEntity}
             <TARGET_ENTITY_END>.`
         );
 
@@ -229,7 +230,7 @@ export namespace PromptFactory {
                 - ALWAYS explain where and why it's used in the codebase with due reasoning and mention of the file and line number.
             </EXPLANATION>
             <DIAGRAM>
-                - You only provide flowchart or sequence diagram in the mermaid 8.9.0 format.
+                - You only provide flowchart or sequence diagram in the Ditaa format.
                 - The diagram must be clear and understandable for the user. The aim is to make it easy for the user to understand the flow & overall working.
                 - The output must not have any kind of errors and must render properly.
             </DIAGRAM>
@@ -244,7 +245,7 @@ export namespace PromptFactory {
             - The output MUST BE IN ONLY AND ONLY IN THE ABOVE SPECIFIED FORMAT.
         `);
         prompt.pushUser(
-            `Hey can you explain why this \`${query}\` entity is used in the following codebase? Here's the codebase:
+            `Hey can you explain why this \`${query}\` entity is used & is useful in the following codebase? Here's the codebase:
             
             <CODEBASE_START>
             ${codebase}
