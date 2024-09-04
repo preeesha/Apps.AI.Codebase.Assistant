@@ -23,7 +23,7 @@ export class DocumentCommand implements ISlashCommand {
     private async process(
         http: IHttp,
         query: string
-    ): Promise<Record<string, string> | null> {
+    ): Promise<{ jsDoc: string; explanation: string | null } | null> {
         const db = new Neo4j(http);
         const llm = new Llama3_70B(http);
         const embeddingModel = new MiniLML6(http);
@@ -35,7 +35,6 @@ export class DocumentCommand implements ISlashCommand {
          * ---------------------------------------------------------------------------------------------
          */
         const keywords = await Query.getDBKeywordsFromQuery(llm, query);
-        console.log("KEYWORDS", keywords);
         if (!keywords.length) return null;
 
         /**
@@ -73,10 +72,10 @@ export class DocumentCommand implements ISlashCommand {
             .split("<EXPLANATION_END>")[0]
             .trim();
 
-        console.log(jsDoc);
-        console.log(explanation);
-
-        return { jsDoc: jsDoc, explanation: explanation };
+        return {
+            jsDoc: "```typescript\n" + jsDoc + "\n```",
+            explanation: explanation,
+        };
     }
 
     public async executor(
@@ -98,7 +97,7 @@ export class DocumentCommand implements ISlashCommand {
 
         let res = await this.process(http, query);
         if (res) {
-            await sendEditedMessage(`${res["jsDoc"]}\n\n${res["explanation"]}`);
+            await sendEditedMessage(`${res.jsDoc}\n\n${res.explanation}`);
         } else {
             await sendEditedMessage("❌ No references found!");
         }
