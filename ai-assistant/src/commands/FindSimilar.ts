@@ -8,8 +8,8 @@ import {
     ISlashCommand,
     SlashCommandContext,
 } from "@rocket.chat/apps-engine/definition/slashcommands";
-import { findSimilarModal } from "../modals/findSimilarModal";
 import { persistUIData } from "../utils/persistenceHandlers";
+import { findSimilarModal } from "./FindSimilar.modal";
 
 export class FindSimilarCommand implements ISlashCommand {
     public command = "rcc-findsimilar";

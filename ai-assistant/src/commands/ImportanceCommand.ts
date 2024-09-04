@@ -7,12 +7,11 @@ import {
     ISlashCommand,
     SlashCommandContext,
 } from "@rocket.chat/apps-engine/definition/slashcommands";
-import { DBNode } from "../core/db/db";
-import { IDB } from "../core/db/db.types";
-import { Neo4j } from "../core/db/neo4j";
-import { MiniLML6 } from "../core/embeddings/minilml6";
-import { Llama3_70B } from "../core/llm/llama3_70B";
 import { Query } from "../core/query";
+import { DBNode } from "../core/services/db/db";
+import { IDB } from "../core/services/db/db.types";
+import { Neo4j } from "../core/services/db/neo4j";
+import { MiniLML6 } from "../core/services/embeddings/minilml6";
 import { handleCommandResponse } from "../utils/handleCommandResponse";
 
 export class ImportanceCommand implements ISlashCommand {
@@ -32,17 +31,17 @@ export class ImportanceCommand implements ISlashCommand {
 			`
         );
         if (!maxOutDegreeQuery.length) return 0;
-        const maxOutDegree = maxOutDegreeQuery[0].get("outDegree").toNumber();
+        const maxOutDegree = maxOutDegreeQuery[0] as unknown as number;
 
         const outDegree = await db.run(
             `
 				MATCH (n:Node { id: $id })<-[]-(x) 
 				RETURN count(x) AS outDegree
-			`,
+                `,
             { id: node.id }
         );
         if (!outDegree.length) return 0;
-        const centrality = outDegree[0].get("outDegree").toNumber();
+        const centrality = outDegree[0] as unknown as number;
 
         const relativeCentrality = centrality / maxOutDegree;
         return relativeCentrality;
@@ -59,7 +58,7 @@ export class ImportanceCommand implements ISlashCommand {
 			`
         );
         if (!maxInDegreeQuery.length) return 0;
-        const maxInDegree = maxInDegreeQuery[0].get("inDegree").toNumber();
+        const maxInDegree = maxInDegreeQuery[0] as unknown as number;
 
         const inDegree = await db.run(
             `
@@ -69,7 +68,7 @@ export class ImportanceCommand implements ISlashCommand {
             { id: node.id }
         );
         if (!inDegree.length) return 0;
-        const criticality = inDegree[0].get("inDegree").toNumber();
+        const criticality = inDegree[0] as unknown as number;
 
         const relativeCriticality = criticality / maxInDegree;
         return relativeCriticality;
@@ -85,7 +84,6 @@ export class ImportanceCommand implements ISlashCommand {
         query: string
     ): Promise<Record<string, number> | null> {
         const db = new Neo4j(http);
-        const llm = new Llama3_70B(http);
         const embeddingModel = new MiniLML6(http);
 
         /**
@@ -131,9 +129,7 @@ export class ImportanceCommand implements ISlashCommand {
         http: IHttp
     ): Promise<void> {
         const [query] = context.getArguments();
-        if (!query) {
-            throw new Error("Error!");
-        }
+        if (!query) return;
 
         const sendEditedMessage = await handleCommandResponse(
             query,

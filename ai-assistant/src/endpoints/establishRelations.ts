@@ -10,9 +10,13 @@ import {
     IApiRequest,
     IApiResponse,
 } from "@rocket.chat/apps-engine/definition/api";
-import { IDB } from "../core/db/db.types";
-import { Neo4j } from "../core/db/neo4j";
-import { EstablishRelationsEndpointRelations, EstablishRelationsEndpointRequestBody, EstablishRelationsEndpointResponseBody } from "./establishRelations.types";
+import { IDB } from "../core/services/db/db.types";
+import { Neo4j } from "../core/services/db/neo4j";
+import {
+    EstablishRelationsEndpointRelations,
+    EstablishRelationsEndpointRequestBody,
+    EstablishRelationsEndpointResponseBody,
+} from "./establishRelations.types";
 
 namespace Helpers {
     async function establishRelation(
@@ -33,7 +37,10 @@ namespace Helpers {
         }
     }
 
-    export async function establishRelations(db: IDB, relations: EstablishRelationsEndpointRelations[]) {
+    export async function establishRelations(
+        db: IDB,
+        relations: EstablishRelationsEndpointRelations[]
+    ) {
         const jobs: Promise<any>[] = [];
         for (const relation of relations) {
             const job = establishRelation(
@@ -53,7 +60,10 @@ export class EstablishRelationsEndpoint extends ApiEndpoint {
 
     makeBodies(
         content: any
-    ): [EstablishRelationsEndpointRequestBody, EstablishRelationsEndpointResponseBody] {
+    ): [
+        EstablishRelationsEndpointRequestBody,
+        EstablishRelationsEndpointResponseBody
+    ] {
         const requestBody = content as EstablishRelationsEndpointRequestBody;
         const responseBody: EstablishRelationsEndpointResponseBody = {
             status: 200,

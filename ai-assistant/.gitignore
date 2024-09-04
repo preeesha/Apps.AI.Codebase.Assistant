@@ -32,3 +32,6 @@ Temporary Items
 *.sh
 
 scratch/
+
+test.ts
+credentials.ts

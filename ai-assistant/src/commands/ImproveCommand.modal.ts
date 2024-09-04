@@ -10,24 +10,24 @@ import {
     UIKitSurfaceType,
 } from "@rocket.chat/apps-engine/definition/uikit";
 import { IUser } from "@rocket.chat/apps-engine/definition/users";
-import { Neo4j } from "../core/db/neo4j";
-import { MiniLML6 } from "../core/embeddings/minilml6";
-import { Llama3_70B } from "../core/llm/llama3_70B";
-import { PromptFactory } from "../core/prompt/prompt.factory";
+import { PromptFactory } from "../core/prompt.factory";
 import { Query } from "../core/query";
+import { Neo4j } from "../core/services/db/neo4j";
+import { MiniLML6 } from "../core/services/embeddings/minilml6";
+import { Llama3_70B } from "../core/services/llm/llama3_70B";
 import { getButton, getInputBox } from "../utils/blockBuilders";
 import { handleCommandResponse } from "../utils/handleCommandResponse";
 
-export const COMMAND = "rcc-suggest";
-export const SUGGEST_COMMAND_MODAL = "suggest-command";
+export const COMMAND = "rcc-improve";
+export const IMPROVE_COMMAND_MODAL = "improve-command";
 
-export async function suggestModal(): Promise<IUIKitSurfaceViewParam> {
+export async function improveModal(): Promise<IUIKitSurfaceViewParam> {
     return {
-        id: SUGGEST_COMMAND_MODAL,
+        id: IMPROVE_COMMAND_MODAL,
         type: UIKitSurfaceType.MODAL,
         title: {
             type: "plain_text",
-            text: "Get Suggestions",
+            text: "Get Improvements",
         },
         close: await getButton("Close", "", ""),
         clearOnClose: true,
@@ -35,9 +35,9 @@ export async function suggestModal(): Promise<IUIKitSurfaceViewParam> {
         blocks: [
             await getInputBox(
                 "",
-                "What code you want to get suggestions for?",
-                "suggest",
-                "suggest",
+                "What code you want to get improvements for?",
+                "improve",
+                "improve",
                 "",
                 true
             ),
@@ -79,7 +79,7 @@ async function process(http: IHttp, query: string): Promise<string | null> {
      * ---------------------------------------------------------------------------------------------
      */
     const answer = await llm.ask(
-        PromptFactory.makeSuggestPrompt(
+        PromptFactory.makeImprovePrompt(
             codeNodes.map((x) => x.code).join("\n\n"),
             query
         )
@@ -89,7 +89,7 @@ async function process(http: IHttp, query: string): Promise<string | null> {
     return answer;
 }
 
-export async function suggestModalSubmitHandler(
+export async function improveModalSubmitHandler(
     view: IUIKitSurface,
     sender: IUser,
     room: IRoom,
@@ -100,7 +100,7 @@ export async function suggestModalSubmitHandler(
     const state = view.state as Record<string, any> | undefined;
     if (!state) return;
 
-    const query = state.suggest.suggest;
+    const query = state.improve.improve;
     const sendMessage = await handleCommandResponse(
         "\n```typescript\n" + query + "\n```",
         sender,
@@ -113,6 +113,6 @@ export async function suggestModalSubmitHandler(
     if (res) {
         await sendMessage(res as string);
     } else {
-        await sendMessage("❌ Failed to get suggestions");
+        await sendMessage("❌ Failed to get improvements");
     }
 }

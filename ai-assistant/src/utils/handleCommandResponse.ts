@@ -26,7 +26,7 @@ export async function handleCommandResponse(
         .setRoom(room)
         .setGroupable(false)
         .setText(`\`/${command}\` ${args}`);
-    await modify.getCreator().finish(greetMessage);
+    const threadID = await modify.getCreator().finish(greetMessage);
 
     const progressIndicators = [
         ":hammer:",
@@ -36,7 +36,11 @@ export async function handleCommandResponse(
     ];
 
     const builder = modify.getCreator().startMessage();
-    builder.setSender(user).setRoom(room).setText(":pick: Working");
+    builder
+        .setSender(user)
+        .setRoom(room)
+        .setThreadId(threadID)
+        .setText(":pick: Working");
     const message = await modify.getCreator().finish(builder);
 
     let progressCount = 0;

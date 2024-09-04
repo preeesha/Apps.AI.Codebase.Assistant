@@ -1,8 +1,8 @@
-import { DBNode } from "./db/db";
-import { IDB } from "./db/db.types";
-import { IEmbeddingModel } from "./embeddings/embeddings.types";
-import { ILLMModel } from "./llm/llm.types";
-import { PromptFactory } from "./prompt/prompt.factory";
+import { PromptFactory } from "./prompt.factory";
+import { DBNode } from "./services/db/db";
+import { IDB } from "./services/db/db.types";
+import { IEmbeddingModel } from "./services/embeddings/embeddings.types";
+import { ILLMModel } from "./services/llm/llm.types";
 
 export namespace Query {
     export async function getDBNodesFromVectorQuery(
@@ -26,9 +26,16 @@ export namespace Query {
         if (!result.length) return [];
 
         const nodes: DBNode[] = [];
-        for (const record of result) {
-            nodes.push(record as DBNode);
-        }
+        const processRecord = (record: any) => {
+            const data = record as DBNode;
+            data.nameEmbeddings = [];
+            data.codeEmbeddings = [];
+            nodes.push(data);
+        };
+        // node
+        processRecord(result[0]);
+        // relatedNodes
+        for (const record of (result as any)[1]) processRecord(record);
 
         return nodes;
     }
@@ -66,8 +73,8 @@ export namespace Query {
 
         // @ts-ignore
         const keywords = content
-            .split("<ANSWER_START>")[1]
-            .split("<ANSWER_END>")[0]
+            .split("<ANSWER>")[1]
+            .split("</ANSWER>")[0]
             .split(",")
             .map((x) => x.trim())
             .map((x) => {
@@ -76,7 +83,6 @@ export namespace Query {
                 }
                 return x;
             });
-        console.log(keywords);
 
         return keywords;
     }

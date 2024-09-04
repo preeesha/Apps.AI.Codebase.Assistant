@@ -1,4 +1,4 @@
-import { DBNode } from "../core/db/db";
+import { DBNode } from "../core/services/db/db";
 
 export type IngestEndpointRequestBody = {
     batchID: string;

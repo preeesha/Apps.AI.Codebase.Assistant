@@ -15,20 +15,19 @@ import {
     ApiVisibility,
 } from "@rocket.chat/apps-engine/definition/api";
 import { UIKitViewSubmitInteractionContext } from "@rocket.chat/apps-engine/definition/uikit";
-import { AskCommand } from "./commands/AskCommand";
-import { DevDocsCommand } from "./commands/DevDocsCommand";
+import { AskCodeCommand } from "./commands/AskCodeCommand";
+import { AskDocsCommand } from "./commands/AskDocsCommand";
 import { DiagramCommand } from "./commands/DiagramCommand";
 import { DocumentCommand } from "./commands/DocumentCommand";
 import { FindSimilarCommand } from "./commands/FindSimilar";
 import { HelpCommand } from "./commands/HelpCommand";
 import { ImportanceCommand } from "./commands/ImportanceCommand";
-import { StyleguideCommand } from "./commands/Styleguide";
-import { SuggestCommand } from "./commands/SuggestCommand";
+import { ImproveCommand } from "./commands/ImproveCommand";
+import { TestcasesCommand } from "./commands/TestcasesCommand";
 import { TranslateCommand } from "./commands/TranslateCommand";
 import { WhyUsedCommand } from "./commands/WhyUsedCommand";
 import { EstablishRelationsEndpoint } from "./endpoints/establishRelations";
 import { IngestEndpoint } from "./endpoints/ingest";
-import { LLMEndpoint } from "./endpoints/llm";
 import { PurgeDBEndpoint } from "./endpoints/purgeDB";
 import { handleModalViewSubmit } from "./utils/handleModalViewSubmit";
 
@@ -50,8 +49,8 @@ export class RocketChatterApp extends App {
     public async extendConfiguration(configuration: IConfigurationExtend) {
         configuration.slashCommands.provideSlashCommand(new HelpCommand());
 
-        configuration.slashCommands.provideSlashCommand(new AskCommand());
-        configuration.slashCommands.provideSlashCommand(new DevDocsCommand());
+        configuration.slashCommands.provideSlashCommand(new AskCodeCommand());
+        configuration.slashCommands.provideSlashCommand(new AskDocsCommand());
         configuration.slashCommands.provideSlashCommand(new DiagramCommand());
         configuration.slashCommands.provideSlashCommand(new DocumentCommand());
         configuration.slashCommands.provideSlashCommand(
@@ -60,10 +59,8 @@ export class RocketChatterApp extends App {
         configuration.slashCommands.provideSlashCommand(
             new ImportanceCommand()
         );
-        configuration.slashCommands.provideSlashCommand(
-            new StyleguideCommand()
-        );
-        configuration.slashCommands.provideSlashCommand(new SuggestCommand());
+        configuration.slashCommands.provideSlashCommand(new ImproveCommand());
+        configuration.slashCommands.provideSlashCommand(new TestcasesCommand());
         configuration.slashCommands.provideSlashCommand(new TranslateCommand());
         configuration.slashCommands.provideSlashCommand(new WhyUsedCommand());
 
@@ -74,7 +71,6 @@ export class RocketChatterApp extends App {
                 new IngestEndpoint(this),
                 new PurgeDBEndpoint(this),
                 new EstablishRelationsEndpoint(this),
-                new LLMEndpoint(this),
             ],
         });
     }

@@ -9,21 +9,21 @@ import { UIKitViewSubmitInteractionContext } from "@rocket.chat/apps-engine/defi
 import {
     FIND_SIMILAR_COMMAND_MODAL,
     findSimilarModalSubmitHandler,
-} from "../modals/findSimilarModal";
+} from "../commands/FindSimilar.modal";
 import {
-    STYLEGUIDE_COMMAND_MODAL,
-    styleguideModalSubmitHandler,
-} from "../modals/styleguideModal";
+    IMPROVE_COMMAND_MODAL,
+    improveModalSubmitHandler,
+} from "../commands/ImproveCommand.modal";
 import {
-    SUGGEST_COMMAND_MODAL,
-    suggestModalSubmitHandler,
-} from "../modals/suggestModal";
+    TESTCASES_COMMAND_MODAL,
+    testcasesModalSubmitHandler,
+} from "../commands/TestcasesCommand.modal";
 import { getUIData } from "./persistenceHandlers";
 
 const MODALS: Record<string, any> = {
-    [SUGGEST_COMMAND_MODAL]: suggestModalSubmitHandler,
+    [IMPROVE_COMMAND_MODAL]: improveModalSubmitHandler,
     [FIND_SIMILAR_COMMAND_MODAL]: findSimilarModalSubmitHandler,
-    [STYLEGUIDE_COMMAND_MODAL]: styleguideModalSubmitHandler,
+    [TESTCASES_COMMAND_MODAL]: testcasesModalSubmitHandler,
 };
 
 export async function handleModalViewSubmit(

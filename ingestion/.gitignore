@@ -6,4 +6,7 @@ data/
 
 *.log
 
-./Rocket.Chat/
+Rocket.Chat/
+project
+
+test.ts

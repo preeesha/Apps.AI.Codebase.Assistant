@@ -10,22 +10,24 @@ import {
     UIKitSurfaceType,
 } from "@rocket.chat/apps-engine/definition/uikit";
 import { IUser } from "@rocket.chat/apps-engine/definition/users";
-import { Neo4j } from "../core/db/neo4j";
-import { Llama3_70B } from "../core/llm/llama3_70B";
-import { PromptFactory } from "../core/prompt/prompt.factory";
+import { PromptFactory } from "../core/prompt.factory";
+import { Query } from "../core/query";
+import { Neo4j } from "../core/services/db/neo4j";
+import { MiniLML6 } from "../core/services/embeddings/minilml6";
+import { Llama3_70B } from "../core/services/llm/llama3_70B";
 import { getButton, getInputBox } from "../utils/blockBuilders";
 import { handleCommandResponse } from "../utils/handleCommandResponse";
 
-export const COMMAND = "rcc-styleguide";
-export const STYLEGUIDE_COMMAND_MODAL = "styleguide-command";
+export const COMMAND = "rcc-testcases";
+export const TESTCASES_COMMAND_MODAL = "testcases-command";
 
-export async function styleguideModal(): Promise<IUIKitSurfaceViewParam> {
+export async function testcasesModal(): Promise<IUIKitSurfaceViewParam> {
     return {
-        id: STYLEGUIDE_COMMAND_MODAL,
+        id: TESTCASES_COMMAND_MODAL,
         type: UIKitSurfaceType.MODAL,
         title: {
             type: "plain_text",
-            text: "Use the styleguide",
+            text: "Generate Testcases",
         },
         close: await getButton("Close", "", ""),
         clearOnClose: true,
@@ -33,9 +35,9 @@ export async function styleguideModal(): Promise<IUIKitSurfaceViewParam> {
         blocks: [
             await getInputBox(
                 "",
-                "What code you want to follow the styleguide?",
-                "styleguide",
-                "styleguide",
+                "What code you want to generate test cases for?",
+                "testcases",
+                "testcases",
                 "",
                 true
             ),
@@ -46,36 +48,49 @@ export async function styleguideModal(): Promise<IUIKitSurfaceViewParam> {
 async function process(http: IHttp, query: string): Promise<string | null> {
     const db = new Neo4j(http);
     const llm = new Llama3_70B(http);
+    const embeddingModel = new MiniLML6(http);
 
     /**
      * ---------------------------------------------------------------------------------------------
      * STEP 1:
-     * Query the database to find the nodes which contains the styleguide rules
+     * Extract the possible keywords from the user's query
      * ---------------------------------------------------------------------------------------------
      */
-    const dbResults = await db.run(`MATCH (n:Styleguide) RETURN n`);
-    if (!dbResults.length) return null;
-
-    const styleGuides = dbResults.map((record) => record.get("n").properties);
-    if (!styleGuides.length) return null;
+    const keywords = await Query.getDBKeywordsFromQuery(llm, query);
+    if (!keywords.length) return null;
 
     /**
      * ---------------------------------------------------------------------------------------------
      * STEP 2:
-     * Generate the new code based on the styleguide nodes and user's query
+     * Query the database to find the nodes names of which are similar to what user has requested
      * ---------------------------------------------------------------------------------------------
      */
-    const result = await llm.ask(
-        PromptFactory.makeStyleguidePrompt(query, JSON.stringify(styleGuides))
+    const codeNodes = await Query.getCodeNodesFromKeywords(
+        db,
+        embeddingModel,
+        keywords
     );
-    if (!result) return null;
+    if (!codeNodes.length) return null;
 
-    const answer = result.split("<ANSWER>")[1].split("</ANSWER>")[0].trim();
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * STEP 3:
+     * Generate the test cases for the code nodes
+     * ---------------------------------------------------------------------------------------------
+     */
+    const answer = await llm.ask(
+        PromptFactory.makeTestcasesPrompt(
+            codeNodes.map((x) => x.code).join("\n\n"),
+            query,
+            "playwright"
+        )
+    );
+    if (!answer) return null;
 
     return answer;
 }
 
-export async function styleguideModalSubmitHandler(
+export async function testcasesModalSubmitHandler(
     view: IUIKitSurface,
     sender: IUser,
     room: IRoom,
@@ -86,7 +101,7 @@ export async function styleguideModalSubmitHandler(
     const state = view.state as Record<string, any> | undefined;
     if (!state) return;
 
-    const query = state.styleguide.styleguide;
+    const query = state.testcases.testcases;
     const sendMessage = await handleCommandResponse(
         "\n```typescript\n" + query + "\n```",
         sender,
@@ -96,14 +111,9 @@ export async function styleguideModalSubmitHandler(
     );
 
     const res = await process(http, query);
-    if (!res) {
-        await sendMessage(
-            "❌ Failed to match the styleguide. Please try again later."
-        );
-        return;
+    if (res) {
+        await sendMessage(res as string);
+    } else {
+        await sendMessage("❌ Failed to get test cases");
     }
-
-    console.log(res);
-
-    await sendMessage(res as string);
 }

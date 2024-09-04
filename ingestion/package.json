@@ -1,7 +1,8 @@
 {
   "main": "src/main.ts",
   "scripts": {
-    "start": "ts-node ./src/main.ts"
+    "start": "ts-node ./src/main.ts",
+    "dev": "ts-node ./src/test.ts"
   },
   "devDependencies": {
     "@babel/parser": "^7.24.7",

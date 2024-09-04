@@ -7,11 +7,11 @@ import {
     ISlashCommand,
     SlashCommandContext,
 } from "@rocket.chat/apps-engine/definition/slashcommands";
-import { Neo4j } from "../core/db/neo4j";
-import { MiniLML6 } from "../core/embeddings/minilml6";
-import { Llama3_70B } from "../core/llm/llama3_70B";
-import { PromptFactory } from "../core/prompt/prompt.factory";
+import { PromptFactory } from "../core/prompt.factory";
 import { Query } from "../core/query";
+import { Neo4j } from "../core/services/db/neo4j";
+import { MiniLML6 } from "../core/services/embeddings/minilml6";
+import { Llama3_70B } from "../core/services/llm/llama3_70B";
 import { handleCommandResponse } from "../utils/handleCommandResponse";
 
 export class DocumentCommand implements ISlashCommand {
@@ -23,7 +23,7 @@ export class DocumentCommand implements ISlashCommand {
     private async process(
         http: IHttp,
         query: string
-    ): Promise<Record<string, string> | null> {
+    ): Promise<{ jsDoc: string; explanation: string | null } | null> {
         const db = new Neo4j(http);
         const llm = new Llama3_70B(http);
         const embeddingModel = new MiniLML6(http);
@@ -35,7 +35,6 @@ export class DocumentCommand implements ISlashCommand {
          * ---------------------------------------------------------------------------------------------
          */
         const keywords = await Query.getDBKeywordsFromQuery(llm, query);
-        console.log("KEYWORDS", keywords);
         if (!keywords.length) return null;
 
         /**
@@ -73,10 +72,10 @@ export class DocumentCommand implements ISlashCommand {
             .split("<EXPLANATION_END>")[0]
             .trim();
 
-        console.log(jsDoc);
-        console.log(explanation);
-
-        return { jsDoc: jsDoc, explanation: explanation };
+        return {
+            jsDoc: "```typescript\n" + jsDoc + "\n```",
+            explanation: explanation,
+        };
     }
 
     public async executor(
@@ -86,9 +85,7 @@ export class DocumentCommand implements ISlashCommand {
         http: IHttp
     ): Promise<void> {
         const query = context.getArguments().join(" ");
-        if (!query) {
-            throw new Error("Error!");
-        }
+        if (!query) return;
 
         const sendEditedMessage = await handleCommandResponse(
             query,
@@ -100,7 +97,7 @@ export class DocumentCommand implements ISlashCommand {
 
         let res = await this.process(http, query);
         if (res) {
-            await sendEditedMessage(`${res["jsDoc"]}\n\n${res["explanation"]}`);
+            await sendEditedMessage(`${res.jsDoc}\n\n${res.explanation}`);
         } else {
             await sendEditedMessage("❌ No references found!");
         }

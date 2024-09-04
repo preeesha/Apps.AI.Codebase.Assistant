@@ -8,15 +8,15 @@ import {
     SlashCommandContext,
 } from "@rocket.chat/apps-engine/definition/slashcommands";
 
-import { Neo4j } from "../core/db/neo4j";
-import { MiniLML6 } from "../core/embeddings/minilml6";
-import { Llama3_70B } from "../core/llm/llama3_70B";
-import { PromptFactory } from "../core/prompt/prompt.factory";
+import { PromptFactory } from "../core/prompt.factory";
 import { Query } from "../core/query";
+import { Neo4j } from "../core/services/db/neo4j";
+import { MiniLML6 } from "../core/services/embeddings/minilml6";
+import { Llama3_70B } from "../core/services/llm/llama3_70B";
 import { handleCommandResponse } from "../utils/handleCommandResponse";
 
-export class AskCommand implements ISlashCommand {
-    public command = "rcc-ask";
+export class AskCodeCommand implements ISlashCommand {
+    public command = "rcc-askcode";
     public i18nParamsExample = "";
     public i18nDescription = "";
     public providesPreview = false;
@@ -33,7 +33,6 @@ export class AskCommand implements ISlashCommand {
          * ---------------------------------------------------------------------------------------------
          */
         const keywords = await Query.getDBKeywordsFromQuery(llm, query);
-        console.log("KEYWORDS", keywords);
         if (!keywords.length) return null;
 
         /**
@@ -47,7 +46,6 @@ export class AskCommand implements ISlashCommand {
             embeddingModel,
             keywords
         );
-        console.log("RESULTS", results);
         if (!results.length) return null;
 
         /**
@@ -57,12 +55,11 @@ export class AskCommand implements ISlashCommand {
          * ---------------------------------------------------------------------------------------------
          */
         const answer = await llm.ask(
-            PromptFactory.makeAskPrompt(
+            PromptFactory.makeAskCodePrompt(
                 results.map((x) => x.code).join("\n\n"),
                 query
             )
         );
-        console.log("ANSWER", answer);
         if (!answer) return null;
 
         return answer;
@@ -75,9 +72,7 @@ export class AskCommand implements ISlashCommand {
         http: IHttp
     ): Promise<void> {
         const query = context.getArguments().join(" ");
-        if (!query) {
-            throw new Error("Error!");
-        }
+        if (!query) return;
 
         const sendEditedMessage = await handleCommandResponse(
             query,

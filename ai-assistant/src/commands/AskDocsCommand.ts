@@ -8,13 +8,13 @@ import {
     SlashCommandContext,
 } from "@rocket.chat/apps-engine/definition/slashcommands";
 
-import { Neo4j } from "../core/db/neo4j";
-import { MiniLML6 } from "../core/embeddings/minilml6";
-import { Llama3_70B } from "../core/llm/llama3_70B";
+import { Neo4j } from "../core/services/db/neo4j";
+import { MiniLML6 } from "../core/services/embeddings/minilml6";
+import { Llama3_70B } from "../core/services/llm/llama3_70B";
 import { handleCommandResponse } from "../utils/handleCommandResponse";
 
-export class DevDocsCommand implements ISlashCommand {
-    public command = "rcc-devdocs";
+export class AskDocsCommand implements ISlashCommand {
+    public command = "rcc-askdocs";
     public i18nParamsExample = "";
     public i18nDescription = "";
     public providesPreview = false;
@@ -34,9 +34,7 @@ export class DevDocsCommand implements ISlashCommand {
         http: IHttp
     ): Promise<void> {
         const query = context.getArguments().join(" ");
-        if (!query) {
-            throw new Error("Error!");
-        }
+        if (!query) return;
 
         const sendEditedMessage = await handleCommandResponse(
             query,

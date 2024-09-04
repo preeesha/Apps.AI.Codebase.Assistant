@@ -7,13 +7,12 @@ import {
     ISlashCommand,
     SlashCommandContext,
 } from "@rocket.chat/apps-engine/definition/slashcommands";
-import { writeFileSync } from "fs";
-import { Neo4j } from "../core/db/neo4j";
+import { Neo4j } from "../core/services/db/neo4j";
 // import { renderDiagramToBase64URI } from "../core/diagram";
-import { MiniLML6 } from "../core/embeddings/minilml6";
-import { Llama3_70B } from "../core/llm/llama3_70B";
-import { PromptFactory } from "../core/prompt/prompt.factory";
+import { PromptFactory } from "../core/prompt.factory";
 import { Query } from "../core/query";
+import { MiniLML6 } from "../core/services/embeddings/minilml6";
+import { Llama3_70B } from "../core/services/llm/llama3_70B";
 import { handleCommandResponse } from "../utils/handleCommandResponse";
 
 export class WhyUsedCommand implements ISlashCommand {
@@ -26,7 +25,6 @@ export class WhyUsedCommand implements ISlashCommand {
         http: IHttp,
         query: string
     ): Promise<{
-        impact: string;
         explanation: string;
         diagram: string;
     } | null> {
@@ -41,6 +39,7 @@ export class WhyUsedCommand implements ISlashCommand {
          * ---------------------------------------------------------------------------------------------
          */
         const keywords = await Query.getDBKeywordsFromQuery(llm, query);
+        console.log(keywords);
         if (!keywords.length) return null;
 
         /**
@@ -70,7 +69,6 @@ export class WhyUsedCommand implements ISlashCommand {
         );
         if (!result) return null;
 
-        const impact = result.split("<IMPACT>")[1].split("</IMPACT>")[0].trim();
         const explanation = result
             .split("<EXPLANATION>")[1]
             .split("</EXPLANATION>")[0]
@@ -86,19 +84,18 @@ export class WhyUsedCommand implements ISlashCommand {
          * Generate the diagram for the user's query given the nodes data
          * ---------------------------------------------------------------------------------------------
          */
-        const data = { impact, explanation, diagram: "" };
-        if (!diagram) return { impact, explanation, diagram: "" };
-
-        if (diagram) {
-            const parsedDiagram = diagram
-                .replace("```mermaid", "")
-                .replace("```", "")
-                .trim();
-            writeFileSync("output.txt", parsedDiagram);
-            try {
-                // data.diagram = await renderDiagramToBase64URI(parsedDiagram);
-            } catch {}
-        }
+        const data = { explanation, diagram: "" };
+        // TODO:
+        // if (diagram) {
+        //     const parsedDiagram = diagram
+        //         .replace("```mermaid", "")
+        //         .replace("```", "")
+        //         .trim();
+        //     writeFileSync("output.txt", parsedDiagram);
+        //     try {
+        //         // data.diagram = await renderDiagramToBase64URI(parsedDiagram);
+        //     } catch {}
+        // }
 
         return data;
     }
@@ -110,9 +107,7 @@ export class WhyUsedCommand implements ISlashCommand {
         http: IHttp
     ): Promise<void> {
         const [query] = context.getArguments();
-        if (!query) {
-            throw new Error("Error!");
-        }
+        if (!query) return;
 
         const sendEditedMessage = await handleCommandResponse(
             query,
@@ -128,10 +123,6 @@ export class WhyUsedCommand implements ISlashCommand {
             return;
         }
 
-        let message = "";
-        message += `\n${res.explanation}\n`;
-        message += `\n**Impact:** ${res.impact}`;
-
-        await sendEditedMessage(message, [res.diagram!]);
+        await sendEditedMessage(res.explanation, [res.diagram!]);
     }
 }

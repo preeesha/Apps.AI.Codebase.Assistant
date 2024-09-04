@@ -8,12 +8,12 @@ import {
     SlashCommandContext,
 } from "@rocket.chat/apps-engine/definition/slashcommands";
 
-import { Neo4j } from "../core/db/neo4j";
+import { Neo4j } from "../core/services/db/neo4j";
 // import { renderDiagramToBase64URI } from "../core/diagram";
-import { MiniLML6 } from "../core/embeddings/minilml6";
-import { Llama3_70B } from "../core/llm/llama3_70B";
-import { PromptFactory } from "../core/prompt/prompt.factory";
+import { PromptFactory } from "../core/prompt.factory";
 import { Query } from "../core/query";
+import { MiniLML6 } from "../core/services/embeddings/minilml6";
+import { Llama3_70B } from "../core/services/llm/llama3_70B";
 import { handleCommandResponse } from "../utils/handleCommandResponse";
 
 export class DiagramCommand implements ISlashCommand {
@@ -34,7 +34,6 @@ export class DiagramCommand implements ISlashCommand {
          * ---------------------------------------------------------------------------------------------
          */
         const keywords = await Query.getDBKeywordsFromQuery(llm, query);
-        console.log("KEYWORDS", keywords);
         if (!keywords.length) return null;
 
         /**
@@ -48,7 +47,6 @@ export class DiagramCommand implements ISlashCommand {
             embeddingModel,
             keywords
         );
-        console.log("RESULTS", results);
         if (!results.length) return null;
 
         /**
@@ -85,9 +83,7 @@ export class DiagramCommand implements ISlashCommand {
         http: IHttp
     ): Promise<void> {
         const query = context.getArguments().join(" ");
-        if (!query) {
-            throw new Error("Error!");
-        }
+        if (!query) return;
 
         const sendEditedMessage = await handleCommandResponse(
             query,

@@ -1,6 +1,6 @@
 import { IHttp } from "@rocket.chat/apps-engine/definition/accessors";
 
-import { Prompt } from "../prompt/prompt";
+import { Prompt } from "../../prompt";
 import { ILLMModel } from "./llm.types";
 
 export class Mistral_7B implements ILLMModel {
@@ -20,7 +20,7 @@ export class Mistral_7B implements ILLMModel {
             },
             data: {
                 model: this.model,
-                temprature: 0,
+                temperature: 0,
                 messages: prompt.messages,
             },
         });
