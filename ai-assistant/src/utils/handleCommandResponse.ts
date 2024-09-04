@@ -2,6 +2,16 @@ import { IModify } from "@rocket.chat/apps-engine/definition/accessors";
 import { IRoom } from "@rocket.chat/apps-engine/definition/rooms";
 import { IUser } from "@rocket.chat/apps-engine/definition/users";
 
+/**
+ * Handles the response of a command.
+ * 
+ * @param args - The arguments passed to the command.
+ * @param sender - The user who sent the command.
+ * @param room - The room where the command was sent.
+ * @param modify - The modify object used to interact with the Rocket.Chat API.
+ * @param command - The command that was executed.
+ * @returns A function that can be used to update the response message with a new message and optional image attachments.
+ */
 export async function handleCommandResponse(
     args: string,
     sender: IUser,
