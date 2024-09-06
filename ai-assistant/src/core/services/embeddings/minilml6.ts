@@ -45,7 +45,7 @@ export class MiniLML6 implements IEmbeddingModel {
      * @returns A promise that resolves to an array of numbers representing the embeddings for the text, or null if the generation fails.
      */
     async generate(text: string): Promise<number[] | null> {
-        return await this.fromHuggingFace(text);
+        // return await this.fromHuggingFace(text);
 
         const res = await this.http.post(this.baseURL, {
             headers: {

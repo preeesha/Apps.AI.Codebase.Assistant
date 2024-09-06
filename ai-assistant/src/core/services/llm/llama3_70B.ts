@@ -43,7 +43,7 @@ export class Llama3_70B implements ILLMModel {
      * @returns {Promise<string | null>} A promise that resolves with the response string or null if no response is available.
      */
     async ask(prompt: Prompt): Promise<string | null> {
-        return await this.fromHuggingFace(prompt);
+        // return await this.fromHuggingFace(prompt);
 
         const url = `${this.baseURL}/chat/completions`;
         const res = await this.http.post(url, {
