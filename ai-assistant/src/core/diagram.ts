@@ -1,47 +1,33 @@
-export default {}
-// import { exec } from "child_process";
-// // import { randomUUID } from "crypto"
-// import { unlinkSync, writeFileSync } from "fs";
+import { IHttp } from "@rocket.chat/apps-engine/definition/accessors";
 
-// export async function renderDiagramToBase64URI(
-//     diagram: string
-// ): Promise<string> {
-//     const diagramID = "diagram";
-//     // ?? randomUUID()
-//     const diagramSourceFileName = `${diagramID}.txt`;
-//     const diagramSVGFileName = `${diagramID}.svg`;
+export async function renderDiagramToBase64URI(
+    http: IHttp,
+    source: string
+): Promise<string> {
+    source = source.trim();
 
-//     writeFileSync(diagramSourceFileName, diagram);
+    let svgContent = "";
+    try {
+        const response = await http.post("https://kroki.io", {
+            headers: {
+                Accept: "image/svg+xml",
+                "Content-Type": "text/json",
+            },
+            content: JSON.stringify({
+                diagram_source: source,
+                diagram_type: "mermaid",
+                output_format: "svg",
+            }),
+        });
+        svgContent = response.content as string;
+    } catch (error) {
+        console.error("Error while rendering diagram", error);
+        return "";
+    }
 
-//     await new Promise<void>((resolve, reject) => {
-//         const diagram = exec(
-//             `npx mmdc -i ${diagramSourceFileName} -o ${diagramSVGFileName}`,
-//             {
-//                 cwd: process.cwd(),
-//                 timeout: 10000,
-//             }
-//         );
+    console.log(svgContent);
 
-//         diagram.on("exit", async (code) => {
-//             //			unlinkSync(diagramSourceFileName)
-//             if (code === 0) {
-//                 resolve();
-//             } else {
-//                 console.log(`Error: ${code}`);
-//                 reject();
-//             }
-//         });
-//     });
-
-//     const base64 = await new Promise<string>((resolve, reject) => {
-//         exec(`base64 ${diagramSVGFileName}`, async (err, stdout) => {
-//             unlinkSync(diagramSVGFileName);
-//             if (err) reject(err);
-//             resolve(stdout);
-//         });
-//     });
-
-//     const uri = `data:image/svg+xml;base64,${base64.trim()}`;
-
-//     return uri;
-// }
+    const svgContentBase64 = Buffer.from(svgContent).toString("base64");
+    const uri = `data:image/svg+xml;base64,${svgContentBase64}`;
+    return uri;
+}

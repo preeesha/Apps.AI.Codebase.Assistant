@@ -8,10 +8,10 @@ import {
     SlashCommandContext,
 } from "@rocket.chat/apps-engine/definition/slashcommands";
 
-import { Neo4j } from "../core/services/db/neo4j";
-// import { renderDiagramToBase64URI } from "../core/diagram";
+import { renderDiagramToBase64URI } from "../core/diagram";
 import { PromptFactory } from "../core/prompt.factory";
 import { Query } from "../core/query";
+import { Neo4j } from "../core/services/db/neo4j";
 import { MiniLML6 } from "../core/services/embeddings/minilml6";
 import { Llama3_70B } from "../core/services/llm/llama3_70B";
 import { handleCommandResponse } from "../utils/handleCommandResponse";
@@ -61,19 +61,21 @@ export class DiagramCommand implements ISlashCommand {
                 query
             )
         );
-        console.log(diagram);
         if (!diagram) return null;
 
+        // @ts-ignore
         const diagramContent = diagram
             .replace("```mermaid", "")
             .replace("```", "")
             .split("<DIAGRAM_START>")[1]
             .split("<DIAGRAM_END>")[0]
             .trim();
-        console.log("DIAGRAM:\n", diagramContent);
 
-        // const base64Diagram = await renderDiagramToBase64URI(diagramContent);
-        return "";
+        const base64Diagram = await renderDiagramToBase64URI(
+            http,
+            diagramContent
+        );
+        return base64Diagram;
     }
 
     public async executor(
