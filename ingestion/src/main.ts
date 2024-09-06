@@ -1,7 +1,7 @@
 import { exec } from "child_process"
 import { v4 as uuid } from "uuid"
 
-import { Documentation } from "./process/documentation/prepare"
+import { Documentation } from "./process/documentation/documentation"
 
 namespace Algorithms {
 	export async function execCommand(command: string) {
