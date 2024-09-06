@@ -1,6 +1,6 @@
 import { PromptFactory } from "./prompt.factory";
-import { DBNode } from "./services/db/db";
 import { IDB } from "./services/db/db.types";
+import { DBNode } from "./services/db/dbNode";
 import { IEmbeddingModel } from "./services/embeddings/embeddings.types";
 import { ILLMModel } from "./services/llm/llm.types";
 
@@ -10,7 +10,7 @@ import { ILLMModel } from "./services/llm/llm.types";
 export namespace Query {
     /**
      * Retrieves database nodes based on a vector query.
-     * 
+     *
      * @param {IDB} db - The database instance.
      * @param {string} indexName - The name of the index to query.
      * @param {number[]} vector - The vector to query with.
@@ -54,7 +54,7 @@ export namespace Query {
 
     /**
      * Retrieves code nodes from the database based on a list of keywords.
-     * 
+     *
      * @param {IDB} db - The database object.
      * @param {IEmbeddingModel} embeddingModel - The embedding model used for generating query vectors.
      * @param {string[]} keywords - The list of keywords to search for.
@@ -84,7 +84,7 @@ export namespace Query {
 
     /**
      * Retrieves database keywords from a given query using a language model.
-     * 
+     *
      * @param llm - The language model used to generate the keywords.
      * @param query - The query string to extract keywords from.
      * @returns A promise that resolves to an array of database keywords extracted from the query.

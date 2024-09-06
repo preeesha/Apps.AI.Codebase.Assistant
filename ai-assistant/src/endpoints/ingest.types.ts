@@ -1,4 +1,4 @@
-import { DBNode } from "../core/services/db/db";
+import { DBNode } from "../core/services/db/dbNode";
 import { DevDocDBNode } from "../core/services/db/devDocDBNode";
 
 export type IngestEndpointRequestBody = {

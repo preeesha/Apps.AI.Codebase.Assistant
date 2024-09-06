@@ -10,7 +10,7 @@ import {
     IApiRequest,
     IApiResponse,
 } from "@rocket.chat/apps-engine/definition/api";
-import { DBNode } from "../core/services/db/db";
+import { DBNode } from "../core/services/db/dbNode";
 import { DevDocDBNode } from "../core/services/db/devDocDBNode";
 import { Neo4j } from "../core/services/db/neo4j";
 import { MiniLML6 } from "../core/services/embeddings/minilml6";

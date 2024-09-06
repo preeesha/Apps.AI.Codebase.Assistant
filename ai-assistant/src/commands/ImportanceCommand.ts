@@ -8,8 +8,8 @@ import {
     SlashCommandContext,
 } from "@rocket.chat/apps-engine/definition/slashcommands";
 import { Query } from "../core/query";
-import { DBNode } from "../core/services/db/db";
 import { IDB } from "../core/services/db/db.types";
+import { DBNode } from "../core/services/db/dbNode";
 import { Neo4j } from "../core/services/db/neo4j";
 import { MiniLML6 } from "../core/services/embeddings/minilml6";
 import { handleCommandResponse } from "../utils/handleCommandResponse";
