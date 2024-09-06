@@ -2,6 +2,7 @@ import { exec } from "child_process"
 import { v4 as uuid } from "uuid"
 
 import { REPO_URI } from "./constants"
+import { Documentation } from "./process/documentation/documentation"
 import { insertDataIntoDB } from "./process/ingest/ingest"
 import { Codebase } from "./process/prepare/codebase"
 import { FileProcessor } from "./process/prepare/processor/file"
@@ -31,6 +32,10 @@ async function main() {
 	{
 		const codebase = new Codebase(sessionID, new FileProcessor(), 1)
 		await codebase.process()
+
+		const docs = new Documentation()
+		await docs.prepare(codebase.dataDirPath)
+
 		await insertDataIntoDB(codebase.dataDirPath)
 	}
 	await Algorithms.execCommand(`rm -rf ${sessionID}`)

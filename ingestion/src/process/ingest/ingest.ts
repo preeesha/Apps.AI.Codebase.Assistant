@@ -5,6 +5,7 @@ import { v4 as uuid } from "uuid"
 
 import { RC_APP_URI } from "../../constants"
 import { DBNode, DBNodeRelation } from "../../core/dbNode"
+import { DevDocDBNodeRelation } from "../../core/devDocDBNode"
 
 namespace Algorithms {
 	export async function purgeDB(): Promise<boolean> {
@@ -85,29 +86,33 @@ export async function insertDataIntoDB(batchesDirPath: string) {
 	{
 		const errorBatches: Set<string> = new Set()
 
-		const relations: DBNodeRelation[] = []
+		const relations: (DBNodeRelation | DevDocDBNodeRelation)[] = []
 
 		// Insert each batch
-		for (const file of files) {
-			const batchID = uuid()
-			const data = await readFile(file, "utf-8")
-			const nodes = Object.values(JSON.parse(data)) as DBNode[]
+		for (let i = 0; i < files.length; i += 100) {
+			const group = files.slice(i, i + 100)
+			const jobs = group.map(async (file) => {
+				const batchID = uuid()
+				const data = await readFile(file, "utf-8")
+				const nodes = Object.values(JSON.parse(data)) as DBNode[]
 
-			for (const node of nodes)
-				relations.push(
-					...node.relations.map((relation) => ({
-						source: node.id,
-						target: relation.target,
-						relation: relation.relation,
-					}))
-				)
+				for (const node of nodes)
+					relations.push(
+						...node.relations.map((relation) => ({
+							source: node.id,
+							target: relation.target,
+							relation: relation.relation,
+						}))
+					)
 
-			const success = await Algorithms.insertBatch(batchID, nodes)
-			if (success) {
-				console.log(`📦 ${batchID} inserted`)
-			} else {
-				errorBatches.add(batchID)
-			}
+				const success = await Algorithms.insertBatch(batchID, nodes)
+				if (success) {
+					console.log(`📦 ${batchID} inserted`)
+				} else {
+					errorBatches.add(batchID)
+				}
+			})
+			await Promise.all(jobs)
 		}
 		if (errorBatches.size > 0) console.log("❌ Error batches", errorBatches)
 

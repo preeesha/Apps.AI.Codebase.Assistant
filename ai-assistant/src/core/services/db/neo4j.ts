@@ -77,7 +77,7 @@ export class Neo4j implements IDB {
 
     /**
      * Verifies the connectivity to the Neo4j database.
-     * 
+     *
      * @returns A Promise that resolves to void.
      * @throws An Error if the connection to Neo4j fails.
      */
@@ -92,7 +92,7 @@ export class Neo4j implements IDB {
 
     /**
      * Closes the connection to the Neo4j database.
-     * 
+     *
      * @returns A promise that resolves when the connection is closed.
      */
     async closeDBConnection(): Promise<void> {
@@ -102,10 +102,10 @@ export class Neo4j implements IDB {
 
     /**
      * Begins a new transaction in the Neo4j database.
-     * 
+     *
      * @throws {Error} If a transaction already exists.
      * @throws {Error} If the transaction fails to begin.
-     * 
+     *
      * @returns {Promise<void>} A promise that resolves when the transaction is successfully started.
      */
     async beginTransaction(): Promise<void> {
@@ -124,10 +124,10 @@ export class Neo4j implements IDB {
 
     /**
      * Commits the current transaction.
-     * 
+     *
      * @throws {Error} If there is no transaction to commit.
      * @throws {Error} If the transaction commit fails.
-     * 
+     *
      * @returns {Promise<void>} A promise that resolves when the transaction is successfully committed.
      */
     async commitTransaction(): Promise<void> {
@@ -146,10 +146,10 @@ export class Neo4j implements IDB {
 
     /**
      * Rolls back the current transaction.
-     * 
+     *
      * @throws {Error} If there is no transaction to rollback.
      * @throws {Error} If the transaction rollback fails.
-     * 
+     *
      * @returns {Promise<void>} A promise that resolves when the transaction is successfully rolled back.
      */
     async rollbackTransaction(): Promise<void> {

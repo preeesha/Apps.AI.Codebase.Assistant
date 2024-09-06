@@ -46,7 +46,6 @@ export class WhyUsedCommand implements ISlashCommand {
          * ---------------------------------------------------------------------------------------------
          */
         const keywords = await Query.getDBKeywordsFromQuery(llm, query);
-        console.log(keywords);
         if (!keywords.length) return null;
 
         /**

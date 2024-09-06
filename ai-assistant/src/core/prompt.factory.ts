@@ -61,6 +61,42 @@ export namespace PromptFactory {
         return prompt;
     }
 
+    export function makeAskDocsPrompt(
+        content: string,
+        sourceURLs: string[],
+        query: string
+    ): Prompt {
+        const prompt = new Prompt();
+        prompt.pushSystem(`
+            You are an expert in understanding the documentation of Rocket.Chat and answering questions of user when given a proper context.
+
+            Here're the sources of the content:
+            ${sourceURLs.map((url) => `- ${url}`).join("\n")}
+
+            Here're the rules:
+            1. Even if user asks for any kind of diagram or visualization, you must ignore that.
+            2. If the user asks for an explanation of the content, you must provide the answer based on the content.
+            3. You must provide the answer in text GitHub Markdown format only.
+            4. In case of any request for diagrams or visualizations, tell user to use the "/rcc-diagram" command.
+            5. If you are unable to answer the question, you must tell the user that you are unable to answer the question.
+            6. Always and always mentions the sources of the content in the end. You must provide all these URLs.
+        `);
+        prompt.pushUser(`
+            Hey I have been the reading the following documentation content and I am not able to understand it quite well. I'll provide you the content in between the tags <CONTENT_START> and <CONTENT_END> and the query between <QUERY_START> and <QUERY_END>. Can you please help me understand it better?
+
+            <QUERY_START>
+            ${query}
+            <QUERY_END>
+
+            Here's the content:
+            <CONTENT_START>
+            ${content}
+            <CONTENT_END>
+        `);
+
+        return prompt;
+    }
+
     export function makeDiagramPrompt(codebase: string, query: string): Prompt {
         const prompt = new Prompt();
 

@@ -11,7 +11,7 @@ import {
 } from "@rocket.chat/apps-engine/definition/uikit";
 import { IUser } from "@rocket.chat/apps-engine/definition/users";
 import { Query } from "../core/query";
-import { DBNode } from "../core/services/db/db";
+import { DBNode } from "../core/services/db/dbNode";
 import { Neo4j } from "../core/services/db/neo4j";
 import { MiniLML6 } from "../core/services/embeddings/minilml6";
 import { getButton, getInputBox } from "../utils/blockBuilders";
