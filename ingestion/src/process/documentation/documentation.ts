@@ -2,7 +2,7 @@ import puppeteer from "puppeteer"
 
 import { writeFile } from "fs/promises"
 import { DOCUMENTATION_URL } from "../../constants"
-import { DevDocDBNode } from "../../core/devDocsDBNode"
+import { DevDocDBNode } from "../../core/devDocDBNode"
 import { IDocumentation } from "./documentation.types"
 import { DocumentationPage } from "./documentationPage"
 
@@ -62,9 +62,10 @@ export class Documentation implements IDocumentation {
 			jobs.push(
 				writeFile(
 					`${dataDirPath}/docs-${node.id}.json`,
-					JSON.stringify(node, null, 2)
+					JSON.stringify([node], null, 2)
 				)
 			)
 		}
+		await Promise.all(jobs)
 	}
 }

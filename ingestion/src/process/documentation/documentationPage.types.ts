@@ -1,4 +1,4 @@
-import { DevDocDBNode } from "../../core/devDocsDBNode"
+import { DevDocDBNode } from "../../core/devDocDBNode"
 
 export type DocumentPageElement_t = {
 	id: string

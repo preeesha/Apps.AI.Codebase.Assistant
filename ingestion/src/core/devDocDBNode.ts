@@ -8,6 +8,7 @@ export type DevDocDBNode = {
 	id: string
 	relations: DevDocDBNodeRelation[]
 
+	url: string
 	element: string
 
 	content: string

@@ -1,7 +1,7 @@
 import { JSDOM } from "jsdom"
 
 import { customAlphabet } from "nanoid"
-import { DevDocDBNode } from "../../core/devDocsDBNode"
+import { DevDocDBNode } from "../../core/devDocDBNode"
 import {
 	DocumentPageElement_t,
 	IDocumentationPage,
@@ -79,39 +79,43 @@ export class DocumentationPage implements IDocumentationPage {
 		return parseElements(elements)
 	}
 
+	private traverseHierarchy(
+		node: DocumentPageElement_t,
+		devDocsDBNodes: DevDocDBNode[]
+	): DevDocDBNode {
+		const devDocDBNode: DevDocDBNode = {
+			id: node.id,
+			relations: [],
+
+			url: this._url,
+			element: node.element,
+
+			content: node.content || "",
+			contentEmbeddings: [],
+		}
+
+		if (node.children) {
+			node.children.forEach((child) => {
+				const childNode = this.traverseHierarchy(child, devDocsDBNodes)
+				devDocDBNode.relations.push({
+					target: childNode.id,
+					relation: "CONTAINS",
+				})
+				devDocsDBNodes.push(childNode)
+			})
+		}
+
+		return devDocDBNode
+	}
+
 	private convertHeirarchyToDevDocsDBNodes(
 		hierarchy: DocumentPageElement_t[]
 	): DevDocDBNode[] {
 		const devDocsDBNodes: DevDocDBNode[] = []
-
-		function traverseHierarchy(node: DocumentPageElement_t): DevDocDBNode {
-			const devDocDBNode: DevDocDBNode = {
-				id: node.id,
-				element: node.element,
-				relations: [],
-
-				content: node.content || "",
-				contentEmbeddings: [],
-			}
-
-			if (node.children) {
-				node.children.forEach((child) => {
-					const childNode = traverseHierarchy(child)
-					devDocDBNode.relations.push({
-						target: childNode.id,
-						relation: "CONTAINS",
-					})
-					devDocsDBNodes.push(childNode)
-				})
-			}
-
-			return devDocDBNode
-		}
-
-		hierarchy.forEach((node) => {
-			const devDocDBNode = traverseHierarchy(node)
+		for (const node of hierarchy) {
+			const devDocDBNode = this.traverseHierarchy(node, devDocsDBNodes)
 			devDocsDBNodes.push(devDocDBNode)
-		})
+		}
 
 		return devDocsDBNodes
 	}
