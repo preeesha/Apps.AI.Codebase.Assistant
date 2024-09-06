@@ -60,7 +60,10 @@ export class Documentation implements IDocumentation {
 		const jobs = []
 		for (const node of nodes) {
 			jobs.push(
-				writeFile(`${dataDirPath}/docs-${node.id}.json`, JSON.stringify(node))
+				writeFile(
+					`${dataDirPath}/docs-${node.id}.json`,
+					JSON.stringify(node, null, 2)
+				)
 			)
 		}
 	}
