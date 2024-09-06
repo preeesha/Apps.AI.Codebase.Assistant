@@ -58,7 +58,7 @@ export class PurgeDBEndpoint extends ApiEndpoint {
             // Create indices for content embeddings
             [
                 "CREATE VECTOR INDEX `contentEmbeddings` IF NOT EXISTS",
-                "FOR (n: Node) ON (n.contentEmbeddings)",
+                "FOR (n: DevDocDBNode) ON (n.contentEmbeddings)",
                 "OPTIONS {indexConfig: {",
                 "   `vector.dimensions`: 384,",
                 "   `vector.similarity_function`: 'COSINE'",

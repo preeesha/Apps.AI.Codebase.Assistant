@@ -200,7 +200,6 @@ export class Neo4j implements IDB {
         }
 
         if (response.errors.length) {
-            console.log(response.errors);
             throw new Error(
                 response.errors.map((x) => JSON.stringify(x)).join("\n\n")
             );
