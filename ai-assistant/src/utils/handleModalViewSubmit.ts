@@ -26,6 +26,15 @@ const MODALS: Record<string, any> = {
     [TESTCASES_COMMAND_MODAL]: testcasesModalSubmitHandler,
 };
 
+/**
+ * Handles the submission of a modal view.
+ * 
+ * @param {UIKitViewSubmitInteractionContext} context - The interaction context for the view submission.
+ * @param {IRead} read - The read utility for accessing data.
+ * @param {IHttp} http - The HTTP utility for making HTTP requests.
+ * @param {IModify} modify - The modify utility for modifying data.
+ * @returns {Promise<void>} - A promise that resolves when the handling is complete.
+ */
 export async function handleModalViewSubmit(
     context: UIKitViewSubmitInteractionContext,
     read: IRead,

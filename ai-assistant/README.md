@@ -1,22 +1,99 @@
 # AI Assistant
-AI Assistant
 
-## Getting Started
-Now that you have generated a blank default Rocket.Chat App, what are you supposed to do next?
-Start developing! Open up your favorite editor, our recommended one is Visual Studio code,
-and start working on your App. Once you have something ready to test, you can either
-package it up and manually deploy it to your test instance or you can use the CLI to do so.
-Here are some commands to get started:
-- `rc-apps package`: this command will generate a packaged app file (zip) which can be installed **if** it compiles with TypeScript
-- `rc-apps deploy`: this will do what `package` does but will then ask you for your server url, username, and password to deploy it for you
+Rocket Chatter is a Rocket.Chat bot that provides code-related information and assistance to developers working on the Rocket Chat project. The bot is designed to help developers understand the Rocket Chat codebase, find relevant documentation, and improve their coding practices. Rocket Chatter uses the Rocket Chat API to access the codebase and provide context-specific information and suggestions to users.
 
-## Documentation
-Here are some links to examples and documentation:
-- [Rocket.Chat Apps TypeScript Definitions Documentation](https://rocketchat.github.io/Rocket.Chat.Apps-engine/)
-- [Rocket.Chat Apps TypeScript Definitions Repository](https://github.com/RocketChat/Rocket.Chat.Apps-engine)
-- [Example Rocket.Chat Apps](https://github.com/graywolf336/RocketChatApps)
-- Community Forums
-  - [App Requests](https://forums.rocket.chat/c/rocket-chat-apps/requests)
-  - [App Guides](https://forums.rocket.chat/c/rocket-chat-apps/guides)
-  - [Top View of Both Categories](https://forums.rocket.chat/c/rocket-chat-apps)
-- [#rocketchat-apps on Open.Rocket.Chat](https://open.rocket.chat/channel/rocketchat-apps)
+## Commands
+
+### `/rcc-help`
+
+Provides descriptions and usage instructions for all available Rocket Chatter commands.
+
+```
+/rcc-help
+```
+
+### `/rcc-askcode`
+
+Allows users to ask specific code-related questions about the Rocket Chat's codebase and receive context-specific answers.
+
+```
+/rcc-askcode [your query]
+```
+
+### `/rcc-askdocs`
+
+Accesses and provides developer documentation related to the Rocket Chat project, including setup guides, API references, and contribution guidelines.
+
+```
+/rcc-askdocs [your query]
+```
+
+### `/rcc-diagram`
+
+Generates clarifying diagrams to visually represent the relationships and structures between an entity and it's dependencies within the Rocket Chat codebase.
+
+```
+/rcc-diagram [entity]
+```
+
+### `/rcc-document`
+
+Generates the documentation for a specific entity within the Rocket Chat codebase.
+
+```
+/rcc-document [entity]
+```
+
+### `/rcc-findsimilar`
+
+Finds similar entities to the one provided within the Rocket Chat codebase to reduce redundancy and improve code quality.
+
+```
+/rcc-findsimilar
+```
+
+(A modal will open to input the code snippet you want to find similar entities to)
+
+### `/rcc-improve`
+
+Offers suggestions for code improvements, refactoring, or enhancements based on best practices and project standards.
+
+```
+/rcc-improve
+```
+
+(A modal will open to input the code snippet you want to suggest improvements for)
+
+### `/rcc-importance`
+
+Determines and explains the importance of a specific code entity within the larger context of the Rocket Chat codebase.
+
+```
+/rcc-importance [entity]
+```
+
+### `/rcc-testcases`
+
+Generates test cases for the provided code which uses Rocket Chat codebase to ensure proper functionality and test coverage.
+
+```
+/rcc-testcases
+```
+
+(A modal will open to input the code snippet you want to generate testcases for)
+
+### `/rcc-translate`
+
+Translates the target entity from one programming language to another for a better understanding of the codebase.
+
+```
+/rcc-translate [entity] [target language]
+```
+
+### `/rcc-whyused`
+
+Explains why a specific entity is used within the Rocket Chat codebase.
+
+```
+/rcc-whyused [entity]
+```

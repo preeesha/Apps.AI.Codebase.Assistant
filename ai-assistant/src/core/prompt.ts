@@ -11,6 +11,12 @@ export class Prompt {
         this._messages = messages;
     }
 
+    /**
+     * Parses the content of a prompt by removing leading and trailing whitespace from each line.
+     *
+     * @param content - The content of the prompt to be parsed.
+     * @returns The parsed content with leading and trailing whitespace removed from each line.
+     */
     private parsePromptContent(content: string): string {
         return content
             .split("\n")
@@ -19,6 +25,12 @@ export class Prompt {
             .trim();
     }
 
+    /**
+     * Pushes a system message to the message list.
+     *
+     * @param {string} content - The content of the system message.
+     * @returns {void}
+     */
     pushSystem(content: string) {
         this._messages.push({
             role: "system",
@@ -26,6 +38,12 @@ export class Prompt {
         });
     }
 
+    /**
+     * Adds a message from the assistant to the message list.
+     *
+     * @param {string} content - The content of the message.
+     * @returns {void}
+     */
     pushAssistant(content: string) {
         this._messages.push({
             role: "assistant",
@@ -33,6 +51,12 @@ export class Prompt {
         });
     }
 
+    /**
+     * Adds a user message to the message list.
+     *
+     * @param {string} content - The content of the user message.
+     * @returns {void}
+     */
     pushUser(content: string) {
         this._messages.push({
             role: "user",

@@ -18,8 +18,6 @@ Rocket Chatter App is an open-source AI-powered assistant designed to help devel
 
 - **Assess Code Importance**: The app can evaluate the criticality and centrality of code entities, providing insights into their impact and dependencies, which is crucial for tasks like refactoring or introducing new features. The app will generate scores for criticality (how many other parts of the code depend on this entity), centrality (how connected this entity is to other parts), and overall importance, helping developers prioritize their efforts.
 
-- **Enforce Style Guides**: The app can automatically check the codebase against predefined style guides and coding standards, ensuring code quality, consistency, and readability across the project. Developers can provide code snippets, and the app will suggest improvements based on the project's style guide, promoting best practices and maintainability.
-
 - **Suggest Improvements**: The app can analyze code snippets and offer targeted refactoring suggestions, such as renaming variables, extracting code into reusable functions, removing dead code, and optimizing performance. These suggestions will help developers write cleaner, more efficient, and maintainable code while adhering to the project's coding standards.
 
 ### Accessibility and Collaboration
@@ -49,7 +47,7 @@ Rocket Chatter App is an open-source AI-powered assistant designed to help devel
 
 ### Usage
 
-Once the application is running, you can access the Rocket Chatter App through the Rocket.Chat interface. The app provides various slash commands (e.g., `/rcc-ask`, `/rcc-diagram`, `/rcc-document`) that you can use to interact with the assistant.
+Once the application is running, you can access the Rocket Chatter App through the Rocket.Chat interface. The app provides various slash commands (e.g., `/rcc-askcode`, `/rcc-diagram`, `/rcc-document`) that you can use to interact with the assistant.
 
 ## Architecture
 
@@ -57,13 +55,11 @@ The Rocket Chatter App follows a modular architecture with the following main co
 
 1. **Rocket Chat Application**: A user-friendly interface for developers to interact with the system, enabling them to ask questions, request diagrams, and access documentation directly within the Rocket.Chat environment. The application is built using the Rocket.Chat App Engine SDK and is deployed as a Rocket.Chat App. ![Rocket Chatter App](./docs/images/architecture-rc-app.png)
 2. **Ingestion Server**: Responsible for parsing the Rocket.Chat codebase, extracting relevant information, and storing it in the Neo4j graph database. It utilizes compiler APIs like `ts-morph` and `jscodeshift` to handle TypeScript and JavaScript code constructs. The ingestion process involves chunking the codebase, generating embeddings for code entities, and establishing relationships between them in the graph database. ![Rocket Chatter App](./docs/images/architecture-ingestion-server.png)
-3. **Application Server**: A middleware component built with Express.js that serves as a bridge between the database and the client application. It handles requests from the Rocket Chat App, queries the Neo4j database using cosine similarity-based searches, and generates responses using Language Models (LMs). The server employs a Retrieval Augmented Generation (RAG) pipeline to provide contextual and accurate information to developers. ![Rocket Chatter App](./docs/images/architecture-application-server.png)
-
 
 ### Development Environment Setup
 
-1. Fork the repository and clone your fork: `git clone https://github.com/your-username/rocket-chatter-app.git`
-2. Navigate to the project directory: `cd rocket-chatter-app`
-3. Install dependencies: `npm install`
+1. Fork the repository and clone your fork: `git clone https://github.com/your-username/Apps.AI.Codebase.Assistant.git`
+2. Navigate to the project directory: `cd Apps.AI.Codebase.Assistant`
+3. Install dependencies: `bun install`
 4. Set up the required environment variables (e.g., database credentials, API keys) by creating a `.env` file based on the provided `.env.example` file.
 5. Start the development server: `npm run dev`

@@ -193,7 +193,7 @@ export namespace PromptFactory {
 
             TASK: Based on the context (other code entities) provided, write various test cases for the target entity in the specified testing framwork.
 
-            EXPECTED OUTPUT: 100% code coverage testcases in markdown format.
+            EXPECTED OUTPUT: 100% code coverage testcases in markdown format. At least 7-10 testcases are expected.
 
             RULES:
             - STRICTLY, do not make anything other than the answer to the user's query.

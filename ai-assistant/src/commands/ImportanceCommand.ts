@@ -20,6 +20,14 @@ export class ImportanceCommand implements ISlashCommand {
     public i18nDescription = "";
     public providesPreview = false;
 
+    /**
+     * Calculates the centrality of a given node in the database.
+     * Centrality is a measure of the importance or influence of a node in a graph.
+     *
+     * @param {IDB} db - The database instance.
+     * @param {DBNode} node - The node for which centrality needs to be calculated.
+     * @returns {Promise<number>} The centrality value of the node.
+     */
     async calculateCentrality(db: IDB, node: DBNode): Promise<number> {
         const maxOutDegreeQuery = await db.run(
             `
@@ -47,6 +55,13 @@ export class ImportanceCommand implements ISlashCommand {
         return relativeCentrality;
     }
 
+    /**
+     * Calculates the criticality of a given node in the database.
+     *
+     * @param {IDB} db - The database object.
+     * @param {DBNode} node - The node for which to calculate the criticality.
+     * @returns {Promise<number>} The relative criticality of the node.
+     */
     async calculateCriticality(db: IDB, node: DBNode): Promise<number> {
         const maxInDegreeQuery = await db.run(
             `
@@ -74,11 +89,25 @@ export class ImportanceCommand implements ISlashCommand {
         return relativeCriticality;
     }
 
+    /**
+     * Calculates the number of lines of code in a given DBNode.
+     *
+     * @param {DBNode} node - The DBNode object representing the code.
+     * @returns {number} The total number of lines of code.
+     */
     calculateLinesOfCode(node: DBNode): number {
         const loc = node.code.split("\n").length;
         return loc;
     }
 
+    /**
+     * Processes the given query to calculate the importance of a code node.
+     *
+     * @param http - The HTTP client used for making requests.
+     * @param query - The user's query.
+     * @returns A promise that resolves to an object containing the calculated importance metrics: lines of code (loc), centrality, criticality, and overall importance.
+     *          Returns null if no code nodes are found.
+     */
     private async process(
         http: IHttp,
         query: string
@@ -122,6 +151,15 @@ export class ImportanceCommand implements ISlashCommand {
         return { loc, centrality, criticality, importance };
     }
 
+    /**
+     * Executes the ImportanceCommand.
+     *
+     * @param {SlashCommandContext} context - The context of the slash command.
+     * @param {IRead} read - The read utility.
+     * @param {IModify} modify - The modify utility.
+     * @param {IHttp} http - The HTTP utility.
+     * @returns {Promise<void>} - A promise that resolves when the execution is complete.
+     */
     public async executor(
         context: SlashCommandContext,
         read: IRead,

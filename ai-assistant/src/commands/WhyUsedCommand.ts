@@ -21,6 +21,13 @@ export class WhyUsedCommand implements ISlashCommand {
     public i18nDescription = "";
     public providesPreview = false;
 
+    /**
+     * Processes the user's query to find the explanation and diagram for the requested code nodes.
+     *
+     * @param http - The HTTP client used for making requests.
+     * @param query - The user's query.
+     * @returns A promise that resolves to an object containing the explanation and diagram, or null if no data is found.
+     */
     private async process(
         http: IHttp,
         query: string
@@ -100,6 +107,15 @@ export class WhyUsedCommand implements ISlashCommand {
         return data;
     }
 
+    /**
+     * Executes the WhyUsedCommand.
+     *
+     * @param {SlashCommandContext} context - The context of the slash command.
+     * @param {IRead} read - The read utility.
+     * @param {IModify} modify - The modify utility.
+     * @param {IHttp} http - The HTTP utility.
+     * @returns {Promise<void>} - A promise that resolves when the execution is complete.
+     */
     public async executor(
         context: SlashCommandContext,
         read: IRead,

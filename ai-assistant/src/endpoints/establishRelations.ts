@@ -19,6 +19,15 @@ import {
 } from "./establishRelations.types";
 
 namespace Helpers {
+    /**
+     * Establishes a relation between two nodes in the database.
+     * 
+     * @param {IDB} db - The database instance.
+     * @param {string} sourceID - The ID of the source node.
+     * @param {string} targetID - The ID of the target node.
+     * @param {string} relation - The type of relation to establish between the nodes.
+     * @returns {Promise<void>} - A promise that resolves when the relation is successfully established.
+     */
     async function establishRelation(
         db: IDB,
         sourceID: string,
@@ -37,6 +46,13 @@ namespace Helpers {
         }
     }
 
+    /**
+     * Establishes relations between entities in the database.
+     * 
+     * @param {IDB} db - The database instance.
+     * @param {EstablishRelationsEndpointRelations[]} relations - An array of objects representing the relations to be established.
+     * @returns {Promise<void>} - A promise that resolves when all relations have been established.
+     */
     export async function establishRelations(
         db: IDB,
         relations: EstablishRelationsEndpointRelations[]
@@ -58,6 +74,12 @@ namespace Helpers {
 export class EstablishRelationsEndpoint extends ApiEndpoint {
     public path = "establishRelations";
 
+    /**
+     * Generates the request and response bodies for the EstablishRelationsEndpoint.
+     *
+     * @param content - The content to be used for generating the request and response bodies.
+     * @returns An array containing the generated request body and response body.
+     */
     makeBodies(
         content: any
     ): [
@@ -72,6 +94,14 @@ export class EstablishRelationsEndpoint extends ApiEndpoint {
         return [requestBody, responseBody];
     }
 
+    /**
+     * Commits the progress of the database transaction.
+     * 
+     * @param {IDB} db - The database instance.
+     * @returns {Promise<number>} - A promise that resolves to the status code indicating the success or failure of the commit operation.
+     *                            - Returns 200 if the commit is successful.
+     *                            - Returns 500 if an error occurs during the commit or rollback operation.
+     */
     async commitProgress(
         db: IDB
     ): Promise<EstablishRelationsEndpointResponseBody["status"]> {

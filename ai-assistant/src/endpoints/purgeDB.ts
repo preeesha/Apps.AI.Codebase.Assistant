@@ -16,11 +16,23 @@ import { Neo4j } from "../core/services/db/neo4j";
 export class PurgeDBEndpoint extends ApiEndpoint {
     public path = "purgeDB";
 
+    /**
+     * Empties the specified database by deleting all nodes and relationships.
+     *
+     * @param {IDB} db - The database to be emptied.
+     * @returns {Promise<void>} - A promise that resolves when the database has been emptied.
+     */
     async emptyDB(db: IDB) {
         const query = `MATCH (n) DETACH DELETE n`;
         await db.run(query);
     }
 
+    /**
+     * Sets up the indices for name embeddings and code embeddings in the specified database.
+     *
+     * @param {IDB} db - The database object.
+     * @returns {Promise<void>} - A promise that resolves when the indices are set up.
+     */
     async setupIndices(db: IDB) {
         const query = [
             // Create indices for name embeddings

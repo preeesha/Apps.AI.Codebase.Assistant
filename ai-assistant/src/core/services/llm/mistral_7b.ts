@@ -12,6 +12,11 @@ export class Mistral_7B implements ILLMModel {
         this.http = http;
     }
 
+    /**
+     * Asynchronously sends a prompt to the server and retrieves a response.
+     * @param {Prompt} prompt - The prompt object containing the messages to send.
+     * @returns {Promise<string | null>} A promise that resolves to the response message or null if no response is received.
+     */
     async ask(prompt: Prompt): Promise<string | null> {
         const url = `${this.baseURL}/chat/completions`;
         const res = await this.http.post(url, {

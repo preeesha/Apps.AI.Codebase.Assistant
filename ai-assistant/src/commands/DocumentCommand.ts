@@ -20,6 +20,13 @@ export class DocumentCommand implements ISlashCommand {
     public i18nDescription = "";
     public providesPreview = false;
 
+    /**
+     * Processes the HTTP request and query to generate documentation.
+     *
+     * @param http - The HTTP client.
+     * @param query - The user's query.
+     * @returns A promise that resolves to an object containing the generated JSDoc and explanation, or null if no references are found or the documentation could be generated.
+     */
     private async process(
         http: IHttp,
         query: string
@@ -78,6 +85,15 @@ export class DocumentCommand implements ISlashCommand {
         };
     }
 
+    /**
+     * Executes the command to retrieve and display documentation for a given query.
+     *
+     * @param context - The SlashCommandContext object containing information about the command execution.
+     * @param read - The IRead object used to read data from the Rocket.Chat server.
+     * @param modify - The IModify object used to modify data on the Rocket.Chat server.
+     * @param http - The IHttp object used to make HTTP requests.
+     * @returns A Promise that resolves to void.
+     */
     public async executor(
         context: SlashCommandContext,
         read: IRead,
