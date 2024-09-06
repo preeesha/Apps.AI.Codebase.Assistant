@@ -1,3 +1,3 @@
 export interface IDocumentation {
-	prepare(): Promise<void>
+	prepare(dataDirPath: string): Promise<void>
 }

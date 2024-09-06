@@ -1,7 +1,11 @@
 import { exec } from "child_process"
 import { v4 as uuid } from "uuid"
 
+import { REPO_URI } from "./constants"
 import { Documentation } from "./process/documentation/documentation"
+import { insertDataIntoDB } from "./process/ingest/ingest"
+import { Codebase } from "./process/prepare/codebase"
+import { FileProcessor } from "./process/prepare/processor/file"
 
 namespace Algorithms {
 	export async function execCommand(command: string) {
@@ -24,16 +28,17 @@ namespace Algorithms {
 async function main() {
 	const sessionID = uuid()
 
-	// await Algorithms.execCommand(`git clone ${REPO_URI} ${sessionID}`)
-	// {
-	// 	const codebase = new Codebase(sessionID, new FileProcessor(), 1)
-	// 	await codebase.process()
-	// 	await insertDataIntoDB(codebase.dataDirPath)
-	// }
-	// await Algorithms.execCommand(`rm -rf ${sessionID}`)
+	await Algorithms.execCommand(`git clone ${REPO_URI} ${sessionID}`)
+	{
+		const codebase = new Codebase(sessionID, new FileProcessor(), 1)
+		await codebase.process()
 
-	const docs = new Documentation()
-	await docs.prepare()
+		const docs = new Documentation()
+		await docs.prepare(codebase.dataDirPath)
+
+		await insertDataIntoDB(codebase.dataDirPath)
+	}
+	await Algorithms.execCommand(`rm -rf ${sessionID}`)
 }
 
 main()

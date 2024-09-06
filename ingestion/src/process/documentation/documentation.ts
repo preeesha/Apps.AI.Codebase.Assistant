@@ -1,6 +1,6 @@
-import { writeFileSync } from "fs"
 import puppeteer from "puppeteer"
 
+import { writeFile } from "fs/promises"
 import { DOCUMENTATION_URL } from "../../constants"
 import { DevDocDBNode } from "../../core/devDocsDBNode"
 import { IDocumentation } from "./documentation.types"
@@ -54,8 +54,14 @@ export class Documentation implements IDocumentation {
 		return flattenedNodes
 	}
 
-	async prepare() {
+	async prepare(dataDirPath: string) {
 		const nodes = await this.prepareDevDocsNodes()
-		writeFileSync("nodes.json", JSON.stringify(nodes, null, 3))
+
+		const jobs = []
+		for (const node of nodes) {
+			jobs.push(
+				writeFile(`${dataDirPath}/docs-${node.id}.json`, JSON.stringify(node))
+			)
+		}
 	}
 }
