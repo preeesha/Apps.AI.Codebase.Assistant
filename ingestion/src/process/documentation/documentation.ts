@@ -3,9 +3,10 @@ import puppeteer from "puppeteer"
 
 import { DOCUMENTATION_URL } from "../../constants"
 import { DevDocDBNode } from "../../core/devDocsDBNode"
+import { IDocumentation } from "./documentation.types"
 import { DocumentationPage } from "./documentationPage"
 
-export class Documentation {
+export class Documentation implements IDocumentation {
 	private async gatherDocumentationLinks() {
 		const browser = await puppeteer.launch({
 			headless: true, // Ensure it is headless for CI environments
