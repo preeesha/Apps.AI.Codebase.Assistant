@@ -1,15 +1,15 @@
-import { DBNodeRelationType } from "../core/services/db/dbNode";
+import { DBNodeRelationType } from "../core/services/db/dbNode"
 
 export type EstablishRelationsEndpointRelations = {
-    source: string;
-    target: string;
-    relation: DBNodeRelationType;
-};
+   source: string
+   target: string
+   relation: DBNodeRelationType
+}
 
 export type EstablishRelationsEndpointRequestBody = {
-    relations: EstablishRelationsEndpointRelations[];
-};
+   relations: EstablishRelationsEndpointRelations[]
+}
 
 export type EstablishRelationsEndpointResponseBody = {
-    status: 200 | 500;
-};
+   status: 200 | 500
+}

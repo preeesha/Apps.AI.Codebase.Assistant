@@ -1,9 +1,9 @@
-import { Prompt } from "./prompt";
+import { Prompt } from "./prompt"
 
 export namespace PromptFactory {
-    export function makeDBKeywordQueryPrompt(query: string): Prompt {
-        const prompt = new Prompt();
-        prompt.pushSystem(`
+   export function makeDBKeywordQueryPrompt(query: string): Prompt {
+      const prompt = new Prompt()
+      prompt.pushSystem(`
             You are an expert in understanding and answering questions of user.
 
             ---
@@ -26,29 +26,29 @@ export namespace PromptFactory {
             OUTPUT: <ANSWER>tests/commands.spec.ts</ANSWER>
 
             OUTPUT STRICT FORMAT: <ANSWER>keyword1,keyword2,full/path/1,full/path/2</ANSWER>
-        `);
-        prompt.pushUser(`
+        `)
+      prompt.pushUser(`
             Hey I have this query, can you please extract the possible keywords from it? Please answer in <ANSWER>keyword1, keyword2<ANSWER> format only and don't say literally anything else.
 
             Here's my query:
             ${query}
-        `);
+        `)
 
-        return prompt;
-    }
+      return prompt
+   }
 
-    export function makeAskCodePrompt(codebase: string, query: string): Prompt {
-        const prompt = new Prompt();
-        prompt.pushSystem(`
+   export function makeAskCodePrompt(codebase: string, query: string): Prompt {
+      const prompt = new Prompt()
+      prompt.pushSystem(`
             You are an expert in understanding and answering questions of user when given a proper context of the codebase. Here're the rules:
             1. Even if user asks for any kind of diagram or visualization, you must ignore that.
             2. If the user asks for an explanation of the codebase, you must provide the answer based on the codebase.
             3. You must provide the answer in text GitHub Markdown format only.
             4. In case of any request for diagrams or visualizations, tell user to use the "/rcc-diagram" command.
             5. If you are unable to answer the question, you must tell the user that you are unable to answer the question.
-        `);
-        prompt.pushUser(
-            `Hey I have a the following codebase in between the tags <CODEBASE_START> and <CODEBASE_END>. Can you please answer the following query?
+        `)
+      prompt.pushUser(
+         `Hey I have a the following codebase in between the tags <CODEBASE_START> and <CODEBASE_END>. Can you please answer the following query?
             
             ${query} 
             
@@ -56,18 +56,14 @@ export namespace PromptFactory {
             <CODEBASE_START>
             ${codebase}
             <CODEBASE_END>`
-        );
+      )
 
-        return prompt;
-    }
+      return prompt
+   }
 
-    export function makeAskDocsPrompt(
-        content: string,
-        sourceURLs: string[],
-        query: string
-    ): Prompt {
-        const prompt = new Prompt();
-        prompt.pushSystem(`
+   export function makeAskDocsPrompt(content: string, sourceURLs: string[], query: string): Prompt {
+      const prompt = new Prompt()
+      prompt.pushSystem(`
             You are an expert in understanding the documentation of Rocket.Chat and answering questions of user when given a proper context.
 
             Here're the sources of the content:
@@ -80,8 +76,8 @@ export namespace PromptFactory {
             4. In case of any request for diagrams or visualizations, tell user to use the "/rcc-diagram" command.
             5. If you are unable to answer the question, you must tell the user that you are unable to answer the question.
             6. Always and always mentions the sources of the content in the end. You must provide all these URLs.
-        `);
-        prompt.pushUser(`
+        `)
+      prompt.pushUser(`
             Hey I have been the reading the following documentation content and I am not able to understand it quite well. I'll provide you the content in between the tags <CONTENT_START> and <CONTENT_END> and the query between <QUERY_START> and <QUERY_END>. Can you please help me understand it better?
 
             <QUERY_START>
@@ -92,15 +88,15 @@ export namespace PromptFactory {
             <CONTENT_START>
             ${content}
             <CONTENT_END>
-        `);
+        `)
 
-        return prompt;
-    }
+      return prompt
+   }
 
-    export function makeDiagramPrompt(codebase: string, query: string): Prompt {
-        const prompt = new Prompt();
+   export function makeDiagramPrompt(codebase: string, query: string): Prompt {
+      const prompt = new Prompt()
 
-        prompt.pushSystem(`
+      prompt.pushSystem(`
             You are an expert in understanding and answering questions of user when given a proper context of the codebase.
             You provide mermaid 8.9.0 based graph and sequence diagrams which enhance the user's understanding of the codebase. These diagrams has a special quality that they are never off the mark and always render properly. The diagram are never other than the information provided in the codebase.
 
@@ -110,31 +106,28 @@ export namespace PromptFactory {
             - The aim is to make it easy for the user to understand the flow & overall working.
             - The output must not have any kind of errors and must render properly.
             </ANSWER>
-        `);
-        prompt.pushAssistant(
-            "Sure, I will strictly follow my instructions. I will provide the answer in a valid PLAIN TEXT only. I won't use parentheses at all even if they are required."
-        );
-        prompt.pushSystem(`
+        `)
+      prompt.pushAssistant(
+         "Sure, I will strictly follow my instructions. I will provide the answer in a valid PLAIN TEXT only. I won't use parentheses at all even if they are required."
+      )
+      prompt.pushSystem(`
             HERE'RE THE NODES OF THE CODEBASE TO USE AS CONTEXT:
             <CODEBASE_START>
                 ${codebase}
             </CODEBASE_END>
-        `);
-        prompt.pushAssistant(
-            "Yeah sure. I'll start my response with <DIAGRAM_START> and end with <DIAGRAM_END>."
-        );
-        prompt.pushUser(query);
-        prompt.pushSystem("<DIAGRAM_START>```mermaid\n");
+        `)
+      prompt.pushAssistant(
+         "Yeah sure. I'll start my response with <DIAGRAM_START> and end with <DIAGRAM_END>."
+      )
+      prompt.pushUser(query)
+      prompt.pushSystem("<DIAGRAM_START>```mermaid\n")
 
-        return prompt;
-    }
+      return prompt
+   }
 
-    export function makeDocumentPrompt(
-        codebase: string,
-        query: string
-    ): Prompt {
-        const prompt = new Prompt();
-        prompt.pushSystem(`
+   export function makeDocumentPrompt(codebase: string, query: string): Prompt {
+      const prompt = new Prompt()
+      prompt.pushSystem(`
             You are an expert in understanding and generating JSDoc documentation for other developers when given a proper context of the codebase.
 
             INPUT: Inter-related entities from a huge codebase in JSON format, target entity to generate documentation for & number of example usages to provide.
@@ -156,25 +149,22 @@ export namespace PromptFactory {
             - STRICTLY, do not make anything other than the answer to the user's query.
             - DON'T REPEAT THE EXAMPLES.
             - Do not provide any kind of diagram or visualization in the output.
-        `);
-        prompt.pushUser(`
+        `)
+      prompt.pushUser(`
             <CODEBASE_START>
             ${codebase}
             <CODEBASE_END>
             
             Target Entity: ${query}
-        `);
+        `)
 
-        return prompt;
-    }
+      return prompt
+   }
 
-    export function makeImprovePrompt(
-        codebase: string,
-        targetEntity: string
-    ): Prompt {
-        const prompt = new Prompt();
+   export function makeImprovePrompt(codebase: string, targetEntity: string): Prompt {
+      const prompt = new Prompt()
 
-        prompt.pushSystem(`
+      prompt.pushSystem(`
             You are an expert in understanding typescript and javascript codebases and fixing it provided the context of the codebase.
 
             INPUT: Other entities the target entity might be using. The target entity to refactor.
@@ -200,9 +190,9 @@ export namespace PromptFactory {
             - STRICTLY, do not make anything other than the answer to the user's query.
             - Do not provide any kind of diagram or visualization in the output.
             - The output MUST BE IN ONLY AND ONLY MARKDOWN.
-        `);
-        prompt.pushUser(
-            `Hey, can you suggest multiple fixes for the target entity? To help you with the context I have provided the codebase of the entities it uses and the target entity. You don't need to worry about the codebase, just focus on the target entity.
+        `)
+      prompt.pushUser(
+         `Hey, can you suggest multiple fixes for the target entity? To help you with the context I have provided the codebase of the entities it uses and the target entity. You don't need to worry about the codebase, just focus on the target entity.
             
             <CODEBASE_START>
             ${codebase}
@@ -210,19 +200,19 @@ export namespace PromptFactory {
             <TARGET_ENTITY_START>
             ${targetEntity}
             <TARGET_ENTITY_END>.`
-        );
+      )
 
-        return prompt;
-    }
+      return prompt
+   }
 
-    export function makeTestcasesPrompt(
-        targetEntity: string,
-        codebase: string,
-        testingFramework: string
-    ): Prompt {
-        const prompt = new Prompt();
+   export function makeTestcasesPrompt(
+      targetEntity: string,
+      codebase: string,
+      testingFramework: string
+   ): Prompt {
+      const prompt = new Prompt()
 
-        prompt.pushSystem(`
+      prompt.pushSystem(`
             You are an expert in understanding typescript and javascript.
 
             INPUT: target entity, other code entities the target entity uses, testing framework.
@@ -236,8 +226,8 @@ export namespace PromptFactory {
             - DO NOT REPEAT THE TRANSLATION MULTIPLE TIMES.
             - Do not provide any kind of diagram or visualization in the output.
             - The output MUST BE IN ONLY AND ONLY STRING.
-        `);
-        prompt.pushUser(`
+        `)
+      prompt.pushUser(`
             Hey, can you write testcases for the following entity. I have provided you with other entities as well on which my target entity depends. Here you go:
 
             <TESTING_FRAMEWORK_START>
@@ -251,19 +241,19 @@ export namespace PromptFactory {
             <OTHER_ENTITIES_START>
             ${codebase}
             <OTHER_ENTITIES_END>
-        `);
+        `)
 
-        return prompt;
-    }
+      return prompt
+   }
 
-    export function makeTranslatePrompt(
-        codebase: string,
-        targetEntity: string,
-        targetLanguage: string
-    ): Prompt {
-        const prompt = new Prompt();
+   export function makeTranslatePrompt(
+      codebase: string,
+      targetEntity: string,
+      targetLanguage: string
+   ): Prompt {
+      const prompt = new Prompt()
 
-        prompt.pushSystem(`
+      prompt.pushSystem(`
             You are an expert in understanding various programming languages and specialized in typescript and javascript.
 
             INPUT: Inter-related entities from a huge codebase in JSON format, target entity to translate, target entity & the language to translate to.
@@ -277,8 +267,8 @@ export namespace PromptFactory {
             - DO NOT REPEAT THE TRANSLATION MULTIPLE TIMES.
             - Do not provide any kind of diagram or visualization in the output.
             - The output MUST BE IN ONLY AND ONLY STRING.
-        `);
-        prompt.pushUser(`
+        `)
+      prompt.pushUser(`
             Hey, can you translate the following codebase in TypeScript to the ${targetLanguage}? I have provided you with other entities as well on which my target entity depends. Here you go:
 
             <CODEBASE_START>
@@ -288,14 +278,14 @@ export namespace PromptFactory {
             <TARGET_ENTITY_START>
             ${targetEntity}
             <TARGET_ENTITY_END>
-        `);
+        `)
 
-        return prompt;
-    }
+      return prompt
+   }
 
-    export function makeWhyUsedPrompt(codebase: string, query: string): Prompt {
-        const prompt = new Prompt();
-        prompt.pushSystem(`
+   export function makeWhyUsedPrompt(codebase: string, query: string): Prompt {
+      const prompt = new Prompt()
+      prompt.pushSystem(`
             You are an expert in understanding and answering questions of user when given a proper context of the codebase.
 
             INPUT: User's text query
@@ -321,15 +311,15 @@ export namespace PromptFactory {
             - If that entity is used multiple times then provide the reasoning for each usage separately.
             - DON'T REPEAT THE USAGES OF THE ENTITY MULTIPLE TIMES.
             - The output MUST BE IN ONLY AND ONLY IN THE ABOVE SPECIFIED FORMAT.
-        `);
-        prompt.pushUser(
-            `Hey can you explain why this \`${query}\` entity is used & is useful in the following codebase? Here's the codebase:
+        `)
+      prompt.pushUser(
+         `Hey can you explain why this \`${query}\` entity is used & is useful in the following codebase? Here's the codebase:
             
             <CODEBASE_START>
             ${codebase}
             <CODEBASE_END>`
-        );
+      )
 
-        return prompt;
-    }
+      return prompt
+   }
 }
