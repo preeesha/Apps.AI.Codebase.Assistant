@@ -1,11 +1,8 @@
+import { IPersistence, IPersistenceRead } from "@rocket.chat/apps-engine/definition/accessors"
 import {
-    IPersistence,
-    IPersistenceRead,
-} from "@rocket.chat/apps-engine/definition/accessors";
-import {
-    RocketChatAssociationModel,
-    RocketChatAssociationRecord,
-} from "@rocket.chat/apps-engine/definition/metadata";
+   RocketChatAssociationModel,
+   RocketChatAssociationRecord,
+} from "@rocket.chat/apps-engine/definition/metadata"
 
 /**
  * Persists UI data using the provided persistence handler.
@@ -16,17 +13,10 @@ import {
  * @param {T} data - The data to be persisted.
  * @returns {Promise<void>} - A promise that resolves when the data has been successfully persisted.
  */
-export const persistUIData = async <T>(
-    persistence: IPersistence,
-    id: string,
-    data: T
-): Promise<void> => {
-    const association = new RocketChatAssociationRecord(
-        RocketChatAssociationModel.USER,
-        `${id}#UI`
-    );
-    await persistence.updateByAssociation(association, data as any, true);
-};
+export const persistUIData = async <T>(persistence: IPersistence, id: string, data: T): Promise<void> => {
+   const association = new RocketChatAssociationRecord(RocketChatAssociationModel.USER, `${id}#UI`)
+   await persistence.updateByAssociation(association, data as any, true)
+}
 
 /**
  * Retrieves UI data from the persistence layer based on the provided ID.
@@ -36,19 +26,11 @@ export const persistUIData = async <T>(
  * @param {string} id - The ID used to identify the UI data.
  * @returns {Promise<T | null>} - A promise that resolves to the retrieved UI data or null if not found.
  */
-export const getUIData = async <T>(
-    persistenceRead: IPersistenceRead,
-    id: string
-): Promise<T | null> => {
-    const association = new RocketChatAssociationRecord(
-        RocketChatAssociationModel.USER,
-        `${id}#UI`
-    );
-    const result = (await persistenceRead.readByAssociation(
-        association
-    )) as Array<any>;
-    return result && result.length ? (result[0] as any) : null;
-};
+export const getUIData = async <T>(persistenceRead: IPersistenceRead, id: string): Promise<T | null> => {
+   const association = new RocketChatAssociationRecord(RocketChatAssociationModel.USER, `${id}#UI`)
+   const result = (await persistenceRead.readByAssociation(association)) as Array<any>
+   return result && result.length ? (result[0] as any) : null
+}
 
 /**
  * Clears the UI data associated with a specific ID.
@@ -57,13 +39,7 @@ export const getUIData = async <T>(
  * @param {string} id - The ID of the data to be cleared.
  * @returns {Promise<void>} - A promise that resolves when the UI data is cleared.
  */
-export const clearUIData = async (
-    persistence: IPersistence,
-    id: string
-): Promise<void> => {
-    const association = new RocketChatAssociationRecord(
-        RocketChatAssociationModel.USER,
-        `${id}#UI`
-    );
-    await persistence.removeByAssociation(association);
-};
+export const clearUIData = async (persistence: IPersistence, id: string): Promise<void> => {
+   const association = new RocketChatAssociationRecord(RocketChatAssociationModel.USER, `${id}#UI`)
+   await persistence.removeByAssociation(association)
+}

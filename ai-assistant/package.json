@@ -1,14 +1,17 @@
 {
     "scripts": {
-        "dev": "clear && tsx src/test.ts"
+        "dev": "clear && tsx src/test.ts",
+        "pretty": "prettier --config .prettierrc --write ./src/*"
     },
     "devDependencies": {
         "@rocket.chat/apps-cli": "^1.11.1",
         "@rocket.chat/apps-engine": "^1.19.0",
         "@types/node": "14.14.6",
         "esbuild": "^0.19.4",
+        "prettier": "^3.3.3",
         "tslint": "^5.10.0",
         "tsx": "^4.17.0",
         "typescript": "^4.0.5"
-    }
+    },
+    "dependencies": {}
 }
