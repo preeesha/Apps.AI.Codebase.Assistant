@@ -1,14 +1,7 @@
-import {
-    IHttp,
-    IModify,
-    IRead,
-} from "@rocket.chat/apps-engine/definition/accessors";
-import {
-    ISlashCommand,
-    SlashCommandContext,
-} from "@rocket.chat/apps-engine/definition/slashcommands";
+import { IHttp, IModify, IRead } from "@rocket.chat/apps-engine/definition/accessors"
+import { ISlashCommand, SlashCommandContext } from "@rocket.chat/apps-engine/definition/slashcommands"
 
-import { handleCommandResponse } from "../utils/handleCommandResponse";
+import { handleCommandResponse } from "../utils/handleCommandResponse"
 
 const HELP_MESSAGE = `
 ## Rocket Chatter
@@ -72,28 +65,28 @@ Rocket Chatter is a Rocket.Chat bot that provides code-related information and a
 \`\`\`
 /rcc-whyused [entity]
 \`\`\`
-`;
+`
 
 export class HelpCommand implements ISlashCommand {
-    public command = "rcc-help";
-    public i18nParamsExample = "";
-    public i18nDescription = "";
-    public providesPreview = false;
+   public command = "rcc-help"
+   public i18nParamsExample = ""
+   public i18nDescription = ""
+   public providesPreview = false
 
-    public async executor(
-        context: SlashCommandContext,
-        read: IRead,
-        modify: IModify,
-        http: IHttp
-    ): Promise<void> {
-        const sendEditedMessage = await handleCommandResponse(
-            "",
-            context.getSender(),
-            context.getRoom(),
-            modify,
-            this.command
-        );
+   public async executor(
+      context: SlashCommandContext,
+      read: IRead,
+      modify: IModify,
+      http: IHttp
+   ): Promise<void> {
+      const sendEditedMessage = await handleCommandResponse(
+         "",
+         context.getSender(),
+         context.getRoom(),
+         modify,
+         this.command
+      )
 
-        sendEditedMessage(HELP_MESSAGE);
-    }
+      sendEditedMessage(HELP_MESSAGE)
+   }
 }

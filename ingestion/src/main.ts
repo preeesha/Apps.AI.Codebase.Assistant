@@ -8,37 +8,46 @@ import { Codebase } from "./process/prepare/codebase"
 import { FileProcessor } from "./process/prepare/processor/file"
 
 namespace Algorithms {
-	export async function execCommand(command: string) {
-		await new Promise((resolve, reject) => {
-			exec(command, (error, stdout, stderr) => {
-				if (error) {
-					reject(`Error: ${error.message}`)
-					return
-				}
-				if (stderr) {
-					reject(`Stderr: ${stderr}`)
-					return
-				}
-				resolve(stdout)
-			})
-		})
-	}
+   export async function execCommand(command: string) {
+      await new Promise((resolve, reject) => {
+         console.log(`🕒 Cloning repository: "${command}"`)
+
+         exec(command, (error, stdout, stderr) => {
+            if (error) {
+               reject(`Error: ${error.message}`)
+               return
+            }
+            resolve(stdout)
+         })
+      })
+   }
 }
 
 async function main() {
-	const sessionID = uuid()
+   await new Promise((resolve) => setTimeout(resolve, 1000))
+   console.clear()
 
-	await Algorithms.execCommand(`git clone ${REPO_URI} ${sessionID}`)
-	{
-		const codebase = new Codebase(sessionID, new FileProcessor(), 1)
-		await codebase.process()
+   let tries = 5
+   while (tries--) {
+      try {
+         const sessionID = uuid()
 
-		const docs = new Documentation()
-		await docs.prepare(codebase.dataDirPath)
+         await Algorithms.execCommand(`git clone ${REPO_URI} ${sessionID}`)
+         {
+            const codebase = new Codebase(sessionID, new FileProcessor(), 1)
+            await codebase.process()
 
-		await insertDataIntoDB(codebase.dataDirPath)
-	}
-	await Algorithms.execCommand(`rm -rf ${sessionID}`)
+            const docs = new Documentation()
+            await docs.prepare(codebase.dataDirPath)
+
+            await insertDataIntoDB(codebase.dataDirPath)
+         }
+         // await Algorithms.execCommand(`rm -rf ${sessionID}`)
+         break
+      } catch {
+         console.error("Retrying", tries)
+      }
+   }
 }
 
 main()
