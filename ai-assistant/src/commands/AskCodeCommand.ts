@@ -21,7 +21,7 @@ export class AskCodeCommand implements ISlashCommand {
     * @param {string} query - The user's query.
     * @returns {Promise<string | null>} A promise that resolves to the response to be given to the user or `null` if no answer or no reference is found.
     */
-   private async process(http: IHttp, query: string): Promise<string | null> {
+   private async process(http: IHttp, query: string): Promise<string> {
       const db = new Neo4j(http)
       const llm = new Llama3_70B(http)
       const embeddingModel = new MiniLML6(http)
@@ -33,7 +33,7 @@ export class AskCodeCommand implements ISlashCommand {
        * ---------------------------------------------------------------------------------------------
        */
       const keywords = await Query.getDBKeywordsFromQuery(llm, query)
-      if (!keywords.length) return null
+      if (!keywords.length) return "I'm sorry, I couldn't understand your query. Please try again."
 
       /**
        * ---------------------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ export class AskCodeCommand implements ISlashCommand {
        * ---------------------------------------------------------------------------------------------
        */
       const results = await Query.getCodeNodesFromKeywords(db, embeddingModel, keywords)
-      if (!results.length) return null
+      if (!results.length) return "I'm sorry, I couldn't find any code related to your query."
 
       /**
        * ---------------------------------------------------------------------------------------------
@@ -53,7 +53,7 @@ export class AskCodeCommand implements ISlashCommand {
       const answer = await llm.ask(
          PromptFactory.makeAskCodePrompt(results.map((x) => x.code).join("\n\n"), query)
       )
-      if (!answer) return null
+      if (!answer) return "I'm sorry, I'm having trouble connecting to the server. Please try again later."
 
       return answer
    }
@@ -85,10 +85,6 @@ export class AskCodeCommand implements ISlashCommand {
       )
 
       const res = await this.process(http, query)
-      if (res) {
-         await sendEditedMessage(res)
-      } else {
-         await sendEditedMessage("❌ Unable to process your query")
-      }
+      await sendEditedMessage(res)
    }
 }

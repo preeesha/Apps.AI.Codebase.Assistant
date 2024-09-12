@@ -47,9 +47,9 @@ export class DiagramCommand implements ISlashCommand {
       const diagram = await llm.ask(
          PromptFactory.makeDiagramPrompt(results.map((x) => x.code).join("\n\n"), query)
       )
+      console.log(diagram)
       if (!diagram) return null
 
-      // @ts-ignore
       const diagramContent = diagram
          .replace("```mermaid", "")
          .replace("```", "")

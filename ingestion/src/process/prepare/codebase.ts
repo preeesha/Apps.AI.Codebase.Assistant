@@ -39,13 +39,13 @@ export class Codebase {
       return this._dataDirPath
    }
 
-   private initializeDataDirectory(removeExisting = true): void {
-      this._dataDirName = uuid()
+   private initializeDataDirectory(removeExisting = false): void {
+      this._dataDirName = "data" || uuid()
       this._dataDirPath = path.resolve(this._path, this._dataDirName)
 
       /* Handle data directory */
       if (removeExisting && existsSync(this._dataDirPath)) rmSync(this._dataDirPath, { recursive: true })
-      mkdirSync(this._dataDirPath)
+      // mkdirSync(this._dataDirPath)
    }
 
    private prepareFilesMetadata() {

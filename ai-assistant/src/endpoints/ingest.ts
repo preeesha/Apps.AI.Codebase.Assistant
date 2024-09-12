@@ -23,7 +23,7 @@ export class IngestEndpoint extends ApiEndpoint {
    makeBodies(content: any): [IngestEndpointRequestBody, IngestEndpointResponseBody] {
       const requestBody = content as IngestEndpointRequestBody
       const responseBody: IngestEndpointResponseBody = {
-         batchID: "hey",
+         batchID: requestBody.batchID,
          status: 200,
       }
 
@@ -38,26 +38,30 @@ export class IngestEndpoint extends ApiEndpoint {
       http: IHttp,
       persis: IPersistence
    ): Promise<IApiResponse> {
-      let [{ nodes }, responseBody] = this.makeBodies(request.content)
+      try {
+         let [{ nodes }, responseBody] = this.makeBodies(request.content)
 
-      // -----------------------------------------------------------------------------------
-      const db = new Neo4j(http)
-      await db.verifyConnectivity()
-      const embeddingModel = new MiniLML6(http)
-      // -----------------------------------------------------------------------------------
-      nodes = nodes.map((node) => {
-         if ("element" in node) {
-            return new DevDocDBNode(node)
-         } else {
-            return new DBNode(node)
-         }
-      })
-      await Promise.all(nodes.map((x) => x.fillEmbeddings(embeddingModel)))
-      // -----------------------------------------------------------------------------------
-      const jobs = nodes.map((node) => db.run(node.getDBInsertQuery(), node))
-      await Promise.all(jobs)
-      // -----------------------------------------------------------------------------------
+         // -----------------------------------------------------------------------------------
+         const db = new Neo4j(http)
+         await db.verifyConnectivity()
+         const embeddingModel = new MiniLML6(http)
+         // -----------------------------------------------------------------------------------
+         nodes = nodes.map((node) => {
+            if ("element" in node) {
+               return new DevDocDBNode(node)
+            } else {
+               return new DBNode(node)
+            }
+         })
+         await Promise.all(nodes.map((x) => x.fillEmbeddings(embeddingModel)))
+         // -----------------------------------------------------------------------------------
+         const jobs = nodes.map((node) => db.run(node.getDBInsertQuery(), node))
+         await Promise.all(jobs)
+         // -----------------------------------------------------------------------------------
 
-      return this.success(JSON.stringify(responseBody))
+         return this.success(JSON.stringify(responseBody))
+      } catch (e) {
+         return this.success(JSON.stringify({ status: 500, error: e }))
+      }
    }
 }

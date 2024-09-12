@@ -33,12 +33,14 @@ export class Neo4j implements IDB {
       // password: string
    ) {
       this.http = http
+
       this.baseUrl = "http://neo4j:7474"
       this.username = "neo4j"
       this.password = "strongpasswordsafe123"
-      // this.baseUrl = "http://44.192.104.170:7474";
-      // this.username = "neo4j";
-      // this.password = "individuals-societies-wools";
+
+      // this.baseUrl = "http://44.192.104.170:7474"
+      // this.username = "neo4j"
+      // this.password = "individuals-societies-wools"
    }
 
    /**

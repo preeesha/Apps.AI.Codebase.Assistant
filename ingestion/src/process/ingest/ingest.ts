@@ -1,5 +1,4 @@
-import { readdirSync } from "fs"
-import { readFile } from "fs/promises"
+import { readFileSync, readdirSync } from "fs"
 import path from "path"
 import { v4 as uuid } from "uuid"
 
@@ -26,21 +25,30 @@ namespace Algorithms {
    }
 
    export async function insertBatch(batchID: string, nodes: DBNode[]): Promise<boolean> {
-      try {
-         const res = await fetch(`${RC_APP_URI}/ingest`, {
-            method: "POST",
-            headers: {
-               accept: "application/json",
-               "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ nodes, batchID }),
-         })
+      let tries = 5
+      while (tries--) {
+         try {
+            const res = await fetch(`${RC_APP_URI}/ingest`, {
+               method: "POST",
+               headers: {
+                  accept: "application/json",
+                  "Content-Type": "application/json",
+               },
+               body: JSON.stringify({ nodes, batchID }),
+            })
 
-         return res.status === 200
-      } catch (e) {
-         console.log(e)
-         return false
+            if (res.status !== 200) {
+               console.log(res)
+               return false
+            }
+
+            return true
+            // return res.status === 200
+         } catch (e) {
+            console.log(e)
+         }
       }
+      return false
    }
 
    export async function establishRelations(relations: DBNodeRelation[]): Promise<boolean> {
@@ -66,13 +74,15 @@ export async function insertDataIntoDB(batchesDirPath: string) {
 
    const files = readdirSync(batchesDirPath).map((file) => path.resolve(batchesDirPath, file))
 
-   /* Step 1: Empty DB */
+   // /* Step 1: Empty DB */
    {
       const success = await Algorithms.purgeDB()
       if (!success) {
          console.log("❌ Error emptying db")
          return
       }
+
+      console.log("🕒 Purged DB")
    }
 
    /* Step 2: Insert batch */
@@ -82,14 +92,21 @@ export async function insertDataIntoDB(batchesDirPath: string) {
       const relations: (DBNodeRelation | DevDocDBNodeRelation)[] = []
 
       // Insert each batch
-      for (let i = 0; i < files.length; i += 100) {
-         const group = files.slice(i, i + 100)
-         const jobs = group.map(async (file) => {
-            const batchID = uuid()
-            const data = await readFile(file, "utf-8")
-            const nodes = Object.values(JSON.parse(data)) as DBNode[]
+      let batches: string[][] = []
+      for (let i = 0; i < files.length; i += 10) {
+         batches.push(files.slice(i, i + 10))
+      }
 
-            for (const node of nodes)
+      console.log("🕒 Waiting for batches")
+      for (const group of batches) {
+         const batchID = uuid()
+         const nodes: DBNode[] = []
+
+         for (const file of group) {
+            const data = readFileSync(file, "utf-8")
+            nodes.push(...(Object.values(JSON.parse(data)) as DBNode[]))
+
+            for (const node of nodes) {
                relations.push(
                   ...node.relations.map((relation) => ({
                      source: node.id,
@@ -97,16 +114,22 @@ export async function insertDataIntoDB(batchesDirPath: string) {
                      relation: relation.relation,
                   }))
                )
-
-            const success = await Algorithms.insertBatch(batchID, nodes)
-            if (success) {
-               console.log(`📦 ${batchID} inserted`)
-            } else {
-               errorBatches.add(batchID)
             }
-         })
-         await Promise.all(jobs)
+         }
+
+         const success = await Algorithms.insertBatch(batchID, nodes)
+         if (success) {
+            console.log(`📦 ${batchID} inserted`)
+         } else {
+            console.log(`❌ Error inserting ${batchID}`)
+            errorBatches.add(batchID)
+         }
+
+         await new Promise((resolve) => setTimeout(resolve, 3_000))
       }
+
+      console.log("📦 All batches inserted")
+
       if (errorBatches.size > 0) console.log("❌ Error batches", errorBatches)
 
       // Establish relations

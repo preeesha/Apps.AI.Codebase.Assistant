@@ -21,7 +21,7 @@ export class TranslateCommand implements ISlashCommand {
     * @param {string} targetEntity - The target entity for translation.
     * @returns {Promise<string | null>} A promise that resolves to the translated result or null if no translation is found.
     */
-   private async process(http: IHttp, targetLanguage: string, targetEntity: string): Promise<string | null> {
+   private async process(http: IHttp, targetLanguage: string, targetEntity: string): Promise<string> {
       const db = new Neo4j(http)
       const llm = new Llama3_70B(http)
       const embeddingModel = new MiniLML6(http)
@@ -33,7 +33,7 @@ export class TranslateCommand implements ISlashCommand {
        * ---------------------------------------------------------------------------------------------
        */
       const codeNodes = await Query.getCodeNodesFromKeywords(db, embeddingModel, [targetEntity])
-      if (!codeNodes.length) return null
+      if (!codeNodes.length) return "I'm sorry, I couldn't find any code related to your query."
 
       /**
        * ---------------------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ export class TranslateCommand implements ISlashCommand {
             targetLanguage
          )
       )
-      if (!res) return null
+      if (!res) return "I'm sorry, I'm having trouble connecting to the server. Please try again later."
 
       return res
    }
@@ -85,10 +85,6 @@ export class TranslateCommand implements ISlashCommand {
       )
 
       const res = await this.process(http, targetEntity, targetLanguage)
-      if (res) {
-         await sendEditedMessage(res)
-      } else {
-         await sendEditedMessage("❌ Translation failed")
-      }
+      await sendEditedMessage(res)
    }
 }

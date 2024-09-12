@@ -23,7 +23,7 @@ export class DocumentCommand implements ISlashCommand {
    private async process(
       http: IHttp,
       query: string
-   ): Promise<{ jsDoc: string; explanation: string | null } | null> {
+   ): Promise<{ jsDoc: string; explanation: string | null } | string> {
       const db = new Neo4j(http)
       const llm = new Llama3_70B(http)
       const embeddingModel = new MiniLML6(http)
@@ -35,7 +35,7 @@ export class DocumentCommand implements ISlashCommand {
        * ---------------------------------------------------------------------------------------------
        */
       const keywords = await Query.getDBKeywordsFromQuery(llm, query)
-      if (!keywords.length) return null
+      if (!keywords.length) return "I'm sorry, I couldn't understand your query. Please try again."
 
       /**
        * ---------------------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ export class DocumentCommand implements ISlashCommand {
        * ---------------------------------------------------------------------------------------------
        */
       const codeNodes = await Query.getCodeNodesFromKeywords(db, embeddingModel, keywords)
-      if (!codeNodes.length) return null
+      if (!codeNodes.length) return "I'm sorry, I couldn't find any code related to your query."
 
       /**
        * ---------------------------------------------------------------------------------------------
@@ -53,7 +53,7 @@ export class DocumentCommand implements ISlashCommand {
        * ---------------------------------------------------------------------------------------------
        */
       const result = await llm.ask(PromptFactory.makeDocumentPrompt(JSON.stringify(codeNodes), query))
-      if (!result) return null
+      if (!result) return "I'm sorry, I couldn't generate documentation for your query."
 
       //@ts-ignore
       const jsDoc = result.split("<JSDOC_START>")[1].split("<JSDOC_END>")[0].trim()
@@ -93,10 +93,10 @@ export class DocumentCommand implements ISlashCommand {
       )
 
       let res = await this.process(http, query)
-      if (res) {
-         await sendEditedMessage(`${res.jsDoc}\n\n${res.explanation}`)
+      if (typeof res === "string") {
+         await sendEditedMessage(res)
       } else {
-         await sendEditedMessage("❌ No references found!")
+         await sendEditedMessage(`${res.jsDoc}\n\n${res.explanation}`)
       }
    }
 }

@@ -10,7 +10,7 @@ import { FileProcessor } from "./process/prepare/processor/file"
 namespace Algorithms {
    export async function execCommand(command: string) {
       await new Promise((resolve, reject) => {
-         console.log(`🕒 Cloning repository: "${command}"`)
+         console.log(`🕒 ${command}`)
 
          exec(command, (error, stdout, stderr) => {
             if (error) {
@@ -24,6 +24,9 @@ namespace Algorithms {
 }
 
 async function main() {
+   await new Promise((resolve) => setTimeout(resolve, 1000))
+   console.clear()
+
    let tries = 5
    while (tries--) {
       try {
@@ -40,6 +43,8 @@ async function main() {
             await insertDataIntoDB(codebase.dataDirPath)
          }
          await Algorithms.execCommand(`rm -rf ${sessionID}`)
+
+         break
       } catch {
          console.error("Retrying", tries)
       }

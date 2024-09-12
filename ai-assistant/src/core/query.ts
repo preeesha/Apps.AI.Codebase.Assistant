@@ -27,12 +27,12 @@ export namespace Query {
       const result = await db.run(
          `
 				CALL db.index.vector.queryNodes("${indexName}", 2, $vector)
-				YIELD node, score 
-                WHERE score >= ${threshold}
-                WITH node, score
-                OPTIONAL MATCH (node)-[r]->(relatedNode)
-                RETURN node, COLLECT(relatedNode) AS relatedNodes, score
-                ORDER BY score DESC
+				YIELD node, score
+            WHERE score >= ${threshold}
+            WITH node, score
+            OPTIONAL MATCH (node)-[r]->(relatedNode)
+            RETURN node, COLLECT(relatedNode) AS relatedNodes, score
+            ORDER BY score DESC
 			`,
          { vector }
       )
@@ -67,13 +67,16 @@ export namespace Query {
       keywords: string[]
    ): Promise<DBNode[]> {
       const results: DBNode[] = []
-      for (const keyword of keywords) {
-         const queryVector = await embeddingModel.generate(keyword)
-         if (!queryVector) continue
 
-         const result = await getDBNodesFromVectorQuery(db, "nameEmbeddings", queryVector, 0.85)
-         results.push(...result)
-      }
+      try {
+         for (const keyword of keywords) {
+            const queryVector = await embeddingModel.generate(keyword)
+            if (!queryVector) continue
+
+            const result = await getDBNodesFromVectorQuery(db, "nameEmbeddings", queryVector, 0.85)
+            results.push(...result)
+         }
+      } catch {}
 
       return results
    }

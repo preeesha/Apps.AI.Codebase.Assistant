@@ -7,6 +7,7 @@ import { Query } from "../core/query"
 import { MiniLML6 } from "../core/services/embeddings/minilml6"
 import { Llama3_70B } from "../core/services/llm/llama3_70B"
 import { handleCommandResponse } from "../utils/handleCommandResponse"
+import { renderDiagramToBase64URI } from "../core/diagram"
 
 export class WhyUsedCommand implements ISlashCommand {
    public command = "rcc-whyused"
@@ -24,10 +25,13 @@ export class WhyUsedCommand implements ISlashCommand {
    private async process(
       http: IHttp,
       query: string
-   ): Promise<{
-      explanation: string
-      diagram: string
-   } | null> {
+   ): Promise<
+      | {
+           explanation: string
+           diagram: string
+        }
+      | string
+   > {
       const db = new Neo4j(http)
       const llm = new Llama3_70B(http)
       const embeddingModel = new MiniLML6(http)
@@ -39,7 +43,7 @@ export class WhyUsedCommand implements ISlashCommand {
        * ---------------------------------------------------------------------------------------------
        */
       const keywords = await Query.getDBKeywordsFromQuery(llm, query)
-      if (!keywords.length) return null
+      if (!keywords.length) return "I'm sorry, I couldn't understand your query. Please try again."
 
       /**
        * ---------------------------------------------------------------------------------------------
@@ -48,7 +52,7 @@ export class WhyUsedCommand implements ISlashCommand {
        * ---------------------------------------------------------------------------------------------
        */
       const codeNodes = await Query.getCodeNodesFromKeywords(db, embeddingModel, keywords)
-      if (!codeNodes.length) return null
+      if (!codeNodes.length) return "I'm sorry, I couldn't find any code related to your query."
 
       /**
        * ---------------------------------------------------------------------------------------------
@@ -59,7 +63,7 @@ export class WhyUsedCommand implements ISlashCommand {
       const result = await llm.ask(
          PromptFactory.makeWhyUsedPrompt(codeNodes.map((x) => x.code).join("\n\n"), query)
       )
-      if (!result) return null
+      if (!result) return "I'm sorry, I couldn't find any references for your query."
 
       const explanation = result.split("<EXPLANATION>")[1].split("</EXPLANATION>")[0].trim()
       const diagram = result.split("<DIAGRAM>")[1].split("</DIAGRAM>")[0].trim()
@@ -71,17 +75,12 @@ export class WhyUsedCommand implements ISlashCommand {
        * ---------------------------------------------------------------------------------------------
        */
       const data = { explanation, diagram: "" }
-      // TODO:
-      // if (diagram) {
-      //     const parsedDiagram = diagram
-      //         .replace("```mermaid", "")
-      //         .replace("```", "")
-      //         .trim();
-      //     writeFileSync("output.txt", parsedDiagram);
-      //     try {
-      //         // data.diagram = await renderDiagramToBase64URI(parsedDiagram);
-      //     } catch {}
-      // }
+      if (diagram) {
+         const parsedDiagram = diagram.replace("```mermaid", "").replace("```", "").trim()
+         try {
+            data.diagram = await renderDiagramToBase64URI(http, parsedDiagram)
+         } catch {}
+      }
 
       return data
    }
@@ -113,11 +112,10 @@ export class WhyUsedCommand implements ISlashCommand {
       )
 
       const res = await this.process(http, query)
-      if (!res) {
-         await sendEditedMessage("❌ No references found!")
+      if (typeof res === "string") {
+         await sendEditedMessage(res)
          return
       }
-
       await sendEditedMessage(res.explanation, [res.diagram!])
    }
 }
